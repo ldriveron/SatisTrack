@@ -1,0 +1,26 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="http://192.168.1.70:4242/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/style.css" media="screen">
+    <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Varela+Round&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title><%- page_title %></title>
+</head>
+<body>
+    <noscript>Javascript is required by Satis Track.</noscript>
+    <div class="statis_logo"><a href="/">SATIS TRACK</a></div>
+    <% if(!isLoggedIn) { %>
+        <div class="topnav" id="myTopnav">
+            <a href="/">Home</a>
+            <a href="/users/login">Login</a>
+            <a href="/users/register">Register</a>
+        </div>
+    <% } %>
+        
+
+    <%- include('./partials/messages') -%>
