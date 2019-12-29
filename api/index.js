@@ -7,7 +7,7 @@ const router = express.Router();
 import User from '../models/User';
 import SatisReport from '../models/SatisReport';
 
-// Return the current users information
+// Return the current user's information
 router.get('/userdata/:userID', (req, res) => {
 	if (req.isAuthenticated() && req.params.userID === req.user.id) {
 		User.findOne({ id: req.params.uderID }).then((user) =>
@@ -16,6 +16,7 @@ router.get('/userdata/:userID', (req, res) => {
 					username: user.username,
 					work_start_hour: user.work_start_hour,
 					work_end_hour: user.work_end_hour,
+					last_schedule_edit: user.last_schedule_edit,
 					days_tracked: user.days_tracked,
 					work_days: user.work_days
 				}
@@ -35,7 +36,7 @@ router.get('/auth/init', (req, res) => {
 	}
 });
 
-// Get all the users satisfaction reports from MongoDB
+// Get all the user's satisfaction reports from MongoDB
 // If there are none, then respond with a message saying so
 router.get('/satis/all/:userID', (req, res) => {
 	if (req.isAuthenticated() && req.params.userID === req.user.id) {
@@ -51,11 +52,17 @@ router.get('/satis/all/:userID', (req, res) => {
 	}
 });
 
+// Update the user's work start and end hour
+// Also update their last schedule edit to today's date
 router.post('/userdata/sethours/:userID/:startHour/:endHour', async (req, res) => {
 	if (req.isAuthenticated() && req.params.userID === req.user.id) {
 		await User.findOneAndUpdate(
 			{ _id: req.user.id },
-			{ work_start_hour: req.params.startHour, work_end_hour: req.params.endHour },
+			{
+				work_start_hour: req.params.startHour,
+				work_end_hour: req.params.endHour,
+				last_schedule_edit: new Date().toLocaleDateString()
+			},
 			{ new: true }
 		);
 
@@ -65,6 +72,8 @@ router.post('/userdata/sethours/:userID/:startHour/:endHour', async (req, res) =
 	}
 });
 
+// Update the user's work schedule
+// Also update their last schedule edit to today's date
 router.post(
 	'/userdata/sethours/:userID/:sunday/:monday/:tuesday/:wednesday/:thursday/:friday/:saturday',
 	async (req, res) => {
@@ -79,7 +88,11 @@ router.post(
 		};
 
 		if (req.isAuthenticated() && req.params.userID === req.user.id) {
-			await User.findOneAndUpdate({ _id: req.user.id }, { work_days: new_days }, { new: true });
+			await User.findOneAndUpdate(
+				{ _id: req.user.id },
+				{ work_days: new_days, last_schedule_edit: new Date().toLocaleDateString() },
+				{ new: true }
+			);
 
 			res.send('Done.');
 		} else {

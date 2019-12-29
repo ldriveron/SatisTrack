@@ -2,14 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // API methods import
-import * as api from '../api';
+import * as api from '../../../api';
+
+// EditSchedule components import
+import EditWorkHours from './EditWorkHours';
+import EditWorkDays from './EditWorkDays';
 
 class SetSchedule extends Component {
 	state = {
 		user_data: this.props.user_data,
+		today: new Date(),
 		new_work_start_hour: 0,
 		new_work_end_hour: 0,
 		new_days: {},
+		allow_schedule_edit: true,
 		hours_submit_disabled: true,
 		days_submit_disabled: true
 	};
@@ -21,7 +27,24 @@ class SetSchedule extends Component {
 			new_days: this.props.user_data.work_days
 		});
 
+		this.setState({
+			allow_schedule_edit: this.validateDateDifference()
+		});
+
 		document.title = 'Set Work Hours';
+	}
+
+	// Prevent the user from updating their work schedule more than once a day
+	// Get the date of the users last schedule edit and get todays date
+	// Get the difference between the two days in milliseconds
+	// If the date difference is more than the milliseconds in a day, then return true, else return false
+	validateDateDifference() {
+		var last_schedule_edit = Date.parse(this.props.user_data.last_schedule_edit.replace('/', ' '));
+		var todays_date = this.state.today.setHours(0, 0, 0, 0);
+		var dateDifference = Math.abs(Number(todays_date) - last_schedule_edit);
+		var milliseconds_in_a_day = 86300000;
+
+		return dateDifference < milliseconds_in_a_day;
 	}
 
 	// When the user changes the option on any of the work hours, set the value on the state
@@ -65,6 +88,7 @@ class SetSchedule extends Component {
 
 	// When a work day checkbox is clicked, update the new_days object based on
 	// if it's selected or not
+	// Previous days are kept in the new object and changed day will be updated
 	handleDayChange(e) {
 		let { name, checked } = e.target;
 
@@ -111,13 +135,13 @@ class SetSchedule extends Component {
 			);
 		}
 
-		// Generate an array with all necessary checkboxes for changin weekly schedule
+		// Generate an array with all necessary checkboxes for changing weekly schedule
 		let days_checkboxes = [];
 		Object.assign(
 			{},
 			...Object.keys(this.state.new_days).map((k) =>
 				days_checkboxes.push(
-					<div key={k}>
+					<span key={k}>
 						<input
 							type="checkbox"
 							name={k}
@@ -126,83 +150,61 @@ class SetSchedule extends Component {
 							onChange={(e) => this.handleDayChange(e)}
 						/>
 						{k.charAt(0).toUpperCase() + k.slice(1)}
-					</div>
+					</span>
 				)
 			)
 		);
 
 		return (
-			<div>
-				<form onSubmit={() => this.setWorkHours()}>
-					<div className="set_work_hours">
-						<label htmlFor="start_hour">Start Hour</label>
-						<select
-							name="new_work_start_hour"
-							id="new_work_start_hour"
-							onChange={(e) => this.handleHourChange(e)}
-							value={this.state.new_work_start_hour}
-						>
-							{options}
-						</select>
+			<div className="set_work_hours">
+				<EditWorkHours
+					setWorkHours={this.setWorkHours.bind(this)}
+					handleHourChange={this.handleHourChange.bind(this)}
+					new_work_start_hour={this.state.new_work_start_hour}
+					new_work_end_hour={this.state.new_work_end_hour}
+					options={options}
+					allow_schedule_edit={this.state.allow_schedule_edit}
+					hours_submit_disabled={this.state.hours_submit_disabled}
+				/>
 
-						<label htmlFor="end_hour">End Hour</label>
-						<select
-							name="new_work_end_hour"
-							id="new_work_end_hour"
-							onChange={(e) => this.handleHourChange(e)}
-							value={this.state.new_work_end_hour}
-						>
-							{options}
-						</select>
-						<br />
-						<button className="button" disabled={this.state.hours_submit_disabled}>
-							Set Work Hours
-						</button>
-
-						{/* This code uses the users set work hours and makes them easier to read */}
-						<div className="current_hours">
-							<div className="hour">
-								Start hour<br />
-								{this.state.user_data.work_start_hour % 12 ? (
-									this.state.user_data.work_start_hour % 12
-								) : (
-									12
-								)}:00{' '}
-								{this.state.user_data.work_start_hour == 24 ? (
-									'am'
-								) : this.state.user_data.work_start_hour >= 12 ? (
-									'pm'
-								) : (
-									'am'
-								)}
-							</div>
-							<div className="hour">
-								End hour<br />
-								{this.state.user_data.work_end_hour % 12 ? (
-									this.state.user_data.work_end_hour % 12
-								) : (
-									12
-								)}:00{' '}
-								{this.state.user_data.work_end_hour == 24 ? (
-									'am'
-								) : this.state.user_data.work_end_hour >= 12 ? (
-									'pm'
-								) : (
-									'am'
-								)}
-							</div>
-						</div>
+				{/* This code uses the users set work hours and makes them easier to read */}
+				<div className="current_hours">
+					<div className="hour">
+						Start hour<br />
+						{this.state.user_data.work_start_hour % 12 ? (
+							this.state.user_data.work_start_hour % 12
+						) : (
+							12
+						)}:00{' '}
+						{this.state.user_data.work_start_hour == 24 ? (
+							'am'
+						) : this.state.user_data.work_start_hour >= 12 ? (
+							'pm'
+						) : (
+							'am'
+						)}
 					</div>
-				</form>
-
-				<form onSubmit={() => this.setWorkDays()}>
-					<div className="set_work_days">
-						{days_checkboxes}
-						<button className="button" disabled={this.state.days_submit_disabled}>
-							Set Work Days
-						</button>
+					<div className="hour">
+						End hour<br />
+						{this.state.user_data.work_end_hour % 12 ? this.state.user_data.work_end_hour % 12 : 12}:00{' '}
+						{this.state.user_data.work_end_hour == 24 ? (
+							'am'
+						) : this.state.user_data.work_end_hour >= 12 ? (
+							'pm'
+						) : (
+							'am'
+						)}
 					</div>
-				</form>
+				</div>
+
+				<EditWorkDays
+					new_days={this.state.new_days}
+					days_checkboxes={days_checkboxes}
+					handleDayChange={this.handleDayChange.bind(this)}
+					setWorkDays={this.setWorkDays.bind(this)}
+					allow_schedule_edit={this.state.allow_schedule_edit}
+					days_submit_disabled={this.state.days_submit_disabled}
+				/>
 			</div>
 		);
 	}
@@ -210,7 +212,8 @@ class SetSchedule extends Component {
 
 SetSchedule.propTypes = {
 	user_id: PropTypes.string,
-	user_data: PropTypes.object
+	user_data: PropTypes.object,
+	today: PropTypes.object
 };
 
 export default SetSchedule;

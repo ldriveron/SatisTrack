@@ -1,11 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class StartingPage extends Component {
-	state = {};
-
-	render() {
-		return <h1>Home</h1>;
-	}
-}
+const StartingPage = () => {
+	return <h1>Home</h1>;
+};
 
 export default StartingPage;

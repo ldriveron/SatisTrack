@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 // API methods import
-import * as api from '../api';
+import * as api from '../../api';
 
 // Components import
 import CurrentDay from './CurrentDay';
@@ -34,11 +34,9 @@ class Dashboard extends Component {
 			});
 		}
 
-		const today = new Date();
-
 		// Update state with current hour
 		this.setState({
-			current_hour: today.getHours()
+			current_hour: new Date().getHours()
 		});
 
 		document.title = 'Dashboard';
@@ -59,7 +57,7 @@ class Dashboard extends Component {
 				<div className="dashboard_row greeting">
 					<div>{greeting}</div>
 				</div>
-				<CurrentDay work_end_hour={this.state.user_data.work_end_hour} />
+				<CurrentDay work_end_hour={this.state.user_data.work_end_hour} today={this.props.today} />
 			</div>
 		);
 	}
@@ -67,7 +65,8 @@ class Dashboard extends Component {
 
 Dashboard.propTypes = {
 	user_id: PropTypes.string,
-	user_data: PropTypes.object
+	user_data: PropTypes.object,
+	today: PropTypes.object
 };
 
 export default Dashboard;

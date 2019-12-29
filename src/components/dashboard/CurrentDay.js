@@ -1,9 +1,8 @@
 import React from 'react';
 
 const CurrentDay = (props) => {
-	const today = new Date();
-
 	// Set variables to current day information
+	let today = new Date();
 	let current_date = today.toLocaleDateString();
 	let current_hour = today.getHours();
 	let current_minutes = today.getMinutes();
@@ -14,15 +13,15 @@ const CurrentDay = (props) => {
 	// const current_weekday = today.getDay();
 
 	// Get the current day of the week
-	let days_of_week = [ 'Su', 'M', 'T', 'W', 'Th', 'F', 'Sa' ];
+	let days_of_week = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ];
 	let current_day = days_of_week[today.getDay()];
 
 	// Minutes and seconds countdown for when the current hour is the users work end hour
 	function startTimer(duration, display) {
-		var timer = duration,
+		let timer = duration,
 			minutes,
 			seconds;
-		var interval = setInterval(function() {
+		let interval = setInterval(function() {
 			minutes = parseInt(timer / 60, 10);
 			seconds = parseInt(timer % 60, 10);
 
@@ -43,8 +42,12 @@ const CurrentDay = (props) => {
 
 	function beginMinutesCounter() {
 		var remaining_minutes = 60 * (60 - current_minutes) - current_seconds,
-			display = document.querySelector('#time');
-		startTimer(remaining_minutes, display);
+			display = document.querySelector('#time_remaining');
+
+		// Start timer when #time_remaining div is found
+		if (display) {
+			startTimer(remaining_minutes, display);
+		}
 	}
 
 	const content = (
@@ -52,28 +55,36 @@ const CurrentDay = (props) => {
 			<div className="detail_box">
 				<p>
 					Current Date<span className="tooltip right">
-						<span className="current_day_letter">{current_day}</span>
-						<span className="tiptext">Day Of The Week</span>
+						<span className="current_day_word">{current_day}</span>
+						<span className="tiptext">Day of the week.</span>
 					</span>
 					<br />
 					<span className="date_hour_text">{current_date}</span>
 				</p>
 			</div>
-			{props.work_end_hour == current_hour ? (
-				<div className="tooltip bottom">
-					<div className="detail_box time_remaining equal">
-						<div id="time" onLoad={beginMinutesCounter()} />
+			<div className="detail_box">
+				{props.work_end_hour == current_hour ? (
+					<div className="tooltip bottom">
+						<div className="detail_box time_remaining equal">
+							<div id="time_remaining" onLoad={beginMinutesCounter()} />
+						</div>
+						<span className="tiptext">Minutes remaning to set your mood for today.</span>
 					</div>
-					<span className="tiptext">Minutes Remaning To Set Your Mood For Today</span>
-				</div>
-			) : (
-				<div className="tooltip bottom">
-					<div className="detail_box time_remaining">
-						{(props.work_end_hour - current_hour + 24) % 24}:{60 - current_minutes}
+				) : (
+					<div className="tooltip bottom">
+						<div className="detail_box time_remaining">
+							{(props.work_end_hour - current_hour + 24) % 24 != 1 ? (
+								(props.work_end_hour - current_hour + 24) % 24
+							) : (
+								'0'
+							)}h<br />
+							{current_minutes > 50 && '0'}
+							{60 - current_minutes}m
+						</div>
+						<span className="tiptext">Time remaining until you can set your mood for the day.</span>
 					</div>
-					<span className="tiptext">Time Remaining Until You Can Set Your Mood For Today</span>
-				</div>
-			)}
+				)}
+			</div>
 			<div className="detail_box">
 				<p>
 					Current Hour<br />

@@ -63,8 +63,8 @@ body {
 
 // Tooltip
 // Tooltip colors
-$tooltip_bg: rgb(241, 239, 225);
-$tooltip_text: rgb(56, 33, 16);
+$tooltip_bg: rgb(58, 59, 63);
+$tooltip_text: #fff;
 $tooltip_shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 
 .tooltip {
@@ -78,9 +78,9 @@ $tooltip_shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 	min-width: 150px;
 	background-color: $tooltip_bg;
 	color: $tooltip_text;
-	font-family: $font_nunito;
+	font-family: $font_varela;
 	font-size: 13px;
-	font-weight: 600;
+	font-weight: 800;
 	text-align: center;
 	border-radius: 3px;
 	padding: 6px 6px;
@@ -124,7 +124,7 @@ $nav_logout_button_bg: getColor(base);
 $nav_logout_button_hover_text: #e10600;
 
 // Username
-$nav_username_bg: rgb(113, 228, 243);
+$nav_username_bg: rgb(101, 50, 255);
 $nav_username_text: #fff;
 
 // Logo
@@ -164,7 +164,6 @@ $nav_username_text: #fff;
 		margin-left: 10px;
 		text-decoration: none;
 		font-size: 17px;
-		transition: 0.5s;
 		border-radius: 25px;
 	}
 
@@ -184,7 +183,7 @@ $nav_username_text: #fff;
 		margin-top: 3px;
 		margin-left: 10px;
 		font-size: 13px;
-		font-weight: 900;
+		font-weight: 800;
 	}
 }
 
@@ -223,7 +222,6 @@ $nav_username_text: #fff;
 	margin-left: 10px;
 	font-size: 15px;
 	border-left: 1px solid $nav_logout_button_border;
-	transition: 0.3s;
 	cursor: pointer;
 
 	&:hover {
@@ -245,6 +243,7 @@ $message_alert_border: rgb(236, 67, 15);
 
 .message_alert {
 	width: fit-content;
+	display: table;
 	color: $message_alert_text;
 	padding: 10px 25px;
 	margin: 0 auto 20px auto;
@@ -383,7 +382,6 @@ $dashboard_current_day_letter_bg: rgb(0, 116, 255);
 .dashboard {
 	width: 70%;
 	color: $dashboard_text;
-	margin-left: -30px;
 	display: flex;
 	flex-wrap: wrap;
 	align-content: center;
@@ -411,7 +409,7 @@ $dashboard_current_day_letter_bg: rgb(0, 116, 255);
 		box-shadow: $box_shadow;
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-around;
+		justify-content: space-evenly;
 		align-items: center;
 		align-content: center;
 
@@ -419,19 +417,30 @@ $dashboard_current_day_letter_bg: rgb(0, 116, 255);
 			color: $dashboard_current_day_text_bright;
 			font-size: 22px;
 			font-weight: 900;
-			margin: 0;
 		}
 
-		.current_day_letter {
+		.current_day_word {
 			background-color: $dashboard_current_day_letter_bg;
 			color: $dashboard_current_day_letter_text;
+			font-weight: 900;
 			margin-left: 10px;
 			padding: 1px 6px;
 			border-radius: 5px;
+			cursor: pointer;
 		}
 
 		.detail_box {
+			flex: 1;
 			display: flex;
+			justify-content: center;
+		}
+
+		.current_day_details:first-child > div {
+			margin-right: auto;
+		}
+
+		.current_day_details:last-child > div {
+			margin-right: auto;
 		}
 
 		.time_remaining {
@@ -443,6 +452,7 @@ $dashboard_current_day_letter_bg: rgb(0, 116, 255);
 			border-radius: 50%;
 			width: 100px;
 			height: 100px;
+			text-align: center;
 			justify-content: center;
 			align-items: center;
 			cursor: pointer;
@@ -479,7 +489,7 @@ $current_hour_gradient: linear-gradient(90deg, rgba(40, 41, 49, 1) 0%, rgba(71, 
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin-top: 40px;
+		margin: 20px 0;
 
 		.hour {
 			background-color: $current_hour_bg_color;
@@ -489,7 +499,7 @@ $current_hour_gradient: linear-gradient(90deg, rgba(40, 41, 49, 1) 0%, rgba(71, 
 			padding: 20px 20px;
 			font-size: 25px;
 			font-weight: 900;
-			margin-left: 20px;
+			margin-right: 20px;
 			color: $current_hour_color;
 		}
 	}
@@ -553,11 +563,9 @@ $current_hour_gradient: linear-gradient(90deg, rgba(40, 41, 49, 1) 0%, rgba(71, 
 	align-items: center;
 	justify-content: center;
 
-	input {
-		width: 20px;
-		height: 20px;
-		cursor: pointer;
-	}
+	// input[type="checkbox"] {
+	// 	cursor: pointer;
+	// }
 
 	.button {
 		border: none;

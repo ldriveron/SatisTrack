@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-// Component imports
+// General imports
 import RegisterForm from './RegisterForm';
 import Header from './Header';
-import Dashboard from './Dashboard';
-import SetSchedule from './SetSchedule';
+
+// Dashboard imports
+import Dashboard from './dashboard/Dashboard';
+import EditSchedule from './dashboard/editschedule/EditSchedule';
 
 import * as api from '../api';
 
@@ -14,7 +16,8 @@ class App extends Component {
 	state = {
 		user_id: '',
 		isLoggedIn: false,
-		user_data: {}
+		user_data: {},
+		today: new Date()
 	};
 
 	componentDidMount() {
@@ -40,6 +43,7 @@ class App extends Component {
 							username: resp.user.username,
 							work_start_hour: resp.user.work_start_hour,
 							work_end_hour: resp.user.work_end_hour,
+							last_schedule_edit: resp.user.last_schedule_edit,
 							work_days: resp.user.work_days,
 							days_tracked: resp.user.days_tracked
 						}
@@ -53,10 +57,8 @@ class App extends Component {
 	render() {
 		return (
 			<Router>
-				{this.state.user_data.user_id ? (
+				{this.state.user_data.user_id && (
 					<Header isLoggedIn={this.state.isLoggedIn} username={this.state.user_data.username} />
-				) : (
-					''
 				)}
 				{this.state.user_data.user_id ? (
 					<Switch>
@@ -68,7 +70,7 @@ class App extends Component {
 						<Route
 							path="/users/editschedule"
 							exact
-							render={(props) => <SetSchedule {...props} user_data={this.state.user_data} />}
+							render={(props) => <EditSchedule {...props} user_data={this.state.user_data} />}
 						/>
 					</Switch>
 				) : (
