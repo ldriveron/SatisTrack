@@ -91,7 +91,7 @@ server.post('/register', checkAuthenticated, async (req, res) => {
 					private: 0
 				});
 
-				// Secure the users password
+				// Secure the user's password
 				await bcrypt.genSalt(10, (err, salt) =>
 					bcrypt.hash(newUser.password, salt, async (err, hash) => {
 						if (err) throw err;

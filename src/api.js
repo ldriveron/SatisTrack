@@ -15,6 +15,11 @@ export const fetchAllSatis = (userID) => {
 	return axios.get(`http://192.168.1.70:4242/api/satis/all/${userID}`).then((resp) => resp.data);
 };
 
+// Post new satis report for the user
+export const postNewSatis = (userID, mood) => {
+	return axios.post(`http://192.168.1.70:4242/api/satis/report/${userID}/${mood}`).then((resp) => resp.data);
+};
+
 // Update the set work times on the database for the user
 export const updateWorkTime = (userID, startHour, endHour) => {
 	return axios

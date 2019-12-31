@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const CurrentDay = (props) => {
 	// Set variables to current day information
@@ -35,6 +36,7 @@ const CurrentDay = (props) => {
 			}
 
 			if (minutes == 0 && seconds == 0) {
+				props.disableSatisSetter();
 				clearInterval(interval);
 			}
 		}, 1000);
@@ -78,7 +80,6 @@ const CurrentDay = (props) => {
 							) : (
 								'0'
 							)}h<br />
-							{current_minutes > 50 && '0'}
 							{60 - current_minutes}m
 						</div>
 						<span className="tiptext">Time remaining until you can set your mood for the day.</span>
@@ -98,6 +99,12 @@ const CurrentDay = (props) => {
 	);
 
 	return content;
+};
+
+CurrentDay.propTypes = {
+	disableSatisSetter: PropTypes.func,
+	work_end_hour: PropTypes.number,
+	day_is_set: PropTypes.bool
 };
 
 export default CurrentDay;

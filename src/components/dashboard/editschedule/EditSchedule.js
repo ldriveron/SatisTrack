@@ -7,6 +7,7 @@ import * as api from '../../../api';
 // EditSchedule components import
 import EditWorkHours from './EditWorkHours';
 import EditWorkDays from './EditWorkDays';
+import CurrentHours from './CurrentHours';
 
 class SetSchedule extends Component {
 	state = {
@@ -167,35 +168,10 @@ class SetSchedule extends Component {
 					hours_submit_disabled={this.state.hours_submit_disabled}
 				/>
 
-				{/* This code uses the users set work hours and makes them easier to read */}
-				<div className="current_hours">
-					<div className="hour">
-						Start hour<br />
-						{this.state.user_data.work_start_hour % 12 ? (
-							this.state.user_data.work_start_hour % 12
-						) : (
-							12
-						)}:00{' '}
-						{this.state.user_data.work_start_hour == 24 ? (
-							'am'
-						) : this.state.user_data.work_start_hour >= 12 ? (
-							'pm'
-						) : (
-							'am'
-						)}
-					</div>
-					<div className="hour">
-						End hour<br />
-						{this.state.user_data.work_end_hour % 12 ? this.state.user_data.work_end_hour % 12 : 12}:00{' '}
-						{this.state.user_data.work_end_hour == 24 ? (
-							'am'
-						) : this.state.user_data.work_end_hour >= 12 ? (
-							'pm'
-						) : (
-							'am'
-						)}
-					</div>
-				</div>
+				<CurrentHours
+					work_start_hour={this.state.user_data.work_start_hour}
+					work_end_hour={this.state.user_data.work_end_hour}
+				/>
 
 				<EditWorkDays
 					new_days={this.state.new_days}

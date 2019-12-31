@@ -5,13 +5,16 @@ import PropTypes from 'prop-types';
 import * as api from '../../api';
 
 // Components import
-import CurrentDay from './CurrentDay';
+import CurrentDay from './today/CurrentDay';
+import NewSatisReport from './today/NewSatisReport';
 
 class Dashboard extends Component {
 	state = {
-		satis_report: {},
 		user_data: this.props.user_data,
-		current_hour: 0
+		user_works_today: this.props.user_works_today,
+		current_hour: 0,
+		display_satis_setter: true,
+		current_mood: ''
 	};
 
 	componentDidMount() {
@@ -34,15 +37,69 @@ class Dashboard extends Component {
 			});
 		}
 
-		// Update state with current hour
+		// Update state with current date class and hour
+		let today = new Date();
+
 		this.setState({
-			current_hour: new Date().getHours()
+			today: today,
+			current_hour: today.getHours()
 		});
 
 		document.title = 'Dashboard';
 	}
 
+	// Change the state's current_mood to what the user selects
+	// Change the satis report button's background color depending on the chosen mood by changing the className
+	handleCurrentMoodOnChange(mood) {
+		let bg_color;
+		switch (mood) {
+			case 'Ecstatic':
+				bg_color = 'ecstatic_bg';
+				break;
+			case 'Happy':
+				bg_color = 'happy_bg';
+				break;
+			case 'Content':
+				bg_color = 'content_bg';
+				break;
+			case 'Displeased':
+				bg_color = 'displeased_bg';
+				break;
+			case 'Disappointed':
+				bg_color = 'disappointed_bg';
+				break;
+			default:
+				bg_color = 'ecstatic_bg';
+		}
+
+		this.setState({
+			button_bg_color: bg_color,
+			current_mood: mood
+		});
+	}
+
+	// Use API post request to set the user's new satis report and deactivate the satis setter
+	postNewSatisReport() {
+		api
+			.postNewSatis(this.state.user_data.user_id, this.state.current_mood)
+			.then((resp) => {
+				if (resp.success == 1) {
+					this.setState({
+						display_satis_setter: false
+					});
+				}
+			})
+			.catch(console.error);
+	}
+
+	disableSatisSetter() {
+		this.setState({
+			display_satis_setter: false
+		});
+	}
+
 	render() {
+		// Select a day of time greeting
 		let greeting = '';
 		if (this.state.current_hour >= 0 && this.state.current_hour <= 11) {
 			greeting = 'Good morning, ' + this.state.user_data.username;
@@ -57,7 +114,25 @@ class Dashboard extends Component {
 				<div className="dashboard_row greeting">
 					<div>{greeting}</div>
 				</div>
-				<CurrentDay work_end_hour={this.state.user_data.work_end_hour} today={this.props.today} />
+
+				{/* When the satis report is retreived from MongoDB, the current hour is the user's work end hour, and
+				    the current user works on the current day, load the NewSatisReport form component */}
+				{this.state.satis_report &&
+				this.state.current_hour == this.state.user_data.work_end_hour &&
+				this.state.user_works_today == 'true' &&
+				this.state.display_satis_setter == true && (
+					<NewSatisReport
+						satis_report={this.state.satis_report}
+						button_bg_color={this.state.button_bg_color}
+						postNewSatisReport={this.postNewSatisReport.bind(this)}
+						handleCurrentMoodOnChange={this.handleCurrentMoodOnChange.bind(this)}
+					/>
+				)}
+
+				<CurrentDay
+					disableSatisSetter={this.disableSatisSetter.bind(this)}
+					work_end_hour={this.state.user_data.work_end_hour}
+				/>
 			</div>
 		);
 	}
@@ -66,6 +141,7 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
 	user_id: PropTypes.string,
 	user_data: PropTypes.object,
+	user_works_today: PropTypes.string,
 	today: PropTypes.object
 };
 

@@ -379,6 +379,30 @@ $dashboard_current_day_details_time_remaining_bg_current: rgb(1, 255, 135);
 $dashboard_current_day_letter_text: #fff;
 $dashboard_current_day_letter_bg: rgb(0, 116, 255);
 
+//Mood Colors
+$mood_ecstatic: rgb(56, 160, 122);
+$mood_happy: rgb(120, 174, 97);
+$mood_content: rgb(187, 183, 74);
+$mood_displeased: rgb(88, 134, 150);
+$mood_disappointed: rgb(106, 94, 114);
+
+//Mood setter
+$mood_setter_bg: rgb(93, 110, 154);
+$mood_setter_bg: rgb(249, 124, 60);
+$mood_setter_bg_gradient: linear-gradient(90deg, rgba(249, 124, 60, 1) 0%, rgba(253, 191, 74, 1) 100%);
+$mood_question_text: #fff;
+$mood_setter_radio_border: #009bff;
+$mood_setter_radio_boder_right: #fff;
+$mood_setter_button_bg: rgb(255, 0, 130);
+$mood_setter_button_border: #fff;
+$mood_setter_button_bg_ecstatic: $mood_ecstatic;
+$mood_setter_button_bg_happy: $mood_happy;
+$mood_setter_button_bg_content: $mood_content;
+$mood_setter_button_bg_displeased: $mood_displeased;
+$mood_setter_button_bg_disappointed: $mood_disappointed;
+$mood_setter_button_bg_hover: rgb(218, 0, 112);
+$mood_setter_button_text: #fff;
+
 .dashboard {
 	width: 70%;
 	color: $dashboard_text;
@@ -397,6 +421,203 @@ $dashboard_current_day_letter_bg: rgb(0, 116, 255);
 		color: $dashboard_text;
 		font-family: $font_playfair;
 		font-size: 50px;
+	}
+
+	.mood_setter {
+		background: $mood_setter_bg;
+		background: $mood_setter_bg_gradient;
+		width: 80%;
+		margin-bottom: 50px;
+		padding: 10px;
+		border-radius: 5px;
+		text-align: center;
+
+		.question {
+			color: $mood_question_text;
+			font-size: 30px;
+			font-weight: 800;
+			font-family: $font_playfair;
+		}
+
+		.button_holder {
+			width: 100%;
+		}
+
+		button {
+			background-color: $mood_setter_button_bg;
+			border: 2px solid $mood_setter_button_border;
+			color: $mood_setter_button_text;
+			font-size: 18px;
+			font-weight: 600;
+			letter-spacing: 10px;
+			text-transform: uppercase;
+			padding: 20px 0;
+			border-radius: 5px;
+			width: 100%;
+			margin-top: 30px;
+			transition: 0.5s;
+			box-shadow: $box_shadow;
+			cursor: pointer;
+
+			&:focus {
+				outline: none;
+			}
+		}
+
+		.all_radio_buttons_container {
+			width: 100%;
+			margin-top: 15px;
+			display: flex;
+			align-content: center;
+			justify-content: space-evenly;
+			flex-wrap: wrap;
+		}
+
+		.radio_button_container {
+			margin-top: 20px;
+			flex: 1;
+			float: left;
+		}
+
+		.ecstatic_bg {
+			background: $mood_setter_button_bg_ecstatic;
+		}
+
+		.happy_bg {
+			background: $mood_setter_button_bg_happy;
+		}
+
+		.content_bg {
+			background: $mood_setter_button_bg_content;
+		}
+
+		.displeased_bg {
+			background: $mood_setter_button_bg_displeased;
+		}
+
+		.disappointed_bg {
+			background: $mood_setter_button_bg_disappointed;
+		}
+
+		.radio_title {
+			margin-top: 10px;
+			color: $mood_question_text;
+			font-family: $font_varela;
+			font-size: 18px;
+			font-weight: bold;
+		}
+
+		.radio_label {
+			display: block;
+			position: relative;
+			margin: auto;
+			cursor: pointer;
+			font-size: 22px;
+			line-height: 24px;
+			height: 24px;
+			width: 30px;
+			clear: both;
+		}
+
+		.radio_label input {
+			position: absolute;
+			opacity: 0;
+			cursor: pointer;
+		}
+
+		.radio_label .radio_custom {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			height: 24px;
+			width: 24px;
+			background-color: transparent;
+			border-radius: 5px;
+			transition: all 0.3s ease-out;
+			-webkit-transition: all 0.3s ease-out;
+			-moz-transition: all 0.3s ease-out;
+			-ms-transition: all 0.3s ease-out;
+			-o-transition: all 0.3s ease-out;
+			border: 2px solid $mood_setter_radio_boder_right;
+		}
+
+		.radio_label input:checked ~ .radio_custom {
+			background-color: $mood_setter_radio_boder_right;
+			border-radius: 5px;
+			-webkit-transform: rotate(0deg) scale(1);
+			-ms-transform: rotate(0deg) scale(1);
+			transform: rotate(0deg) scale(1);
+			opacity: 1;
+			border: 2px solid $mood_setter_radio_boder_right;
+		}
+
+		.radio_label .radio_custom::after {
+			position: absolute;
+			content: "";
+			left: 12px;
+			top: 12px;
+			height: 0px;
+			width: 0px;
+			border-radius: 5px;
+			border: solid $mood_setter_radio_border;
+			border-width: 0 3px 3px 0;
+			-webkit-transform: rotate(0deg) scale(0);
+			-ms-transform: rotate(0deg) scale(0);
+			transform: rotate(0deg) scale(0);
+			opacity: 1;
+			transition: all 0.3s ease-out;
+			-webkit-transition: all 0.3s ease-out;
+			-moz-transition: all 0.3s ease-out;
+			-ms-transition: all 0.3s ease-out;
+			-o-transition: all 0.3s ease-out;
+		}
+
+		.radio_label input:checked ~ .radio_custom::after {
+			-webkit-transform: rotate(45deg) scale(1);
+			-ms-transform: rotate(45deg) scale(1);
+			transform: rotate(45deg) scale(1);
+			opacity: 1;
+			left: 8px;
+			top: 3px;
+			width: 6px;
+			height: 12px;
+			border: solid $mood_setter_radio_border;
+			border-width: 0 2px 2px 0;
+			background-color: transparent;
+			border-radius: 0;
+		}
+
+		.radio_label .radio_custom::before {
+			position: absolute;
+			content: "";
+			left: 10px;
+			top: 10px;
+			width: 0px;
+			height: 0px;
+			border-radius: 5px;
+			border: 2px solid $mood_setter_radio_boder_right;
+			-webkit-transform: scale(0);
+			-ms-transform: scale(0);
+			transform: scale(0);
+		}
+
+		.radio_label input:checked ~ .radio_custom::before {
+			left: -3px;
+			top: -3px;
+			width: 24px;
+			height: 24px;
+			border-radius: 5px;
+			-webkit-transform: scale(3);
+			-ms-transform: scale(3);
+			transform: scale(3);
+			opacity: 0;
+			z-index: 999;
+			transition: all 0.3s ease-out;
+			-webkit-transition: all 0.3s ease-out;
+			-moz-transition: all 0.3s ease-out;
+			-ms-transition: all 0.3s ease-out;
+			-o-transition: all 0.3s ease-out;
+		}
 	}
 
 	.current_day_details {

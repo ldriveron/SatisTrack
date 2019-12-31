@@ -36,17 +36,41 @@ router.get('/auth/init', (req, res) => {
 	}
 });
 
-// Get all the user's satisfaction reports from MongoDB
-// If there are none, then respond with a message saying so
+// Get all the user's satisfaction reports from MongoDB sorted by date
+// If there are none, then respond with total_results: 0
 router.get('/satis/all/:userID', (req, res) => {
 	if (req.isAuthenticated() && req.params.userID === req.user.id) {
-		SatisReport.find({ user_id: req.params.userID }).then((report) => {
+		SatisReport.find({ user_id: req.params.userID }).sort('date').then((report) => {
 			if (report.length !== 0) {
 				res.send({ total_results: report.length, results: report });
 			} else {
 				res.send({ total_results: 0 });
 			}
 		});
+	} else {
+		res.redirect('/users/login');
+	}
+});
+
+// Add a satisfaction report for the user to MongoDB
+router.post('/satis/report/:userID/:mood', async (req, res) => {
+	if (req.isAuthenticated() && req.params.userID === req.user.id) {
+		let user_id = req.params.userID;
+		let mood = req.params.mood;
+		const date = new Date().toLocaleDateString();
+
+		const newReport = new SatisReport({
+			user_id,
+			mood,
+			date
+		});
+
+		await newReport
+			.save()
+			.then(() => {
+				res.send({ success: 1 });
+			})
+			.catch(console.error);
 	} else {
 		res.redirect('/users/login');
 	}

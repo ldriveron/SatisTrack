@@ -59,7 +59,7 @@ server.use((req, res, next) => {
 server.use(express.static('public'));
 
 // Index routes
-server.use([ '/', '/:userID' ], require('./routes/index'));
+server.use('/', require('./routes/index'));
 
 // User routes (login, register, dashboard, logout...)
 server.use('/users', require('./routes/users'));

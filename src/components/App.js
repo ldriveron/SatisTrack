@@ -33,6 +33,7 @@ class App extends Component {
 				});
 			}
 
+			let days_of_week = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
 			// Fetch user data after their ID is retreived
 			api
 				.fetchUser(resp.id)
@@ -46,7 +47,8 @@ class App extends Component {
 							last_schedule_edit: resp.user.last_schedule_edit,
 							work_days: resp.user.work_days,
 							days_tracked: resp.user.days_tracked
-						}
+						},
+						user_works_today: resp.user.work_days[days_of_week[this.state.today.getDay()]]
 					});
 				})
 				.catch(console.error);
@@ -65,7 +67,13 @@ class App extends Component {
 						<Route
 							path="/users/dashboard"
 							exact
-							render={(props) => <Dashboard {...props} user_data={this.state.user_data} />}
+							render={(props) => (
+								<Dashboard
+									{...props}
+									user_data={this.state.user_data}
+									user_works_today={this.state.user_works_today}
+								/>
+							)}
 						/>
 						<Route
 							path="/users/editschedule"
