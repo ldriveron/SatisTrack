@@ -142,13 +142,12 @@ $nav_username_text: #fff;
 }
 
 .topnav {
-	overflow: hidden;
 	width: 100%;
 	background-color: $nav_background;
 	padding: 20px 0;
 	color: $nav_text;
 	display: flex;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 	flex-direction: row;
 	justify-content: center;
 	align-items: start;
@@ -379,21 +378,23 @@ $dashboard_current_day_details_time_remaining_bg_current: rgb(1, 255, 135);
 $dashboard_current_day_letter_text: #fff;
 $dashboard_current_day_letter_bg: rgb(0, 116, 255);
 
-//Mood Colors
+// Mood Colors
 $mood_ecstatic: rgb(56, 160, 122);
 $mood_happy: rgb(120, 174, 97);
 $mood_content: rgb(187, 183, 74);
 $mood_displeased: rgb(88, 134, 150);
 $mood_disappointed: rgb(106, 94, 114);
 
-//Mood setter
+// Mood setter
 $mood_setter_bg: rgb(93, 110, 154);
 $mood_setter_bg: rgb(249, 124, 60);
 $mood_setter_bg_gradient: linear-gradient(90deg, rgba(249, 124, 60, 1) 0%, rgba(253, 191, 74, 1) 100%);
 $mood_question_text: #fff;
 $mood_setter_radio_border: #009bff;
 $mood_setter_radio_boder_right: #fff;
-$mood_setter_button_bg: rgb(255, 0, 130);
+
+// Mood setter button
+$mood_setter_button_bg: rgb(42, 48, 70);
 $mood_setter_button_border: #fff;
 $mood_setter_button_bg_ecstatic: $mood_ecstatic;
 $mood_setter_button_bg_happy: $mood_happy;
@@ -402,6 +403,19 @@ $mood_setter_button_bg_displeased: $mood_displeased;
 $mood_setter_button_bg_disappointed: $mood_disappointed;
 $mood_setter_button_bg_hover: rgb(218, 0, 112);
 $mood_setter_button_text: #fff;
+
+// Monthly report colors
+$monthly_report_selector_bg: getColor(base);
+$monthly_report_selector_text: getColor(text);
+$monthly_report_selector_border: 1px solid rgb(124, 106, 182);
+$monthly_report_month_title_bottom_border: 1px solid rgb(124, 106, 182);
+$monthty_report_blank_day_bg: getColor(base);
+$monthly_report_blank_day_text: getColor(text);
+$monthly_report_day_text: #fff;
+$monthly_report_day_border: 1px solid rgb(44, 52, 58);
+$monthly_report_loader_color: rgb(252, 113, 55);
+
+// Satis Report viewer
 
 .dashboard {
 	width: 70%;
@@ -682,6 +696,130 @@ $mood_setter_button_text: #fff;
 		.equal {
 			background-color: $dashboard_current_day_details_time_remaining_bg_current;
 		}
+	}
+
+	.monthly_report {
+		margin-top: 30px;
+		width: 80%;
+
+		.report_year_selector {
+			width: 100px;
+			height: 50px;
+			font-size: 18px;
+			color: $monthly_report_selector_text;
+			background: $monthly_report_selector_bg;
+			border: $monthly_report_selector_border;
+			cursor: pointer;
+
+			&:focus {
+				outline: none;
+			}
+		}
+
+		.month_title {
+			width: 100%;
+			margin-bottom: 10px;
+			font-size: 40px;
+			border-bottom: $monthly_report_month_title_bottom_border;
+		}
+
+		.days_holder {
+			width: 100%;
+			margin-bottom: 80px;
+			display: flex;
+			justify-content: space-evenly;
+			flex-wrap: wrap;
+		}
+
+		.blank_day {
+			width: 50px;
+			height: 80px;
+			border-radius: 10px;
+			margin: 10px 10px;
+			font-size: 15px;
+			color: $monthly_report_blank_day_text;
+			padding: 10px;
+			display: flex;
+			background: $monthty_report_blank_day_bg;
+			border: $monthly_report_day_border;
+		}
+
+		.reported_day {
+			width: 150px;
+			height: 80px;
+			border-radius: 10px;
+			margin: 10px 10px;
+			font-size: 20px;
+			font-weight: 900;
+			font-family: $font_varela;
+			color: $monthly_report_day_text;
+			padding: 10px;
+			display: flex;
+			cursor: pointer;
+
+			.day_number {
+				width: 10px;
+				height: 10px;
+				padding: 5px 10px 17px 9px;
+				float: left;
+				border-radius: 5px;
+				color: #000;
+				background: #fff;
+			}
+
+			.day_name {
+				margin-left: 5px;
+				margin-top: 5px;
+			}
+
+			.mood_word {
+				width: 100%;
+				margin-top: 50px;
+				margin-left: -100px;
+			}
+		}
+
+		.ecstatic {
+			background: $mood_setter_button_bg_ecstatic;
+		}
+
+		.happy {
+			background: $mood_setter_button_bg_happy;
+		}
+
+		.content {
+			background: $mood_setter_button_bg_content;
+		}
+
+		.displeased {
+			background: $mood_setter_button_bg_displeased;
+		}
+
+		.disappointed {
+			background: $mood_setter_button_bg_disappointed;
+		}
+
+		// Loader
+		.month_loader:empty {
+			position: absolute;
+			left: calc(51% - 4em);
+			width: 3em;
+			height: 3em;
+			border: 1.1em solid rgba(0, 0, 0, 0.2);
+			border-left: 1.1em solid $monthly_report_loader_color;
+			border-radius: 50%;
+			animation: load8 1.1s infinite linear;
+		}
+
+		@keyframes load8 {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+		// End loader
 	}
 }
 

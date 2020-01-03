@@ -7,6 +7,7 @@ import * as api from '../../api';
 // Components import
 import CurrentDay from './today/CurrentDay';
 import NewSatisReport from './today/NewSatisReport';
+import MonthRouter from './monthlyreport/MonthRouter';
 
 class Dashboard extends Component {
 	state = {
@@ -132,7 +133,12 @@ class Dashboard extends Component {
 				<CurrentDay
 					disableSatisSetter={this.disableSatisSetter.bind(this)}
 					work_end_hour={this.state.user_data.work_end_hour}
+					day_is_set={this.state.display_satis_setter}
 				/>
+
+				{this.state.satis_report && (
+					<MonthRouter satis_report={this.state.satis_report} user_id={this.state.user_data.user_id} />
+				)}
 			</div>
 		);
 	}

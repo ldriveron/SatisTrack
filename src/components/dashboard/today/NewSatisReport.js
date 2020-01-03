@@ -9,7 +9,6 @@ const NewSatisReport = (props) => {
 
 	// className of button will change depending on the chosen mood
 	let button_bg_color = props.button_bg_color;
-
 	// Show the Satis Setter if the user has 0 satis reports or if their latest satis report is not the current day.
 	if (props.satis_report.total_results == 0 || props.satis_report.results[0].date != today.toLocaleDateString()) {
 		return (
@@ -49,7 +48,7 @@ const NewSatisReport = (props) => {
 										.getElementById('set_mood')
 										.dispatchEvent(new Event('submit', { cancelable: true }));
 								}}
-								disabled={today.toLocaleDateString().toString() != props.satis_report.results[0].date}
+								disabled={!(props.satis_report.results[0].date != today.toLocaleDateString())}
 							>
 								Set Mood
 							</button>

@@ -36,12 +36,15 @@ const CurrentDay = (props) => {
 			}
 
 			if (minutes == 0 && seconds == 0) {
+				// Remove NewSatisReport component when timer is over
 				props.disableSatisSetter();
 				clearInterval(interval);
 			}
 		}, 1000);
 	}
 
+	// Create a timer for 60 minutes
+	// Time remaining will decrease depending on the minutes remaining for the current hour
 	function beginMinutesCounter() {
 		var remaining_minutes = 60 * (60 - current_minutes) - current_seconds,
 			display = document.querySelector('#time_remaining');
@@ -56,10 +59,8 @@ const CurrentDay = (props) => {
 		<div className="current_day_details">
 			<div className="detail_box">
 				<p>
-					Current Date<span className="tooltip right">
-						<span className="current_day_word">{current_day}</span>
-						<span className="tiptext">Day of the week.</span>
-					</span>
+					Current Date
+					<span className="current_day_word">{current_day}</span>
 					<br />
 					<span className="date_hour_text">{current_date}</span>
 				</p>

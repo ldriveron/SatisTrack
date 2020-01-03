@@ -128,7 +128,7 @@ class SetSchedule extends Component {
 		// Add all options to array using a for loop
 		let options = [];
 
-		for (var hours = 0; hours < 24; hours++) {
+		for (let hours = 0; hours < 24; hours++) {
 			options.push(
 				<option key={hours} value={hours}>
 					{hours % 12 ? hours % 12 : 12}:00 {hours == 24 ? 'am' : hours >= 12 ? 'pm' : 'am'}

@@ -6,6 +6,7 @@ const NewSatisReportRadioButton = (props) => {
 		<div className="radio_button_container">
 			<label className="radio_label">
 				<input
+					required
 					type="radio"
 					name="mood"
 					value={props.mood}

@@ -33,7 +33,9 @@ class App extends Component {
 				});
 			}
 
+			// Days of the week array to check if the user works on the current day
 			let days_of_week = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
+
 			// Fetch user data after their ID is retreived
 			api
 				.fetchUser(resp.id)

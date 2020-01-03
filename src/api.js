@@ -15,6 +15,11 @@ export const fetchAllSatis = (userID) => {
 	return axios.get(`http://192.168.1.70:4242/api/satis/all/${userID}`).then((resp) => resp.data);
 };
 
+// Fetch satisfaction report based on month and year
+export const fetchMonthSatis = (userID, year, month) => {
+	return axios.get(`http://192.168.1.70:4242/api/satis/${year}/${month}/${userID}`).then((resp) => resp.data);
+};
+
 // Post new satis report for the user
 export const postNewSatis = (userID, mood) => {
 	return axios.post(`http://192.168.1.70:4242/api/satis/report/${userID}/${mood}`).then((resp) => resp.data);

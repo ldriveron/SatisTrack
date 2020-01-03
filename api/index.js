@@ -40,7 +40,7 @@ router.get('/auth/init', (req, res) => {
 // If there are none, then respond with total_results: 0
 router.get('/satis/all/:userID', (req, res) => {
 	if (req.isAuthenticated() && req.params.userID === req.user.id) {
-		SatisReport.find({ user_id: req.params.userID }).sort('date').then((report) => {
+		SatisReport.find({ user_id: req.params.userID }).sort('-date').then((report) => {
 			if (report.length !== 0) {
 				res.send({ total_results: report.length, results: report });
 			} else {
@@ -52,17 +52,51 @@ router.get('/satis/all/:userID', (req, res) => {
 	}
 });
 
+// Get one month's report based on year
+// The result will be retreived based on logged in user, selected year and month, and sorted by day.
+router.get('/satis/:year/:month/:userID', (req, res) => {
+	if (req.isAuthenticated() && req.params.userID === req.user.id) {
+		SatisReport.find({ user_id: req.params.userID, year: req.params.year, month: req.params.month })
+			.sort('day')
+			.then((report) => {
+				if (report.length !== 0) {
+					res.send({
+						total_results: report.length,
+						year: req.params.year,
+						month: req.params.month,
+						result: report
+					});
+				} else {
+					res.send({ total_results: 0 });
+				}
+			});
+	} else {
+		res.redirect('/users/login');
+	}
+});
+
 // Add a satisfaction report for the user to MongoDB
 router.post('/satis/report/:userID/:mood', async (req, res) => {
 	if (req.isAuthenticated() && req.params.userID === req.user.id) {
+		let days_of_week = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ];
+
 		let user_id = req.params.userID;
 		let mood = req.params.mood;
-		const date = new Date().toLocaleDateString();
+		let today = new Date();
+		const date = today.toLocaleDateString();
+		const month = today.getMonth() + 1;
+		const day = today.getDate();
+		const day_word = days_of_week[today.getDay()];
+		const year = today.getFullYear();
 
 		const newReport = new SatisReport({
 			user_id,
 			mood,
-			date
+			date,
+			month,
+			day,
+			day_word,
+			year
 		});
 
 		await newReport
