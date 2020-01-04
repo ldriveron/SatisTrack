@@ -102,7 +102,7 @@ router.post('/satis/report/:userID/:mood', async (req, res) => {
 		await newReport
 			.save()
 			.then(() => {
-				res.send({ success: 1 });
+				res.send('Done.');
 			})
 			.catch(console.error);
 	} else {

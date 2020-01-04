@@ -25,7 +25,7 @@ const EditWorkHours = (props) => {
 					{props.options}
 				</select>
 				<button
-					type="submit"
+					type="button"
 					className="button"
 					disabled={props.allow_schedule_edit ? true : props.hours_submit_disabled}
 					onClick={() => {

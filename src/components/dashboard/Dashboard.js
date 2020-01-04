@@ -84,11 +84,14 @@ class Dashboard extends Component {
 		api
 			.postNewSatis(this.state.user_data.user_id, this.state.current_mood)
 			.then((resp) => {
-				if (resp.success == 1) {
+				if (resp === 'Done.') {
 					this.setState({
 						display_satis_setter: false
 					});
 				}
+
+				// Force reload after new Satis Report
+				location.reload();
 			})
 			.catch(console.error);
 	}

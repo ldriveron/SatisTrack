@@ -12,7 +12,7 @@ const NewSatisReport = (props) => {
 	// Show the Satis Setter if the user has 0 satis reports or if their latest satis report is not the current day.
 	if (props.satis_report.total_results == 0 || props.satis_report.results[0].date != today.toLocaleDateString()) {
 		return (
-			<div className="mood_setter">
+			<div className={'mood_setter ' + button_bg_color}>
 				<span className="question">How did you feel after work today?</span>
 				<form className="dashboard_row" id="set_mood" onSubmit={() => props.postNewSatisReport()}>
 					<div className="all_radio_buttons_container">
@@ -29,7 +29,8 @@ const NewSatisReport = (props) => {
 					<div className="button_holder">
 						{props.satis_report.total_results == 0 ? (
 							<button
-								type="submit"
+								type="button"
+								style={{ background: button_bg_color }}
 								className={button_bg_color}
 								onClick={() => {
 									document
@@ -41,8 +42,9 @@ const NewSatisReport = (props) => {
 							</button>
 						) : (
 							<button
-								type="submit"
+								type="button"
 								style={{ background: button_bg_color }}
+								className={button_bg_color}
 								onClick={() => {
 									document
 										.getElementById('set_mood')

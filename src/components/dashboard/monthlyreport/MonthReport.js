@@ -4,6 +4,9 @@ import PropTypes from 'prop-types';
 // API methods import
 import * as api from '../../../api';
 
+// Component import
+import SingleDay from './SingleDay';
+
 const MonthReport = (props) => {
 	// Use useState() hook for calendar days
 	let [ days, setDays ] = useState([]);
@@ -55,6 +58,16 @@ const MonthReport = (props) => {
 		// Array for all month days
 		let days_to_show = [];
 
+		// Generate month calendar with blank days
+		for (let i = 1; i <= days_in_month; i++) {
+			days_to_show.push(
+				<div className="blank_day" key={i}>
+					{i}
+				</div>
+			);
+		}
+
+		// If there are Satis Reports for this month, then place them in the days_to_show array
 		if (resp.total_results != 0) {
 			// Array containing days reported by user
 			let days_reported = [];
@@ -62,31 +75,8 @@ const MonthReport = (props) => {
 				days_reported.push(resp.result[i].day);
 			}
 
-			for (let i = 1; i <= days_in_month; i++) {
-				days_to_show.push(
-					<div className="blank_day" key={i}>
-						{i}
-					</div>
-				);
-			}
-
 			for (let i = 0; i < days_reported.length; i++) {
-				days_to_show[days_reported[i] - 1] = (
-					<div className={'reported_day ' + resp.result[i].mood} key={days_reported[i] + resp.result[i].mood}>
-						<div className="day_number">{resp.result[i].day}</div>
-						<div className="day_name">{resp.result[i].day_word}</div>
-						<div className="mood_word">{resp.result[i].mood}</div>
-					</div>
-				);
-			}
-		} else {
-			// If the user has no reported days for this month, then all days are blank
-			for (let i = 1; i <= days_in_month; i++) {
-				days_to_show.push(
-					<div className="blank_day" key={i}>
-						{i}
-					</div>
-				);
+				days_to_show[days_reported[i] - 1] = <SingleDay key={i + resp.result[i].mood} day={resp.result[i]} />;
 			}
 		}
 

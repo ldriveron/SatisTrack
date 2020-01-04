@@ -8,7 +8,7 @@ const EditWorkDays = (props) => {
 			<div>
 				{props.days_checkboxes}
 				<button
-					type="submit"
+					type="button"
 					className="button"
 					disabled={props.allow_schedule_edit ? true : props.days_submit_disabled}
 					onClick={() => {

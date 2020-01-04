@@ -59,6 +59,8 @@ body {
 	font-family: $font_nunito;
 	margin: 0;
 	padding: 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 // Tooltip
@@ -379,11 +381,11 @@ $dashboard_current_day_letter_text: #fff;
 $dashboard_current_day_letter_bg: rgb(0, 116, 255);
 
 // Mood Colors
-$mood_ecstatic: rgb(56, 160, 122);
-$mood_happy: rgb(120, 174, 97);
-$mood_content: rgb(187, 183, 74);
-$mood_displeased: rgb(88, 134, 150);
-$mood_disappointed: rgb(106, 94, 114);
+$mood_ecstatic: rgb(160, 87, 157);
+$mood_happy: rgb(2, 196, 198);
+$mood_content: rgb(184, 222, 111);
+$mood_displeased: rgb(247, 205, 67);
+$mood_disappointed: rgb(255, 127, 1);
 
 // Mood setter
 $mood_setter_bg: rgb(93, 110, 154);
@@ -732,50 +734,46 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		}
 
 		.blank_day {
-			width: 50px;
+			width: 175px;
 			height: 80px;
-			border-radius: 10px;
-			margin: 10px 10px;
 			font-size: 15px;
 			color: $monthly_report_blank_day_text;
-			padding: 10px;
+			padding: 5px;
 			display: flex;
 			background: $monthty_report_blank_day_bg;
 			border: $monthly_report_day_border;
 		}
 
 		.reported_day {
-			width: 150px;
+			width: 175px;
 			height: 80px;
-			border-radius: 10px;
-			margin: 10px 10px;
-			font-size: 20px;
+			font-size: 15px;
 			font-weight: 900;
-			font-family: $font_varela;
 			color: $monthly_report_day_text;
-			padding: 10px;
-			display: flex;
+			padding: 5px;
+			border: $monthly_report_day_border;
 			cursor: pointer;
 
 			.day_number {
 				width: 10px;
 				height: 10px;
-				padding: 5px 10px 17px 9px;
-				float: left;
+				padding: 5px 10px 15px 12px;
 				border-radius: 5px;
+				float: left;
 				color: #000;
-				background: #fff;
+				background: rgba(255, 255, 255, 0.6);
 			}
 
 			.day_name {
-				margin-left: 5px;
+				margin-left: 40px;
 				margin-top: 5px;
 			}
 
 			.mood_word {
+				font-size: 20px;
 				width: 100%;
-				margin-top: 50px;
-				margin-left: -100px;
+				margin-top: 20px;
+				margin-left: 40px;
 			}
 		}
 

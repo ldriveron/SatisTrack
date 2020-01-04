@@ -32,7 +32,7 @@ class SetSchedule extends Component {
 			allow_schedule_edit: this.validateDateDifference()
 		});
 
-		document.title = 'Set Work Hours';
+		document.title = 'Edit Schedule';
 	}
 
 	// Prevent the user from updating their work schedule more than once a day
@@ -83,6 +83,9 @@ class SetSchedule extends Component {
 						work_end_hour: this.state.new_work_end_hour
 					});
 				}
+
+				// Force reload after set work days
+				location.reload();
 			})
 			.catch(console.error);
 	}
@@ -119,6 +122,9 @@ class SetSchedule extends Component {
 				if (resp === 'Done.') {
 					console.log('Done');
 				}
+
+				// Force reload after setting work days
+				location.reload();
 			})
 			.catch(console.error);
 	}
