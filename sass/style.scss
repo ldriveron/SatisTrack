@@ -5,6 +5,7 @@ $colors: (
 	base : rgb(238, 240, 246),
 	box_base: #fff,
 	form_input: rgb(244, 246, 248),
+	blank_day_bg: rgb(223, 225, 231),
 	text : #000000,
 	base2 : #eeeeee,
 	text2 : #111111
@@ -15,6 +16,7 @@ $colors-dark: (
 	base : rgb(27, 33, 35),
 	box_base: rgb(44, 52, 58),
 	form_input: rgb(55, 63, 70),
+	blank_day_bg: rgb(34, 42, 44),
 	text: #ffffff,
 	base2: #111111,
 	text2: #eeeeee
@@ -58,7 +60,7 @@ body {
 	min-width: 670px;
 	font-family: $font_nunito;
 	margin: 0;
-	padding: 0;
+	padding-bottom: 30px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -411,13 +413,23 @@ $monthly_report_selector_bg: getColor(base);
 $monthly_report_selector_text: getColor(text);
 $monthly_report_selector_border: 1px solid rgb(124, 106, 182);
 $monthly_report_month_title_bottom_border: 1px solid rgb(124, 106, 182);
-$monthty_report_blank_day_bg: getColor(base);
-$monthly_report_blank_day_text: getColor(text);
+$monthty_report_blank_day_bg: getColor(blank_day_bg);
+$monthly_report_blank_day_text: rgb(182, 184, 189);
+$monthly_report_reported_day_number_bg: rgba(255, 255, 255, 0.6);
+$monthly_report_reported_day_number_text: #000;
 $monthly_report_day_text: #fff;
-$monthly_report_day_border: 1px solid rgb(44, 52, 58);
+$monthly_report_day_border: 1px solid rgb(205, 207, 211);
 $monthly_report_loader_color: rgb(252, 113, 55);
 
-// Satis Report viewer
+// Page title
+.page_title {
+	width: 100%;
+	text-align: center;
+	margin-bottom: 40px;
+	color: getcolor(text);
+	font-family: $font_playfair;
+	font-size: 50px;
+}
 
 .dashboard {
 	width: 70%;
@@ -430,13 +442,6 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 	.dashboard_row {
 		text-align: center;
 		width: 100%;
-	}
-
-	.greeting {
-		margin-bottom: 40px;
-		color: $dashboard_text;
-		font-family: $font_playfair;
-		font-size: 50px;
 	}
 
 	.mood_setter {
@@ -453,6 +458,22 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			font-size: 30px;
 			font-weight: 800;
 			font-family: $font_playfair;
+		}
+
+		.recap_input {
+			width: 60%;
+			max-height: 50px;
+			margin-top: 30px;
+			padding: 10px 10px 10px 20px;
+			font-size: 13px;
+			font-weight: 600;
+			background: rgba(255, 255, 255, 0.5);
+			border: none;
+			border-radius: 20px;
+
+			&:focus {
+				outline: none;
+			}
 		}
 
 		.button_holder {
@@ -737,11 +758,10 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			width: 175px;
 			height: 80px;
 			font-size: 15px;
+			margin-bottom: 3px;
 			color: $monthly_report_blank_day_text;
 			padding: 5px;
-			display: flex;
 			background: $monthty_report_blank_day_bg;
-			border: $monthly_report_day_border;
 		}
 
 		.reported_day {
@@ -749,9 +769,9 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			height: 80px;
 			font-size: 15px;
 			font-weight: 900;
+			margin-bottom: 3px;
 			color: $monthly_report_day_text;
 			padding: 5px;
-			border: $monthly_report_day_border;
 			cursor: pointer;
 
 			.day_number {
@@ -760,8 +780,8 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 				padding: 5px 10px 15px 12px;
 				border-radius: 5px;
 				float: left;
-				color: #000;
-				background: rgba(255, 255, 255, 0.6);
+				color: $monthly_report_reported_day_number_text;
+				background: $monthly_report_reported_day_number_bg;
 			}
 
 			.day_name {
@@ -774,6 +794,31 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 				width: 100%;
 				margin-top: 20px;
 				margin-left: 40px;
+			}
+
+			.chat-solid.icon {
+				color: rgba(255, 255, 255, 0.5);
+				position: absolute;
+				margin-left: 80%;
+				margin-top: 8px;
+				width: 15px;
+				height: 10px;
+				border: solid 1px currentColor;
+				background-color: currentColor;
+				border-radius: 2px;
+			}
+			.chat-solid.icon:before {
+				content: '';
+				position: absolute;
+				left: 3px;
+				top: 8px;
+				width: 4px;
+				height: 4px;
+				background-color: currentColor;
+				border-bottom: solid 1px currentColor;
+				border-right: solid 1px currentColor;
+				-webkit-transform: rotate(45deg);
+				transform: rotate(45deg);
 			}
 		}
 
@@ -829,9 +874,9 @@ $select_bg_color_hover: #1e2168;
 $set_work_button_background: #fe9079;
 $set_work_button_background_hover: #ffa290;
 $set_work_button_text_color: #fff;
-$current_hour_bg_color: rgb(40, 41, 49);
-$current_hour_color: #fff;
-$current_hour_gradient: linear-gradient(90deg, rgba(40, 41, 49, 1) 0%, rgba(71, 72, 83, 1) 100%);
+$current_hour_bg_color: getColor(box_base);
+$current_hour_color: getColor(text);
+$current_hour_borer: 1px solid rgb(39, 46, 53);
 
 .set_work_hours {
 	width: 100%;
@@ -841,23 +886,26 @@ $current_hour_gradient: linear-gradient(90deg, rgba(40, 41, 49, 1) 0%, rgba(71, 
 	align-items: center;
 	justify-content: center;
 
+	.schedule_form {
+		width: 100%;
+	}
+
 	.current_hours {
 		width: 100%;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin: 20px 0;
+		margin: 0 0 20px 0;
 
 		.hour {
 			background-color: $current_hour_bg_color;
-			background: $current_hour_gradient;
-			border-radius: 10px;
 			width: 150px;
 			padding: 20px 20px;
-			font-size: 25px;
-			font-weight: 900;
+			font-size: 20px;
+			font-weight: 300;
 			margin-right: 20px;
 			color: $current_hour_color;
+			border: $current_hour_borer;
 		}
 	}
 

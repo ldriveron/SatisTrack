@@ -8,12 +8,12 @@ const CurrentHours = (props) => {
 	return (
 		<div className="current_hours">
 			<div className="hour">
-				Start hour<br />
+				Start<br />
 				{props.work_start_hour % 12 ? props.work_start_hour % 12 : 12}:00{' '}
 				{props.work_start_hour == 24 ? 'am' : props.work_start_hour >= 12 ? 'pm' : 'am'}
 			</div>
 			<div className="hour">
-				End hour<br />
+				End<br />
 				{props.work_end_hour % 12 ? props.work_end_hour % 12 : 12}:00{' '}
 				{props.work_end_hour == 24 ? 'am' : props.work_end_hour >= 12 ? 'pm' : 'am'}
 			</div>

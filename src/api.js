@@ -21,8 +21,8 @@ export const fetchMonthSatis = (userID, year, month) => {
 };
 
 // Post new satis report for the user
-export const postNewSatis = (userID, mood) => {
-	return axios.post(`http://192.168.1.70:4242/api/satis/report/${userID}/${mood}`).then((resp) => resp.data);
+export const postNewSatis = (userID, mood, recap) => {
+	return axios.post(`http://192.168.1.70:4242/api/satis/report/${userID}/${mood}/${recap}`).then((resp) => resp.data);
 };
 
 // Update the set work times on the database for the user

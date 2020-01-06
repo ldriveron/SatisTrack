@@ -76,12 +76,13 @@ router.get('/satis/:year/:month/:userID', (req, res) => {
 });
 
 // Add a satisfaction report for the user to MongoDB
-router.post('/satis/report/:userID/:mood', async (req, res) => {
+router.post('/satis/report/:userID/:mood/:recap', async (req, res) => {
 	if (req.isAuthenticated() && req.params.userID === req.user.id) {
 		let days_of_week = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ];
 
 		let user_id = req.params.userID;
 		let mood = req.params.mood;
+		let recap = req.params.recap;
 		let today = new Date();
 		const date = today.toLocaleDateString();
 		const month = today.getMonth() + 1;
@@ -96,6 +97,7 @@ router.post('/satis/report/:userID/:mood', async (req, res) => {
 			month,
 			day,
 			day_word,
+			recap,
 			year
 		});
 

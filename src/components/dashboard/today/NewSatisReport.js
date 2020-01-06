@@ -26,6 +26,15 @@ const NewSatisReport = (props) => {
 						/>
 					</div>
 
+					<input
+						type="text"
+						name="recap"
+						className="recap_input"
+						maxLength="170"
+						placeholder="Recap your day (optional)"
+						onChange={(e) => props.handleRecapChange(e.target.value)}
+					/>
+
 					<div className="button_holder">
 						{props.satis_report.total_results == 0 ? (
 							<button
@@ -68,6 +77,7 @@ NewSatisReport.propTypes = {
 	satis_report: PropTypes.object,
 	button_bg_color: PropTypes.string,
 	handleCurrentMoodOnChange: PropTypes.func,
+	handleNoteChange: PropTypes.func,
 	postNewSatisReport: PropTypes.func
 };
 

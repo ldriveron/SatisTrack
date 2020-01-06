@@ -27,33 +27,33 @@ class App extends Component {
 					user_id: resp.id,
 					isLoggedIn: true
 				});
+
+				// Days of the week array to check if the user works on the current day
+				let days_of_week = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
+
+				// Fetch user data after their ID is retreived
+				api
+					.fetchUser(resp.id)
+					.then((resp) => {
+						this.setState({
+							user_data: {
+								user_id: this.state.user_id,
+								username: resp.user.username,
+								work_start_hour: resp.user.work_start_hour,
+								work_end_hour: resp.user.work_end_hour,
+								last_schedule_edit: resp.user.last_schedule_edit,
+								work_days: resp.user.work_days,
+								days_tracked: resp.user.days_tracked
+							},
+							user_works_today: resp.user.work_days[days_of_week[this.state.today.getDay()]]
+						});
+					})
+					.catch(console.error);
 			} else {
 				this.setState({
 					isLoggedIn: false
 				});
 			}
-
-			// Days of the week array to check if the user works on the current day
-			let days_of_week = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
-
-			// Fetch user data after their ID is retreived
-			api
-				.fetchUser(resp.id)
-				.then((resp) => {
-					this.setState({
-						user_data: {
-							user_id: this.state.user_id,
-							username: resp.user.username,
-							work_start_hour: resp.user.work_start_hour,
-							work_end_hour: resp.user.work_end_hour,
-							last_schedule_edit: resp.user.last_schedule_edit,
-							work_days: resp.user.work_days,
-							days_tracked: resp.user.days_tracked
-						},
-						user_works_today: resp.user.work_days[days_of_week[this.state.today.getDay()]]
-					});
-				})
-				.catch(console.error);
 		});
 	}
 

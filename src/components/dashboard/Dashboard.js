@@ -15,7 +15,8 @@ class Dashboard extends Component {
 		user_works_today: this.props.user_works_today,
 		current_hour: 0,
 		display_satis_setter: true,
-		current_mood: ''
+		current_mood: '',
+		satis_report_recap: ''
 	};
 
 	componentDidMount() {
@@ -79,10 +80,17 @@ class Dashboard extends Component {
 		});
 	}
 
+	// Handle recap change on new Satis Report
+	handleRecapChange(recap) {
+		this.setState({
+			satis_report_recap: recap
+		});
+	}
+
 	// Use API post request to set the user's new satis report and deactivate the satis setter
 	postNewSatisReport() {
 		api
-			.postNewSatis(this.state.user_data.user_id, this.state.current_mood)
+			.postNewSatis(this.state.user_data.user_id, this.state.current_mood, this.state.satis_report_recap)
 			.then((resp) => {
 				if (resp === 'Done.') {
 					this.setState({
@@ -115,7 +123,7 @@ class Dashboard extends Component {
 
 		return (
 			<div className="dashboard">
-				<div className="dashboard_row greeting">
+				<div className="page_title">
 					<div>{greeting}</div>
 				</div>
 
@@ -130,6 +138,7 @@ class Dashboard extends Component {
 						button_bg_color={this.state.button_bg_color}
 						postNewSatisReport={this.postNewSatisReport.bind(this)}
 						handleCurrentMoodOnChange={this.handleCurrentMoodOnChange.bind(this)}
+						handleRecapChange={this.handleRecapChange.bind(this)}
 					/>
 				)}
 
@@ -137,6 +146,7 @@ class Dashboard extends Component {
 					disableSatisSetter={this.disableSatisSetter.bind(this)}
 					work_end_hour={this.state.user_data.work_end_hour}
 					day_is_set={this.state.display_satis_setter}
+					setting_satis={this.state.display_satis_setter}
 				/>
 
 				{this.state.satis_report && (

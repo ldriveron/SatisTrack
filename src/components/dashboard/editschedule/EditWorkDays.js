@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // Form for editing work hours
 const EditWorkDays = (props) => {
 	return (
-		<form id="set_work_days" onSubmit={() => props.setWorkDays()}>
+		<form id="set_work_days" className="schedule_form" onSubmit={() => props.setWorkDays()}>
 			<div>
 				{props.days_checkboxes}
 				<button

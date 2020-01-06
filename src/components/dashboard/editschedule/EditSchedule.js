@@ -164,6 +164,13 @@ class SetSchedule extends Component {
 
 		return (
 			<div className="set_work_hours">
+				<div className="page_title">Edit Schedule</div>
+
+				<CurrentHours
+					work_start_hour={this.state.user_data.work_start_hour}
+					work_end_hour={this.state.user_data.work_end_hour}
+				/>
+
 				<EditWorkHours
 					setWorkHours={this.setWorkHours.bind(this)}
 					handleHourChange={this.handleHourChange.bind(this)}
@@ -172,11 +179,6 @@ class SetSchedule extends Component {
 					options={options}
 					allow_schedule_edit={this.state.allow_schedule_edit}
 					hours_submit_disabled={this.state.hours_submit_disabled}
-				/>
-
-				<CurrentHours
-					work_start_hour={this.state.user_data.work_start_hour}
-					work_end_hour={this.state.user_data.work_end_hour}
 				/>
 
 				<EditWorkDays

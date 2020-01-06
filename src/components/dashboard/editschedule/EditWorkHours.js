@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const EditWorkHours = (props) => {
 	return (
-		<form id="set_work_hours" onSubmit={() => props.setWorkHours()}>
+		<form id="set_work_hours" className="schedule_form" onSubmit={() => props.setWorkHours()}>
 			<div>
 				<label htmlFor="start_hour">Start Hour</label>
 				<select
