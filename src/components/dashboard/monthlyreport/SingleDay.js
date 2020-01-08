@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const SingleDay = (props) => {
-	if (props.day.recap) {
+	if (props.day.recap != '') {
 		return (
 			<div className="tooltip bottom">
 				<div className={'reported_day ' + props.day.mood}>

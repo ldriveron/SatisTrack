@@ -42,7 +42,9 @@ class App extends Component {
 								work_start_hour: resp.user.work_start_hour,
 								work_end_hour: resp.user.work_end_hour,
 								last_schedule_edit: resp.user.last_schedule_edit,
+								last_report_date: resp.user.last_report_date,
 								work_days: resp.user.work_days,
+								reporting_streak: resp.user.reporting_streak,
 								days_tracked: resp.user.days_tracked
 							},
 							user_works_today: resp.user.work_days[days_of_week[this.state.today.getDay()]]

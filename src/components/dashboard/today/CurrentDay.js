@@ -66,7 +66,7 @@ const CurrentDay = (props) => {
 				</p>
 			</div>
 			<div className="detail_box">
-				{props.work_end_hour == current_hour && !props.setting_satis ? (
+				{props.work_end_hour == current_hour ? (
 					<div className="tooltip bottom">
 						<div className="detail_box time_remaining equal">
 							<div id="time_remaining" onLoad={beginMinutesCounter()} />

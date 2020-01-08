@@ -10,7 +10,7 @@ const NewSatisReport = (props) => {
 	// className of button will change depending on the chosen mood
 	let button_bg_color = props.button_bg_color;
 	// Show the Satis Setter if the user has 0 satis reports or if their latest satis report is not the current day.
-	if (props.satis_report.total_results == 0 || props.satis_report.results[0].date != today.toLocaleDateString()) {
+	if (props.satis_report.total_results == 0 || props.last_report_date != today.toLocaleDateString()) {
 		return (
 			<div className={'mood_setter ' + button_bg_color}>
 				<span className="question">How did you feel after work today?</span>
@@ -32,6 +32,7 @@ const NewSatisReport = (props) => {
 						className="recap_input"
 						maxLength="170"
 						placeholder="Recap your day (optional)"
+						defaultValue=""
 						onChange={(e) => props.handleRecapChange(e.target.value)}
 					/>
 
@@ -59,7 +60,6 @@ const NewSatisReport = (props) => {
 										.getElementById('set_mood')
 										.dispatchEvent(new Event('submit', { cancelable: true }));
 								}}
-								disabled={!(props.satis_report.results[0].date != today.toLocaleDateString())}
 							>
 								Set Mood
 							</button>
@@ -75,6 +75,7 @@ const NewSatisReport = (props) => {
 
 NewSatisReport.propTypes = {
 	satis_report: PropTypes.object,
+	last_report_date: PropTypes.string,
 	button_bg_color: PropTypes.string,
 	handleCurrentMoodOnChange: PropTypes.func,
 	handleNoteChange: PropTypes.func,

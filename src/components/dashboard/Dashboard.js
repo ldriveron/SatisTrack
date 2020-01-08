@@ -16,7 +16,7 @@ class Dashboard extends Component {
 		current_hour: 0,
 		display_satis_setter: true,
 		current_mood: '',
-		satis_report_recap: ''
+		satis_report_recap: ' '
 	};
 
 	componentDidMount() {
@@ -135,6 +135,7 @@ class Dashboard extends Component {
 				this.state.display_satis_setter == true && (
 					<NewSatisReport
 						satis_report={this.state.satis_report}
+						last_report_date={this.state.user_data.last_report_date}
 						button_bg_color={this.state.button_bg_color}
 						postNewSatisReport={this.postNewSatisReport.bind(this)}
 						handleCurrentMoodOnChange={this.handleCurrentMoodOnChange.bind(this)}
