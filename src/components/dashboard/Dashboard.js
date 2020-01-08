@@ -16,7 +16,7 @@ class Dashboard extends Component {
 		current_hour: 0,
 		display_satis_setter: true,
 		current_mood: '',
-		satis_report_recap: ' '
+		satis_report_recap: ''
 	};
 
 	componentDidMount() {
