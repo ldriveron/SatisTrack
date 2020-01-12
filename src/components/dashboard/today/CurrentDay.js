@@ -66,7 +66,7 @@ const CurrentDay = (props) => {
 				</p>
 			</div>
 			<div className="detail_box">
-				{props.work_end_hour == current_hour ? (
+				{props.work_end_hour == current_hour && props.day_is_set ? (
 					<div className="tooltip bottom">
 						<div className="detail_box time_remaining equal">
 							<div id="time_remaining" onLoad={beginMinutesCounter()} />
@@ -76,10 +76,10 @@ const CurrentDay = (props) => {
 				) : (
 					<div className="tooltip bottom">
 						<div className="detail_box time_remaining">
-							{(props.work_end_hour - current_hour + 24) % 24 != 1 ? (
+							{(props.work_end_hour - current_hour + 24) % 24 != 1 && props.setting_satis == false ? (
 								(props.work_end_hour - current_hour + 24) % 24
 							) : (
-								'0'
+								'24'
 							)}h<br />
 							{60 - current_minutes}m
 						</div>
@@ -105,7 +105,7 @@ const CurrentDay = (props) => {
 CurrentDay.propTypes = {
 	disableSatisSetter: PropTypes.func,
 	work_end_hour: PropTypes.number,
-	setting_satis: PropTypes.bool
+	day_is_set: PropTypes.bool
 };
 
 export default CurrentDay;

@@ -6,6 +6,7 @@ import * as api from '../../api';
 
 // Components import
 import CurrentDay from './today/CurrentDay';
+import StreakNotify from './today/StreakNotify';
 import NewSatisReport from './today/NewSatisReport';
 import MonthRouter from './monthlyreport/MonthRouter';
 
@@ -46,6 +47,12 @@ class Dashboard extends Component {
 			today: today,
 			current_hour: today.getHours()
 		});
+
+		if (this.state.user_data.last_report_date == today.toLocaleDateString()) {
+			this.setState({
+				display_satis_setter: false
+			});
+		}
 
 		document.title = 'Dashboard';
 	}
@@ -143,11 +150,16 @@ class Dashboard extends Component {
 					/>
 				)}
 
+				{/* If user hit a new reporting streak (5 mood reports in a row),  then show streak notification */}
+				{this.state.user_data &&
+				this.state.user_data.reporting_streak % 5 == 0 && (
+					<StreakNotify total_streaks={this.state.user_data.total_streaks} />
+				)}
+
 				<CurrentDay
 					disableSatisSetter={this.disableSatisSetter.bind(this)}
 					work_end_hour={this.state.user_data.work_end_hour}
 					day_is_set={this.state.display_satis_setter}
-					setting_satis={this.state.display_satis_setter}
 				/>
 
 				{this.state.satis_report && (

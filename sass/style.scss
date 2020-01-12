@@ -78,6 +78,7 @@ $tooltip_shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 
 .tooltip .tiptext {
 	visibility: hidden;
+	opacity: 0;
 	width: fit-content;
 	min-width: 150px;
 	background-color: $tooltip_bg;
@@ -95,6 +96,11 @@ $tooltip_shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 
 .tooltip:hover .tiptext {
 	visibility: visible;
+	opacity: 1;
+	-webkit-transition: all 0.5s ease-in-out;
+	-moz-transition: all 0.5s ease-in-out;
+	-o-transition: all 0.5s ease-in-out;
+	transition: all 0.5s ease-in-out;
 }
 
 .tooltip.bottom .tiptext {
@@ -382,6 +388,14 @@ $dashboard_current_day_details_time_remaining_bg_current: rgb(1, 255, 135);
 $dashboard_current_day_letter_text: #fff;
 $dashboard_current_day_letter_bg: rgb(0, 116, 255);
 
+//Streak notifier colors
+$dashboard_streak_notify_bg: rgb(48, 51, 78);
+$dashboard_streak_notify_bell_bg_one: rgb(26, 225, 108);
+$dashboard_streak_notify_bell_bg_two: linear-gradient(90deg, rgba(26, 225, 108, 1) 25%, rgba(20, 205, 149, 1) 100%);
+$dashboard_streak_notify_streak_number_bg: #fff;
+$dashboard_streak_notify_streak_number_text: #000;
+$dashboard_streak_notify_explain_text: rgb(105, 110, 133);
+
 // Mood Colors
 $mood_ecstatic: rgb(160, 87, 157);
 $mood_happy: rgb(2, 196, 198);
@@ -442,6 +456,80 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 	.dashboard_row {
 		text-align: center;
 		width: 100%;
+	}
+
+	.streak_notify {
+		background: $dashboard_streak_notify_bg;
+		width: 30%;
+		border-radius: 20px;
+		margin-bottom: 30px;
+
+		.explainer {
+			font-size: 18px;
+			font-weight: 600;
+			color: $dashboard_streak_notify_explain_text;
+		}
+
+		.bell_holder {
+			background: $dashboard_streak_notify_bell_bg_one;
+			background: $dashboard_streak_notify_bell_bg_two;
+			width: 100%;
+			padding: 20px 0px 10px 0px;
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
+			display: flex;
+			flex-wrap: wrap;
+			align-content: center;
+			justify-content: center;
+
+			.total_streaks_number {
+				background: $dashboard_streak_notify_streak_number_bg;
+				color: $dashboard_streak_notify_streak_number_text;
+				font-size: 20px;
+				font-weight: 800;
+				border-radius: 10px;
+				padding: 5px 10px 5px 10px;
+				margin-top: 30px;
+			}
+
+			.bell-solid.icon {
+				color: #fff;
+				position: absolute;
+				margin-left: 0px;
+				margin-top: 2px;
+				width: 9px;
+				height: 10px;
+				border: solid 1px currentColor;
+				background-color: currentColor;
+				border-radius: 5px 5px 0 0;
+			}
+			.bell-solid.icon:before {
+				content: '';
+				position: absolute;
+				bottom: -5px;
+				left: 2px;
+				width: 3px;
+				height: 3px;
+				border-radius: 50%;
+				border: solid 1px currentColor;
+				background-color: currentColor;
+			}
+			.bell-solid.icon:after {
+				content: '';
+				position: absolute;
+				bottom: -2px;
+				left: -3px;
+				width: 15px;
+				height: 0px;
+				border-top: solid 1px currentColor;
+				border-bottom: solid 1px white;
+			}
+		}
+
+		.text_holder {
+			padding: 20px;
+			text-align: center;
+		}
 	}
 
 	.mood_setter {
@@ -764,6 +852,58 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			background: $monthty_report_blank_day_bg;
 		}
 
+		// Day Tooltip
+		// Day Tooltip colors
+		$day_tooltip_bg: rgb(79, 135, 251);
+		$day_tooltip_text: #fff;
+		$day_tooltip_shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+
+		.day_tooltip {
+			position: relative;
+			display: inline-block;
+		}
+
+		.day_tooltip .day_tiptext {
+			visibility: hidden;
+			width: fit-content;
+			width: 173px;
+			background-color: $day_tooltip_bg;
+			color: $day_tooltip_text;
+			font-family: $font_varela;
+			font-size: 13px;
+			font-weight: 800;
+			text-align: center;
+			border-bottom-left-radius: 3px;
+			border-bottom-right-radius: 3px;
+			padding: 6px 6px;
+			position: absolute;
+			z-index: 1;
+			box-shadow: $day_tooltip_shadow;
+		}
+
+		.day_tooltip:hover .day_tiptext {
+			visibility: visible;
+		}
+
+		.day_tooltip.bottom .day_tiptext {
+			margin-left: -78px;
+			top: 98%;
+			left: 42%;
+		}
+
+		.day_tooltip.top .day_tiptext {
+			margin-left: -85px;
+			z-index: 999;
+			bottom: 110%;
+			left: 50%;
+		}
+
+		.day_tooltip.right .day_tiptext {
+			top: -5px;
+			left: 110%;
+		}
+		// End day tooltip
+
 		.reported_day {
 			width: 175px;
 			height: 80px;
@@ -775,9 +915,11 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			cursor: pointer;
 
 			.day_number {
-				width: 10px;
-				height: 10px;
-				padding: 5px 10px 15px 12px;
+				width: 30px;
+				height: 25px;
+				text-align: center;
+				align-items: center;
+				padding-top: 7px;
 				border-radius: 5px;
 				float: left;
 				color: $monthly_report_reported_day_number_text;
@@ -797,7 +939,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			}
 
 			.chat-solid.icon {
-				color: rgba(255, 255, 255, 0.5);
+				color: rgba(255, 255, 255, 1);
 				position: absolute;
 				margin-left: 80%;
 				margin-top: 8px;

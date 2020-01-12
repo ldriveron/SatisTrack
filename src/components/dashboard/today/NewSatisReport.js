@@ -30,7 +30,7 @@ const NewSatisReport = (props) => {
 						type="text"
 						name="recap"
 						className="recap_input"
-						maxLength="170"
+						maxLength="80"
 						placeholder="Recap your day (optional)"
 						defaultValue=""
 						onChange={(e) => props.handleRecapChange(e.target.value)}

@@ -20,6 +20,7 @@ router.get('/userdata/:userID', (req, res) => {
 					last_report_date: user.last_report_date,
 					days_tracked: user.days_tracked,
 					reporting_streak: user.reporting_streak,
+					total_steaks: user.total_streaks,
 					work_days: user.work_days
 				}
 			})
@@ -143,21 +144,46 @@ router.post([ '/satis/report/:userID/:mood', '/satis/report/:userID/:mood/:recap
 			let yesterday = new Date();
 			// Set the Date object to yesterday's date
 			yesterday.setDate(yesterday.getDate() - 1);
+
+			// If the day before was a working day for the user, and their last_report_date is not
+			// the same as yesterday's date, then reset their reporting_streak to 1.
+			// Else, add increment their reporting_streak by 1.
 			let reporting_streak = 0;
 			if (
 				user.work_days[days_of_week[yesterday.getDay()]] &&
-				user.last_report_date != yesterday.toLocaleDateString()
+				user.last_report_date != yesterday.toLocaleDateString() &&
+				user.last_report_date != today.toLocaleDateString()
 			) {
 				reporting_streak = 1;
 			} else {
 				reporting_streak = user.reporting_streak + 1;
 			}
 
-			await user.updateOne({
-				last_report_date: today.toLocaleDateString(),
-				days_reported: user.days_reported + 1,
-				reporting_streak: reporting_streak
-			});
+			// If this is the user's first mood report, then set their first_satis_report to today.
+			// Else if the user's reporting_streak is divisible by 5, then add one to their total_streaks
+			// This means the user has set a mood report 5 days in a row.
+			// Else just do a normal mood report without changing first_satis_report or total_streaks.
+			if (user.days_reported == 0) {
+				await user.updateOne({
+					last_report_date: today.toLocaleDateString(),
+					days_reported: user.days_reported + 1,
+					reporting_streak: reporting_streak,
+					first_satis_report: today.toLocaleDateString()
+				});
+			} else if ((user.reporting_streak + 1) % 5 == 0) {
+				await user.updateOne({
+					last_report_date: today.toLocaleDateString(),
+					days_reported: user.days_reported + 1,
+					reporting_streak: reporting_streak,
+					total_streaks: user.total_streaks + 1
+				});
+			} else {
+				await user.updateOne({
+					last_report_date: today.toLocaleDateString(),
+					days_reported: user.days_reported + 1,
+					reporting_streak: reporting_streak
+				});
+			}
 		});
 	} else {
 		res.redirect('/users/login');
