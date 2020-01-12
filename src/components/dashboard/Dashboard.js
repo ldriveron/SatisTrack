@@ -48,7 +48,11 @@ class Dashboard extends Component {
 			current_hour: today.getHours()
 		});
 
-		if (this.state.user_data.last_report_date == today.toLocaleDateString()) {
+		// If the user's last report date or last schedule edit is the current day, then do not allow them to set their Mood Report
+		if (
+			this.state.user_data.last_report_date == today.toLocaleDateString() ||
+			this.state.user_data.last_schedule_edit == today.toLocaleDateString()
+		) {
 			this.setState({
 				display_satis_setter: false
 			});

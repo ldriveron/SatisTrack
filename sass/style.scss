@@ -65,6 +65,75 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+// Homepage colors
+$homepage_bg: #fff;
+$homepage_text: #000;
+$homepage_p_text: rgb(76, 92, 167);
+$homepage_screenshot_shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+.home {
+	width: 70%;
+	background: $homepage_bg;
+	color: $homepage_text;
+	border-radius: 40px;
+	text-align: center;
+	box-shadow: $box_shadow;
+
+	h1 {
+		font-family: $font_nunito;
+		font-size: 50px;
+		margin-bottom: 80px;
+	}
+
+	h2 {
+		margin-bottom: 0;
+	}
+
+	p {
+		font-size: 17px;
+		color: $homepage_p_text;
+	}
+
+	.section {
+		width: 100%;
+		margin-top: 0px;
+		margin-bottom: 100px;
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		justify-content: center;
+		align-items: start;
+		align-content: start;
+	}
+
+	.explainer {
+		width: 30%;
+		margin-top: 20px;
+		text-align: left;
+	}
+
+	.small_screenshot {
+		width: 500px;
+		border-radius: 15px;
+		margin-left: 100px;
+		transform: rotate(10deg);
+		box-shadow: $homepage_screenshot_shadow;
+	}
+
+	.large_screenshot {
+		width: 70%;
+		border-radius: 15px;
+		margin-top: 20px;
+		box-shadow: $homepage_screenshot_shadow;
+	}
+
+	.streak_screenshot {
+		width: 100%;
+		border-radius: 15px;
+		box-shadow: $homepage_screenshot_shadow;
+	}
+}
+
 // Tooltip
 // Tooltip colors
 $tooltip_bg: rgb(58, 59, 63);
@@ -193,32 +262,6 @@ $nav_username_text: #fff;
 		margin-left: 10px;
 		font-size: 13px;
 		font-weight: 800;
-	}
-}
-
-@media screen and (max-width: 600px) {
-	.topnav a:not(:first-child) {
-		display: none;
-	}
-	.topnav a.icon {
-		float: right;
-		display: block;
-	}
-}
-
-@media screen and (max-width: 600px) {
-	.topnav.responsive {
-		position: relative;
-	}
-	.topnav.responsive .icon {
-		position: absolute;
-		right: 0;
-		top: 0;
-	}
-	.topnav.responsive a {
-		float: none;
-		display: block;
-		text-align: left;
 	}
 }
 
