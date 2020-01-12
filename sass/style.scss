@@ -394,7 +394,8 @@ $dashboard_streak_notify_bell_bg_one: rgb(26, 225, 108);
 $dashboard_streak_notify_bell_bg_two: linear-gradient(90deg, rgba(26, 225, 108, 1) 25%, rgba(20, 205, 149, 1) 100%);
 $dashboard_streak_notify_streak_number_bg: #fff;
 $dashboard_streak_notify_streak_number_text: #000;
-$dashboard_streak_notify_explain_text: rgb(105, 110, 133);
+$dashboard_streak_notify_streak_h2_text: #fff;
+$dashboard_streak_notify_explain_text: rgb(76, 92, 167);
 
 // Mood Colors
 $mood_ecstatic: rgb(160, 87, 157);
@@ -529,6 +530,10 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		.text_holder {
 			padding: 20px;
 			text-align: center;
+
+			h2 {
+				color: $dashboard_streak_notify_streak_h2_text;
+			}
 		}
 	}
 

@@ -54,6 +54,26 @@ class Dashboard extends Component {
 			});
 		}
 
+		// If the user works on the current day and there is one hour remaining till their work end hour, then set an interval
+		// for every minute that checks if the current hour is the user's work end hour.
+		// Once this happens, clear the interval and reload the page in order to show the mood setter without the user having
+		// to manually reload the page.
+		if (this.props.user_data) {
+			if (
+				this.props.user_works_today &&
+				Math.abs(this.props.user_data.work_end_hour - new Date().getHours()) == 1
+			) {
+				let work_end_hour = this.state.user_data.work_end_hour;
+
+				let interval = setInterval(function() {
+					if (work_end_hour == new Date().getHours()) {
+						clearInterval(interval);
+						location.reload();
+					}
+				}, 60000);
+			}
+		}
+
 		document.title = 'Dashboard';
 	}
 
@@ -158,6 +178,8 @@ class Dashboard extends Component {
 
 				<CurrentDay
 					disableSatisSetter={this.disableSatisSetter.bind(this)}
+					work_days={this.state.user_data.work_days}
+					last_report_date={this.state.user_data.last_report_date}
 					work_end_hour={this.state.user_data.work_end_hour}
 					day_is_set={this.state.display_satis_setter}
 				/>

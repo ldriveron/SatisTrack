@@ -15,10 +15,7 @@ class SetSchedule extends Component {
 		today: new Date(),
 		new_work_start_hour: 0,
 		new_work_end_hour: 0,
-		new_days: {},
-		allow_schedule_edit: true,
-		hours_submit_disabled: true,
-		days_submit_disabled: true
+		new_days: {}
 	};
 
 	componentDidMount() {
@@ -28,24 +25,7 @@ class SetSchedule extends Component {
 			new_days: this.props.user_data.work_days
 		});
 
-		this.setState({
-			allow_schedule_edit: this.validateDateDifference()
-		});
-
 		document.title = 'Edit Schedule';
-	}
-
-	// Prevent the user from updating their work schedule more than once a day
-	// Get the date of the users last schedule edit and get todays date
-	// Get the difference between the two days in milliseconds
-	// If the date difference is more than the milliseconds in a day, then return true, else return false
-	validateDateDifference() {
-		var last_schedule_edit = Date.parse(this.props.user_data.last_schedule_edit.replace('/', ' '));
-		var todays_date = this.state.today.setHours(0, 0, 0, 0);
-		var dateDifference = Math.abs(Number(todays_date) - last_schedule_edit);
-		var milliseconds_in_a_day = 86300000;
-
-		return dateDifference < milliseconds_in_a_day;
 	}
 
 	// When the user changes the option on any of the work hours, set the value on the state
@@ -56,19 +36,6 @@ class SetSchedule extends Component {
 		this.setState({
 			[e.target.name]: e.target.value
 		});
-
-		if (
-			this.state.new_work_start_hour !== this.state.user_data.work_start_hour ||
-			this.state.new_work_end_hour !== this.state.user_data.work_end_hour
-		) {
-			this.setState({
-				hours_submit_disabled: false
-			});
-		} else {
-			this.setState({
-				hours_submit_disabled: true
-			});
-		}
 	}
 
 	// This method is used to update the users work hours on the database
@@ -94,39 +61,55 @@ class SetSchedule extends Component {
 	// if it's selected or not
 	// Previous days are kept in the new object and changed day will be updated
 	handleDayChange(e) {
-		let { name, checked } = e.target;
+		let { value, checked } = e.target;
 
 		this.setState((prevState) => ({
 			new_days: {
 				...prevState.new_days,
-				[name]: checked
-			},
-			days_submit_disabled: false
+				[value]: checked
+			}
 		}));
 	}
 
 	setWorkDays() {
-		// Call api update method to update the users workdays
-		api
-			.updateWorkDays(
-				this.state.user_data.user_id,
-				this.state.new_days.sunday,
-				this.state.new_days.monday,
-				this.state.new_days.tuesday,
-				this.state.new_days.wednesday,
-				this.state.new_days.thursday,
-				this.state.new_days.friday,
-				this.state.new_days.saturday
-			)
-			.then((resp) => {
-				if (resp === 'Done.') {
-					console.log('Done');
-				}
+		// Make sure that at least one work day checkbox is checked
+		let days = document.getElementsByName('work_day');
+		let day_checked = false;
+		for (let i = 0; i < days.length; i++) {
+			// If at least one work day checkbox is checked, then set day_checked to true and end loop
+			if (days[i].checked) {
+				day_checked = true;
+				break;
+			}
+		}
 
-				// Force reload after setting work days
-				location.reload();
-			})
-			.catch(console.error);
+		// If one workday is checked, then update the users workdays
+		if (day_checked) {
+			// Call api update method to update the users workdays
+			api
+				.updateWorkDays(
+					this.state.user_data.user_id,
+					this.state.new_days.sunday,
+					this.state.new_days.monday,
+					this.state.new_days.tuesday,
+					this.state.new_days.wednesday,
+					this.state.new_days.thursday,
+					this.state.new_days.friday,
+					this.state.new_days.saturday
+				)
+				.then((resp) => {
+					if (resp === 'Done.') {
+						console.log('Done');
+					}
+
+					// Force reload after setting work days
+					location.reload();
+				})
+				.catch(console.error);
+		} else {
+			// Alert the user to check at least one work day
+			alert('Please select at least one work day.');
+		}
 	}
 
 	render() {
@@ -151,7 +134,7 @@ class SetSchedule extends Component {
 					<span key={k}>
 						<input
 							type="checkbox"
-							name={k}
+							name="work_day"
 							value={k}
 							checked={this.state.new_days[k] == 'true' || this.state.new_days[k] == true}
 							onChange={(e) => this.handleDayChange(e)}
@@ -177,8 +160,6 @@ class SetSchedule extends Component {
 					new_work_start_hour={this.state.new_work_start_hour}
 					new_work_end_hour={this.state.new_work_end_hour}
 					options={options}
-					allow_schedule_edit={this.state.allow_schedule_edit}
-					hours_submit_disabled={this.state.hours_submit_disabled}
 				/>
 
 				<EditWorkDays
@@ -186,8 +167,6 @@ class SetSchedule extends Component {
 					days_checkboxes={days_checkboxes}
 					handleDayChange={this.handleDayChange.bind(this)}
 					setWorkDays={this.setWorkDays.bind(this)}
-					allow_schedule_edit={this.state.allow_schedule_edit}
-					days_submit_disabled={this.state.days_submit_disabled}
 				/>
 			</div>
 		);

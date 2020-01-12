@@ -11,7 +11,50 @@ const CurrentDay = (props) => {
 		current_minutes = '0' + current_minutes;
 	}
 	let current_seconds = today.getSeconds();
-	// const current_weekday = today.getDay();
+	//let current_weekday = today.getDay();
+
+	// The code below is used to calculate the remaining hours before the user can set their mood report
+	let day_of_week = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
+	let start_day;
+	// Start checking from tomorrow's date if user set their mood report on the current day
+	if (current_date == props.last_report_date) {
+		start_day = today.getDay() + 1;
+	} else {
+		start_day = today.getDay();
+	}
+	let days_remaining = 0;
+	let total_hours_remaining = 0;
+	let day_found = false;
+
+	// While the user's next workday is not found, calculate how many days remain until their next work day.
+	// Multiply the remaining days by 24 and add to it the difference of the user's work end hour and the currenet hour.
+	// Set this calculation to total_hours_remaining.
+	function calculateHoursRemaining() {
+		while (day_found == false) {
+			if (start_day == 7) {
+				start_day = 0;
+			}
+
+			if (props.work_days[day_of_week[start_day]] == 'false') {
+				days_remaining++;
+				start_day++;
+			} else {
+				day_found = true;
+			}
+		}
+
+		// If there are no days remaining, it means the user works on this day and only the difference from the user's
+		// work end hour and the current hour need to be calculated. If there is less than an hour remaining, show 0 hours.
+		if (current_date == props.last_report_date && days_remaining == 0) {
+			if (Math.abs(props.work_end_hour - current_hour + 24) > 24) {
+				total_hours_remaining = 0;
+			} else {
+				total_hours_remaining = Math.abs((props.work_end_hour - current_hour + 23) % 24);
+			}
+		} else {
+			total_hours_remaining = days_remaining * 24 + Math.abs((props.work_end_hour - current_hour + 23) % 24);
+		}
+	}
 
 	// Get the current day of the week
 	let days_of_week = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ];
@@ -75,12 +118,8 @@ const CurrentDay = (props) => {
 					</div>
 				) : (
 					<div className="tooltip bottom">
-						<div className="detail_box time_remaining">
-							{(props.work_end_hour - current_hour + 24) % 24 != 1 && props.setting_satis == false ? (
-								(props.work_end_hour - current_hour + 24) % 24
-							) : (
-								'24'
-							)}h<br />
+						<div className="detail_box time_remaining" onLoad={calculateHoursRemaining()}>
+							{total_hours_remaining}h<br />
 							{60 - current_minutes}m
 						</div>
 						<span className="tiptext">Time remaining until you can set your mood for the day.</span>
@@ -104,6 +143,8 @@ const CurrentDay = (props) => {
 
 CurrentDay.propTypes = {
 	disableSatisSetter: PropTypes.func,
+	work_days: PropTypes.object,
+	last_report_date: PropTypes.string,
 	work_end_hour: PropTypes.number,
 	day_is_set: PropTypes.bool
 };

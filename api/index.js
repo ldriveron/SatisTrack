@@ -195,18 +195,13 @@ router.post([ '/satis/report/:userID/:mood', '/satis/report/:userID/:mood/:recap
 router.post('/userdata/sethours/:userID/:startHour/:endHour', async (req, res) => {
 	if (req.isAuthenticated() && req.params.userID === req.user.id) {
 		await User.findOne({ _id: req.user.id }).then(async (user) => {
-			let today = new Date();
-			if (user.last_schedule_edit != today.toLocaleDateString()) {
-				await user.updateOne({
-					work_start_hour: req.params.startHour,
-					work_end_hour: req.params.endHour,
-					last_schedule_edit: today.toLocaleDateString()
-				});
+			await user.updateOne({
+				work_start_hour: req.params.startHour,
+				work_end_hour: req.params.endHour,
+				last_schedule_edit: new Date().toLocaleDateString()
+			});
 
-				res.send('Done.');
-			} else {
-				res.send('Not yet.');
-			}
+			res.send('Done.');
 		});
 	} else {
 		res.redirect('/users/login');
@@ -230,14 +225,9 @@ router.post(
 
 		if (req.isAuthenticated() && req.params.userID === req.user.id) {
 			await User.findOne({ _id: req.user.id }).then(async (user) => {
-				let today = new Date();
-				if (user.last_schedule_edit != today.toLocaleDateString()) {
-					await user.updateOne({ work_days: new_days, last_schedule_edit: new Date().toLocaleDateString() });
+				await user.updateOne({ work_days: new_days, last_schedule_edit: new Date().toLocaleDateString() });
 
-					res.send('Done');
-				} else {
-					res.send('Not yet.');
-				}
+				res.send('Done');
 			});
 		} else {
 			res.redirect('/users/login');

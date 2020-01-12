@@ -27,7 +27,6 @@ const EditWorkHours = (props) => {
 				<button
 					type="button"
 					className="button"
-					disabled={props.allow_schedule_edit ? true : props.hours_submit_disabled}
 					onClick={() => {
 						document
 							.getElementById('set_work_hours')
@@ -46,9 +45,7 @@ EditWorkHours.propTypes = {
 	handleHourChange: PropTypes.func,
 	new_work_start_hour: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
 	new_work_end_hour: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),
-	options: PropTypes.array,
-	allow_schedule_edit: PropTypes.bool,
-	hours_submit_disabled: PropTypes.bool
+	options: PropTypes.array
 };
 
 export default EditWorkHours;
