@@ -43,10 +43,10 @@ class App extends Component {
 								work_end_hour: resp.user.work_end_hour,
 								last_schedule_edit: resp.user.last_schedule_edit,
 								last_report_date: resp.user.last_report_date,
+								days_reported: resp.user.days_reported,
 								work_days: resp.user.work_days,
 								reporting_streak: resp.user.reporting_streak,
-								total_streaks: resp.user.total_steaks,
-								days_tracked: resp.user.days_tracked
+								total_streaks: resp.user.total_steaks
 							},
 							user_works_today: resp.user.work_days[days_of_week[this.state.today.getDay()]]
 						});
@@ -65,7 +65,7 @@ class App extends Component {
 		return (
 			<Router>
 				{this.state.user_data.user_id && (
-					<Header isLoggedIn={this.state.isLoggedIn} username={this.state.user_data.username} />
+					<Header isLoggedIn={this.state.isLoggedIn} user_data={this.state.user_data} />
 				)}
 				{this.state.user_data.user_id ? (
 					<Switch>

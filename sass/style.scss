@@ -73,17 +73,12 @@ $homepage_screenshot_shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 
 .home {
 	width: 70%;
+	padding: 0 20px;
 	background: $homepage_bg;
 	color: $homepage_text;
 	border-radius: 40px;
 	text-align: center;
 	box-shadow: $box_shadow;
-
-	h1 {
-		font-family: $font_nunito;
-		font-size: 50px;
-		margin-bottom: 80px;
-	}
 
 	h2 {
 		margin-bottom: 0;
@@ -107,29 +102,78 @@ $homepage_screenshot_shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 	}
 
 	.explainer {
-		width: 30%;
-		margin-top: 20px;
+		min-width: 30%;
+		max-width: 40%;
 		text-align: left;
+		margin-bottom: 30px;
 	}
 
-	.small_screenshot {
-		width: 500px;
-		border-radius: 15px;
-		margin-left: 100px;
-		transform: rotate(10deg);
-		box-shadow: $homepage_screenshot_shadow;
+	@media only screen and (max-width: 10000px) {
+		h1 {
+			font-family: $font_nunito;
+			font-size: 50px;
+			margin-bottom: 80px;
+		}
+
+		.explainer {
+			width: 30%;
+			text-align: left;
+			margin-bottom: 30px;
+		}
+
+		.small_screenshot {
+			width: 500px;
+			border-radius: 15px;
+			margin-left: 100px;
+			transform: rotate(10deg);
+			box-shadow: $homepage_screenshot_shadow;
+		}
+
+		.streak_screenshot {
+			width: 80%;
+			border-radius: 15px;
+			margin-bottom: 30px;
+			margin-left: 25px;
+			box-shadow: $homepage_screenshot_shadow;
+		}
+	}
+
+	@media only screen and (max-width: 1345px) {
+		h1 {
+			font-family: $font_nunito;
+			font-size: 50px;
+			margin-bottom: 0;
+		}
+
+		.explainer {
+			min-width: 60%;
+			text-align: left;
+			margin-bottom: 30px;
+			margin-left: 40px;
+		}
+
+		.small_screenshot {
+			width: 500px;
+			border-radius: 15px;
+			margin-left: 0;
+			transform: rotate(0deg);
+			box-shadow: $homepage_screenshot_shadow;
+		}
+
+		.streak_screenshot {
+			width: 80%;
+			border-radius: 15px;
+			margin-bottom: 30px;
+			margin-left: 20px;
+			box-shadow: $homepage_screenshot_shadow;
+		}
 	}
 
 	.large_screenshot {
-		width: 70%;
+		max-width: 90%;
+		min-width: 70%;
 		border-radius: 15px;
 		margin-top: 20px;
-		box-shadow: $homepage_screenshot_shadow;
-	}
-
-	.streak_screenshot {
-		width: 100%;
-		border-radius: 15px;
 		box-shadow: $homepage_screenshot_shadow;
 	}
 }
@@ -174,7 +218,7 @@ $tooltip_shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 
 .tooltip.bottom .tiptext {
 	margin-left: -105px;
-	top: 105%;
+	top: 110%;
 	left: 50%;
 }
 
@@ -197,6 +241,8 @@ $nav_background: getColor(base);
 $nav_text: getColor(text);
 $nav_link: getColor(text);
 $nav_link_hover: rgb(171, 78, 104);
+$nav_user_header_stat_bg: rgb(0, 100, 98);
+$nav_user_header_stat_text: #fff;
 $nav_logout_button_text: getColor(text);
 $nav_logout_button_border: #ccc;
 $nav_logout_button_bg: getColor(base);
@@ -257,11 +303,35 @@ $nav_username_text: #fff;
 		color: $nav_username_text;
 		background-color: $nav_username_bg;
 		border-radius: 30px;
+		border-top-left-radius: 30px;
+		border-bottom-left-radius: 30px;
 		padding: 5px 10px;
 		margin-top: 3px;
 		margin-left: 10px;
 		font-size: 13px;
 		font-weight: 800;
+	}
+
+	.user_header_stat {
+		color: $nav_user_header_stat_text;
+		background-color: $nav_user_header_stat_bg;
+		padding: 5px 10px;
+		margin-top: 3px;
+		font-size: 13px;
+		font-weight: 800;
+	}
+
+	.left {
+		border-right: 2px solid rgb(1, 90, 89);
+		margin-left: 10px;
+		border-top-left-radius: 30px;
+		border-bottom-left-radius: 30px;
+	}
+
+	.right {
+		border-left: 2px solid rgb(1, 90, 89);
+		border-top-right-radius: 30px;
+		border-bottom-right-radius: 30px;
 	}
 }
 
@@ -504,7 +574,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 
 	.streak_notify {
 		background: $dashboard_streak_notify_bg;
-		width: 30%;
+		width: 400px;
 		border-radius: 20px;
 		margin-bottom: 30px;
 

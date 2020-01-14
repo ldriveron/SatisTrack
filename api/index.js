@@ -18,7 +18,7 @@ router.get('/userdata/:userID', (req, res) => {
 					work_end_hour: user.work_end_hour,
 					last_schedule_edit: user.last_schedule_edit,
 					last_report_date: user.last_report_date,
-					days_tracked: user.days_tracked,
+					days_reported: user.days_reported,
 					reporting_streak: user.reporting_streak,
 					total_steaks: user.total_streaks,
 					work_days: user.work_days

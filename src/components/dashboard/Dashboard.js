@@ -174,8 +174,10 @@ class Dashboard extends Component {
 					/>
 				)}
 
-				{/* If user hit a new reporting streak (5 mood reports in a row),  then show streak notification */}
+				{/* If user hit a new reporting streak (5 mood reports in a row),  then show streak notification.
+				    This only shows if the reporting streak was achieved on the current day. */}
 				{this.state.user_data &&
+				new Date().toLocaleDateString() == this.state.user_data.last_report_date &&
 				this.state.user_data.reporting_streak % 5 == 0 && (
 					<StreakNotify total_streaks={this.state.user_data.total_streaks} />
 				)}
