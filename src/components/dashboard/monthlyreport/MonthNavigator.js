@@ -18,15 +18,14 @@ const MonthNavigator = (props) => {
 	}
 
 	return (
-		<div key="header" className="topnav" id="myTopnav">
+		<div key="header" className="topnav" id="myTopnav" style={{ width: 'fit-content' }}>
 			{links}
 		</div>
 	);
 };
 
 MonthNavigator.propTypes = {
-	year: PropTypes.number,
-	handleMonthClick: PropTypes.func
+	year: PropTypes.number
 };
 
 export default MonthNavigator;

@@ -3,7 +3,7 @@
 
 Satis Track is a web application for keeping track of daily work satisfaction.
 
-After creating an account and logging in, users set their work schedule which includes (these can be edited once a day):
+After creating an account and logging in, users set their work schedule which includes:
 - Work start hour
 - Work end hour
 - Work days during the week

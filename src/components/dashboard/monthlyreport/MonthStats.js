@@ -1,0 +1,58 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+const MonthStats = (props) => {
+	let ecstatic = 0;
+	let happy = 0;
+	let content = 0;
+	let displeased = 0;
+	let disappointed = 0;
+
+	if (props.days.length > 0) {
+		for (let day = 0; day < props.days.length; day++) {
+			switch (props.days[day].mood) {
+				case 'Ecstatic':
+					ecstatic++;
+					continue;
+				case 'Happy':
+					happy++;
+					continue;
+				case 'Content':
+					content++;
+					continue;
+				case 'Displeased':
+					displeased++;
+					continue;
+				case 'Disappointed':
+					disappointed++;
+					continue;
+			}
+		}
+	}
+
+	return (
+		<div className="month_stats">
+			<div className="mood_total ecstatic_bg">
+				<div className="text">Ecstatic</div> <div className="number">{ecstatic}</div>
+			</div>
+			<div className="mood_total happy_bg">
+				<div className="text">Happy</div> <div className="number">{happy}</div>
+			</div>
+			<div className="mood_total content_bg">
+				<div className="text">Content</div> <div className="number">{content}</div>
+			</div>
+			<div className="mood_total displeased_bg">
+				<div className="text">Displeased</div> <div className="number">{displeased}</div>
+			</div>
+			<div className="mood_total disappointed_bg">
+				<div className="text">Disappointed</div> <div className="number">{disappointed}</div>
+			</div>
+		</div>
+	);
+};
+
+MonthStats.propTypes = {
+	days: PropTypes.array
+};
+
+export default MonthStats;

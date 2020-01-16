@@ -116,6 +116,9 @@ const RegisterForm = () => (
 						>
 							Register
 						</button>
+						<p>
+							Already have an account? <a href="login">Login here.</a>
+						</p>
 					</form>
 				</div>
 			);

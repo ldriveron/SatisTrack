@@ -28,6 +28,9 @@ const LoginForm = (props) => {
 				<button type="submit" className="formbutton">
 					Login
 				</button>
+				<p>
+					Don&apos;t have an account? <a href="register">Create one here.</a>
+				</p>
 			</form>
 		</div>
 	);

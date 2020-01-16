@@ -7,10 +7,13 @@ const Header = (props) => {
 
 	userLinks.push(
 		<div key="header" className="topnav" id="myTopnav">
-			<Link key="dashboard" to="/users/dashboard">
+			<div className="statis_logo">
+				<a href="/">SATIS TRACK</a>
+			</div>
+			<Link key="dashboard" to="/users/dashboard" className="links_holder">
 				Dashboard
 			</Link>
-			<Link key="change_work_hours" to="/users/editschedule">
+			<Link key="change_work_hours" to="/users/editschedule" className="links_holder">
 				Edit Schedule
 			</Link>
 			<div className="username">{props.user_data.username}</div>

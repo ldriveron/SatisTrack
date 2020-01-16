@@ -131,16 +131,21 @@ class SetSchedule extends Component {
 			{},
 			...Object.keys(this.state.new_days).map((k) =>
 				days_checkboxes.push(
-					<span key={k}>
-						<input
-							type="checkbox"
-							name="work_day"
-							value={k}
-							checked={this.state.new_days[k] == 'true' || this.state.new_days[k] == true}
-							onChange={(e) => this.handleDayChange(e)}
-						/>
-						{k.charAt(0).toUpperCase() + k.slice(1)}
-					</span>
+					// <span key={k}>
+					<div key={k} className="checkbox_container">
+						<label className="checkbox_label">
+							<input
+								type="checkbox"
+								name="work_day"
+								value={k}
+								checked={this.state.new_days[k] == 'true' || this.state.new_days[k] == true}
+								onChange={(e) => this.handleDayChange(e)}
+							/>
+							<span className="checkbox_custom rectangular" />
+						</label>
+						<div className="checkbox_title">{k.charAt(0).toUpperCase() + k.slice(1)}</div>
+					</div>
+					// </span>
 				)
 			)
 		);
@@ -148,12 +153,11 @@ class SetSchedule extends Component {
 		return (
 			<div className="set_work_hours">
 				<div className="page_title">Edit Schedule</div>
-
+				<div className="page_sub_title">Hours</div>
 				<CurrentHours
 					work_start_hour={this.state.user_data.work_start_hour}
 					work_end_hour={this.state.user_data.work_end_hour}
 				/>
-
 				<EditWorkHours
 					setWorkHours={this.setWorkHours.bind(this)}
 					handleHourChange={this.handleHourChange.bind(this)}
@@ -161,13 +165,13 @@ class SetSchedule extends Component {
 					new_work_end_hour={this.state.new_work_end_hour}
 					options={options}
 				/>
-
 				<EditWorkDays
 					new_days={this.state.new_days}
 					days_checkboxes={days_checkboxes}
 					handleDayChange={this.handleDayChange.bind(this)}
 					setWorkDays={this.setWorkDays.bind(this)}
 				/>
+				Editing your work schedule will disable the Mood Setter for one day.
 			</div>
 		);
 	}

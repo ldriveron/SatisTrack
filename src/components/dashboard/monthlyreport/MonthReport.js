@@ -6,10 +6,12 @@ import * as api from '../../../api';
 
 // Component import
 import SingleDay from './SingleDay';
+import MonthStats from './MonthStats';
 
 const MonthReport = (props) => {
 	// Use useState() hook for calendar days
 	let [ days, setDays ] = useState([]);
+	let [ moodResults, setMoodResults ] = useState([]);
 	let [ isLoading, setIsLoading ] = useState(true);
 
 	const months = [
@@ -42,7 +44,17 @@ const MonthReport = (props) => {
 				.fetchMonthSatis(props.user_id, props.year, props.match.params.month)
 				.then((resp) => {
 					setIsLoading(false);
+					// Update the state using useState()
 					setDays(generateMonthCalendar(month_days[props.match.params.month - 1], resp));
+
+					// Get mood results for CurrentMonthStats component.
+					// If the total results is not 0, then set moodResults to the resp result.
+					// If it is 0, then reset the moodResults to an empty array [].
+					if (resp.total_results != 0) {
+						setMoodResults(resp.result);
+					} else {
+						setMoodResults([]);
+					}
 				})
 				.catch(console.error);
 		},
@@ -67,14 +79,16 @@ const MonthReport = (props) => {
 			);
 		}
 
-		// If there are Satis Reports for this month, then place them in the days_to_show array
+		// If there are Satis Reports for this month, then place them in the days_to_show array.
+		// If there are none, then just return the previous blank days month calendar.
 		if (resp.total_results != 0) {
-			// Array containing days reported by user
+			// Array containing days of this month reported by user
 			let days_reported = [];
 			for (let i = 0; i < resp.result.length; i++) {
 				days_reported.push(resp.result[i].day);
 			}
 
+			// Replace each blank day with a reported day on the days to show array
 			for (let i = 0; i < days_reported.length; i++) {
 				days_to_show[days_reported[i] - 1] = <SingleDay key={i + resp.result[i].mood} day={resp.result[i]} />;
 			}
@@ -96,7 +110,10 @@ const MonthReport = (props) => {
 			{isLoading ? (
 				<div className="month_loader" />
 			) : (
-				<div className="days_holder">{days.length > 0 && days}</div>
+				<div>
+					{moodResults.length > 0 && <MonthStats days={moodResults} />}
+					<div className="days_holder">{days.length > 0 && days}</div>
+				</div>
 			)}
 		</div>
 	);

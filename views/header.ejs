@@ -13,12 +13,14 @@
 </head>
 <body>
     <noscript>Javascript is required by Satis Track.</noscript>
-    <div class="statis_logo"><a href="/">SATIS TRACK</a></div>
     <% if(!isLoggedIn) { %>
         <div class="topnav" id="myTopnav">
-            <a href="/">Home</a>
-            <a href="/users/login">Login</a>
-            <a href="/users/register">Register</a>
+            <div class="statis_logo"><a href="/">SATIS TRACK</a></div>
+            <div class="links_holder">
+                <a href="/users/register">Register</a>
+                <a href="/users/login">Login</a>
+                <a href="/">Home</a>
+            </div>
         </div>
     <% } %>
         

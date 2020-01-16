@@ -7,7 +7,7 @@ const CurrentHours = (props) => {
 	}
 	return (
 		<div className="current_hours">
-			<div className="hour">
+			<div className="hour" style={{ marginLeft: '20px' }}>
 				Start<br />
 				{props.work_start_hour % 12 ? props.work_start_hour % 12 : 12}:00{' '}
 				{props.work_start_hour == 24 ? 'am' : props.work_start_hour >= 12 ? 'pm' : 'am'}

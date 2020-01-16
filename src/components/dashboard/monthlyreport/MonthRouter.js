@@ -41,7 +41,7 @@ class MonthRouter extends Component {
 
 		return (
 			<div className="monthly_report">
-				<select
+				{/* <select
 					className="report_year_selector"
 					name="year"
 					id="year"
@@ -49,9 +49,18 @@ class MonthRouter extends Component {
 					value={this.state.year}
 				>
 					{options}
-				</select>
+				</select> */}
 				{this.state.year && (
 					<Router>
+						<select
+							className="report_year_selector"
+							name="year"
+							id="year"
+							onChange={(e) => this.handleYearChange(e.target.value)}
+							value={this.state.year}
+						>
+							{options}
+						</select>
 						<MonthNavigator year={this.state.year} />
 						<Switch>
 							{/* Show default satis report for current year and month */}
