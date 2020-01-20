@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 // API methods import
@@ -7,7 +9,6 @@ import * as api from '../../../api';
 // EditSchedule components import
 import EditWorkHours from './EditWorkHours';
 import EditWorkDays from './EditWorkDays';
-import CurrentHours from './CurrentHours';
 
 class SetSchedule extends Component {
 	state = {
@@ -131,7 +132,6 @@ class SetSchedule extends Component {
 			{},
 			...Object.keys(this.state.new_days).map((k) =>
 				days_checkboxes.push(
-					// <span key={k}>
 					<div key={k} className="checkbox_container">
 						<label className="checkbox_label">
 							<input
@@ -145,33 +145,58 @@ class SetSchedule extends Component {
 						</label>
 						<div className="checkbox_title">{k.charAt(0).toUpperCase() + k.slice(1)}</div>
 					</div>
-					// </span>
 				)
 			)
 		);
 
 		return (
-			<div className="set_work_hours">
+			<div>
 				<div className="page_title">Edit Schedule</div>
-				<div className="page_sub_title">Hours</div>
-				<CurrentHours
-					work_start_hour={this.state.user_data.work_start_hour}
-					work_end_hour={this.state.user_data.work_end_hour}
-				/>
-				<EditWorkHours
-					setWorkHours={this.setWorkHours.bind(this)}
-					handleHourChange={this.handleHourChange.bind(this)}
-					new_work_start_hour={this.state.new_work_start_hour}
-					new_work_end_hour={this.state.new_work_end_hour}
-					options={options}
-				/>
-				<EditWorkDays
-					new_days={this.state.new_days}
-					days_checkboxes={days_checkboxes}
-					handleDayChange={this.handleDayChange.bind(this)}
-					setWorkDays={this.setWorkDays.bind(this)}
-				/>
-				Editing your work schedule will disable the Mood Setter for one day.
+				<div className="edit_schedule">
+					<Router>
+						<div className="left_links">
+							<Link key="work_hours" to="/users/editschedule">
+								<div className="link top_link">Work Hours</div>
+							</Link>
+							<Link key="work_days" to="/users/editschedule/days">
+								<div className="link bottom_link">Work Days</div>
+							</Link>
+						</div>
+						<div className="right_panel">
+							<Switch>
+								<Route
+									path="/users/editschedule"
+									exact
+									render={(props) => (
+										<EditWorkHours
+											{...props}
+											setWorkHours={this.setWorkHours.bind(this)}
+											handleHourChange={this.handleHourChange.bind(this)}
+											work_start_hour={this.state.user_data.work_start_hour}
+											work_end_hour={this.state.user_data.work_end_hour}
+											new_work_start_hour={this.state.new_work_start_hour}
+											new_work_end_hour={this.state.new_work_end_hour}
+											options={options}
+										/>
+									)}
+								/>
+								<Route
+									path="/users/editschedule/days"
+									exact
+									render={(props) => (
+										<EditWorkDays
+											{...props}
+											new_days={this.state.new_days}
+											days_checkboxes={days_checkboxes}
+											handleDayChange={this.handleDayChange.bind(this)}
+											setWorkDays={this.setWorkDays.bind(this)}
+										/>
+									)}
+								/>
+							</Switch>
+						</div>
+					</Router>
+				</div>
 			</div>
 		);
 	}

@@ -1,16 +1,24 @@
 // API server routes
 
 import express from 'express';
+import bcrypt from 'bcrypt';
 const router = express.Router();
+
+// React imports
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 
 // MongoDB models for api search
 import User from '../models/User';
 import SatisReport from '../models/SatisReport';
 
+// Import react components
+import LoginForm from '../src/components/LoginForm';
+
 // Return the current user's information
-router.get('/userdata/:userID', (req, res) => {
+router.get('/userdata/:userID', async (req, res) => {
 	if (req.isAuthenticated() && req.params.userID === req.user.id) {
-		User.findOne({ id: req.params.uderID }).then((user) =>
+		await User.findOne({ _id: req.user.id }).then((user) =>
 			res.send({
 				user: {
 					username: user.username,
@@ -21,7 +29,8 @@ router.get('/userdata/:userID', (req, res) => {
 					days_reported: user.days_reported,
 					reporting_streak: user.reporting_streak,
 					total_steaks: user.total_streaks,
-					work_days: user.work_days
+					work_days: user.work_days,
+					company: user.company
 				}
 			})
 		);
@@ -234,5 +243,97 @@ router.post(
 		}
 	}
 );
+
+// Change the user's profile
+router.post('/userdata/editprofile', async (req, res) => {
+	let new_username = req.body.username;
+	let new_company = req.body.company;
+
+	if (req.isAuthenticated()) {
+		await User.findOne({ _id: req.user.id }).then(async (user) => {
+			if (user.username != new_username || user.company != new_company) {
+				await user.updateOne({ username: new_username, company: new_company });
+
+				req.flash('success_msg', 'Your profile has been updated.');
+				res.redirect('/users/settings/profile');
+			}
+		});
+	} else {
+		res.redirect('/users/login');
+	}
+});
+
+// Change the user's password
+router.post('/userdata/editpassword', async (req, res) => {
+	let current_pw = req.body.current_pw;
+	let new_pw = req.body.new_pw;
+
+	if (req.isAuthenticated()) {
+		await User.findOne({ _id: req.user.id })
+			.then((user) => {
+				//match password
+				bcrypt.compare(current_pw, user.password, async (err, isMatch) => {
+					if (err) throw err;
+
+					if (isMatch) {
+						// Secure the user's password
+						await bcrypt.genSalt(10, (err, salt) =>
+							bcrypt.hash(new_pw, salt, async (err, hash) => {
+								if (err) throw err;
+								//set the password to the generated hash
+								new_pw = hash;
+
+								// Save user's new password to mongodb
+								await user.updateOne({ password: new_pw });
+							})
+						);
+
+						req.flash('success_msg', 'Your password has been changed.');
+						res.redirect('/users/settings/password');
+					} else {
+						req.flash('success_msg', 'Current password incorrect.');
+					}
+				});
+			})
+			.catch((err) => console.log(err));
+	} else {
+		res.redirect('/users/login');
+	}
+});
+
+// Delete the user's account
+router.post('/userdata/deleteaccount', async (req, res) => {
+	let pw = req.body.password;
+
+	if (req.isAuthenticated()) {
+		await User.findOne({ _id: req.user.id }).then((user) => {
+			//match password
+			bcrypt.compare(pw, user.password, async (err, isMatch) => {
+				if (err) throw err;
+
+				if (isMatch) {
+					// Delete the user's account from MongoDB
+					await User.deleteOne({ _id: req.user.id });
+
+					// Delete all Satis Reports by the user from MongoDB
+					await SatisReport.deleteMany({ user_id: req.user.id });
+
+					// End passport session and redirect user to login page
+					req.logout();
+				} else {
+					req.flash('success_msg', 'Incorrect password.');
+				}
+			});
+		});
+
+		res.redirect('/users/login');
+		res.render('login.ejs', {
+			loginForm: ReactDOMServer.renderToString(<LoginForm />),
+			page_title: 'Login'
+		});
+	} else {
+		res.redirect('/users/login');
+	}
+});
 
 export default router;

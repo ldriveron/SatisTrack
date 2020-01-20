@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const MonthStats = (props) => {
+	let total_days = props.days.length;
+
 	let ecstatic = 0;
 	let happy = 0;
 	let content = 0;
@@ -33,19 +35,39 @@ const MonthStats = (props) => {
 	return (
 		<div className="month_stats">
 			<div className="mood_total ecstatic_bg">
-				<div className="text">Ecstatic</div> <div className="number">{ecstatic}</div>
+				<div className="text">Ecstatic</div>{' '}
+				<div className="number">
+					{ecstatic}
+					<div className="percentage">{parseInt(ecstatic / total_days * 100)}%</div>
+				</div>
 			</div>
 			<div className="mood_total happy_bg">
-				<div className="text">Happy</div> <div className="number">{happy}</div>
+				<div className="text">Happy</div>{' '}
+				<div className="number">
+					{happy}
+					<div className="percentage">{parseInt(happy / total_days * 100)}%</div>
+				</div>
 			</div>
 			<div className="mood_total content_bg">
-				<div className="text">Content</div> <div className="number">{content}</div>
+				<div className="text">Content</div>{' '}
+				<div className="number">
+					{content}
+					<div className="percentage">{parseInt(content / total_days * 100)}%</div>
+				</div>
 			</div>
 			<div className="mood_total displeased_bg">
-				<div className="text">Displeased</div> <div className="number">{displeased}</div>
+				<div className="text">Displeased</div>{' '}
+				<div className="number">
+					{displeased}
+					<div className="percentage">{parseInt(displeased / total_days * 100)}%</div>
+				</div>
 			</div>
 			<div className="mood_total disappointed_bg">
-				<div className="text">Disappointed</div> <div className="number">{disappointed}</div>
+				<div className="text">Disappointed</div>{' '}
+				<div className="number">
+					{disappointed}
+					<div className="percentage">{parseInt(disappointed / total_days * 100)}%</div>
+				</div>
 			</div>
 		</div>
 	);

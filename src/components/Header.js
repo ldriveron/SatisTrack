@@ -2,6 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
+// API methods import
+import * as api from '../api';
+
 const Header = (props) => {
 	let userLinks = [];
 
@@ -13,8 +16,11 @@ const Header = (props) => {
 			<Link key="dashboard" to="/users/dashboard" className="links_holder">
 				Dashboard
 			</Link>
-			<Link key="change_work_hours" to="/users/editschedule" className="links_holder">
+			<Link key="account_settings" to="/users/editschedule" className="links_holder">
 				Edit Schedule
+			</Link>
+			<Link key="settings" to="/users/settings/profile" className="links_holder">
+				Settings
 			</Link>
 			<div className="username">{props.user_data.username}</div>
 			<div className="tooltip bottom">
@@ -38,7 +44,7 @@ const Header = (props) => {
 				</span>
 			</div>
 
-			<form key="logout" action="logout?_method=DELETE" method="POST">
+			<form key="logout" action="http://localhost:4242/users/logout?_method=POST" method="POST">
 				<button type="submit" className="logout_button">
 					Logout
 				</button>

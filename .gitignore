@@ -12,3 +12,4 @@ dist
 package-lock.json
 webpack.config.js
 passport-config.js
+EmailService.js

@@ -8,7 +8,9 @@ import Header from './Header';
 // Dashboard imports
 import Dashboard from './dashboard/Dashboard';
 import EditSchedule from './dashboard/editschedule/EditSchedule';
+import Settings from './dashboard/settings/Settings';
 
+// API methods import
 import * as api from '../api';
 
 // Main app starting point
@@ -46,7 +48,8 @@ class App extends Component {
 								days_reported: resp.user.days_reported,
 								work_days: resp.user.work_days,
 								reporting_streak: resp.user.reporting_streak,
-								total_streaks: resp.user.total_steaks
+								total_streaks: resp.user.total_steaks,
+								company: resp.user.company
 							},
 							user_works_today: resp.user.work_days[days_of_week[this.state.today.getDay()]]
 						});
@@ -82,8 +85,11 @@ class App extends Component {
 						/>
 						<Route
 							path="/users/editschedule"
-							exact
 							render={(props) => <EditSchedule {...props} user_data={this.state.user_data} />}
+						/>
+						<Route
+							path="/users/settings"
+							render={(props) => <Settings {...props} user_data={this.state.user_data} />}
 						/>
 					</Switch>
 				) : (

@@ -122,8 +122,8 @@ server.get('/dashboard', checkNotAuthenticated, (req, res) => {
 });
 
 // Log out the user and redirect them to the login page
-server.delete('/logout', (req, res) => {
-	req.logOut();
+server.post('/logout', (req, res) => {
+	req.logout();
 	req.flash('success_msg', 'You have logged out.');
 	res.redirect('/users/login');
 });

@@ -26,10 +26,15 @@ class MonthRouter extends Component {
 	render() {
 		// Array with only the years the user has set satis reports
 		let years = [];
-		for (let i = 0; i < this.props.satis_report.results.length; i++) {
-			if (!years.includes(this.props.satis_report.results[i].year)) {
-				years.push(this.props.satis_report.results[i].year);
+
+		if (this.props.satis_report.total_results != 0) {
+			for (let i = 0; i < this.props.satis_report.results.length; i++) {
+				if (!years.includes(this.props.satis_report.results[i].year)) {
+					years.push(this.props.satis_report.results[i].year);
+				}
 			}
+		} else {
+			years.push(this.state.today.getFullYear());
 		}
 
 		// Generate options with the years
@@ -41,27 +46,20 @@ class MonthRouter extends Component {
 
 		return (
 			<div className="monthly_report">
-				{/* <select
-					className="report_year_selector"
-					name="year"
-					id="year"
-					onChange={(e) => this.handleYearChange(e.target.value)}
-					value={this.state.year}
-				>
-					{options}
-				</select> */}
 				{this.state.year && (
 					<Router>
-						<select
-							className="report_year_selector"
-							name="year"
-							id="year"
-							onChange={(e) => this.handleYearChange(e.target.value)}
-							value={this.state.year}
-						>
-							{options}
-						</select>
-						<MonthNavigator year={this.state.year} />
+						<div className="report_nav_links">
+							<select
+								className="report_year_selector"
+								name="year"
+								id="year"
+								onChange={(e) => this.handleYearChange(e.target.value)}
+								value={this.state.year}
+							>
+								{options}
+							</select>
+							<MonthNavigator year={this.state.year} />
+						</div>
 						<Switch>
 							{/* Show default satis report for current year and month */}
 							<Route
