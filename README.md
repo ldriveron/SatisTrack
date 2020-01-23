@@ -8,7 +8,7 @@ After creating an account and logging in, users set their work schedule which in
 - Work end hour
 - Work days during the week
 
-Users are encouraged to login everyday at their Work end hour in order to post their current mood. Once the hour expires, the user is no longer allowed to enter a mood for that day. This is meant to hopefully offer more in the moment and realistic statistics for the user's work satisfaction.
+Users are encouraged to login everyday at their Work End Hour in order to post their current mood. Once the hour expires, the user is no longer allowed to enter a mood for that day. This is meant to hopefully offer more in the moment and realistic statistics for the user's work satisfaction.
 
 Every reported day is saved to the database (MongoDB) and displayed as a monthly calendar for the user.
 
@@ -19,10 +19,15 @@ Every reported day is saved to the database (MongoDB) and displayed as a monthly
 ![Satis Track Dashboard Light Theme](public/Screenshots/DashboardLightThemeSatisTrack.png)
 
 ## Edit Schedule
-![Satis Track Edit Schedule](public/Screenshots/EditScheduleSatisTrack.png)
+![Satis Track Hours Edit Schedule](public/Screenshots/EditScheduleHoursSatisTrack.png)
+
+![Satis Track Days Edit Schedule](public/Screenshots/EditScheduleDaysSatisTrack.png)
 
 ## Post Report
 ![Satis Track Post Report](public/Screenshots/PostReportSatisTrack.png)
+
+## Settings
+![Settings](public/Screenshots/SettingsSatisTrack.png)
 
 ## Login
 ![Satis Track Login](public/Screenshots/LoginSatisTrack.png)

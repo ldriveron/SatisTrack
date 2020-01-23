@@ -40,8 +40,6 @@ const NewSatisReport = (props) => {
 						{props.satis_report.total_results == 0 ? (
 							<button
 								type="button"
-								style={{ background: button_bg_color }}
-								className={button_bg_color}
 								onClick={() => {
 									document
 										.getElementById('set_mood')
@@ -53,8 +51,6 @@ const NewSatisReport = (props) => {
 						) : (
 							<button
 								type="button"
-								style={{ background: button_bg_color }}
-								className={button_bg_color}
 								onClick={() => {
 									document
 										.getElementById('set_mood')

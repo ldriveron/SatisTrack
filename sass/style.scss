@@ -564,9 +564,8 @@ $mood_displeased: rgb(247, 205, 67);
 $mood_disappointed: rgb(255, 127, 1);
 
 // Mood setter
-$mood_setter_bg: rgb(93, 110, 154);
-$mood_setter_bg: rgb(249, 124, 60);
-$mood_setter_bg_gradient: linear-gradient(90deg, rgba(249, 124, 60, 1) 0%, rgba(253, 191, 74, 1) 100%);
+$mood_setter_bg: rgb(65, 172, 227);
+$mood_setter_bg_gradient: linear-gradient(0deg, rgba(65, 172, 227, 1) 0%, rgba(49, 139, 218, 1) 100%);
 $mood_question_text: #fff;
 $mood_setter_radio_border: #009bff;
 $mood_setter_radio_boder_right: #fff;
@@ -919,6 +918,26 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		}
 	}
 
+	.ecstatic_bg {
+		background: $mood_setter_button_bg_ecstatic;
+	}
+
+	.happy_bg {
+		background: $mood_setter_button_bg_happy;
+	}
+
+	.content_bg {
+		background: $mood_setter_button_bg_content;
+	}
+
+	.displeased_bg {
+		background: $mood_setter_button_bg_displeased;
+	}
+
+	.disappointed_bg {
+		background: $mood_setter_button_bg_disappointed;
+	}
+
 	.current_day_details {
 		min-width: 70%;
 		color: $dashboard_current_day_text_light;
@@ -1255,7 +1274,7 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 
 	.set_work_hours {
 		width: 100%;
-		padding-right: 20px;
+		padding-right: 50px;
 		text-align: center;
 
 		.current_hours {
@@ -1311,7 +1330,6 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 			width: 200px;
 			height: 40px;
 			margin-top: 20px;
-			margin-left: 30px;
 			border-radius: 5px;
 			font-size: 17px;
 			font-weight: 300;
@@ -1381,7 +1399,7 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 
 			.checkbox_title {
 				margin-top: 20px;
-				color: $mood_question_text;
+				color: getColor(text);
 				font-family: $font_varela;
 				font-size: 18px;
 				font-weight: bold;
@@ -1418,7 +1436,7 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 				-moz-transition: all 0.3s ease-out;
 				-ms-transition: all 0.3s ease-out;
 				-o-transition: all 0.3s ease-out;
-				border: 2px solid $mood_setter_radio_boder_right;
+				border: 1px solid #000;
 			}
 
 			.checkbox_label input:checked ~ .checkbox_custom {
@@ -1428,7 +1446,7 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 				-ms-transform: rotate(0deg) scale(1);
 				transform: rotate(0deg) scale(1);
 				opacity: 1;
-				border: 2px solid $mood_setter_radio_boder_right;
+				border: 1px solid #000;
 			}
 
 			.checkbox_label .checkbox_custom::after {

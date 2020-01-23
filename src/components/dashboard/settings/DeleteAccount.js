@@ -34,7 +34,9 @@ const DeleteAccount = (props) => (
 			return (
 				<div>
 					<form action="/api/userdata/deleteaccount" method="POST">
-						<div className="panel_title">Danger Zone</div>
+						<div className="panel_title" style={{ color: 'rgb(203,36,49)' }}>
+							Danger Zone
+						</div>
 						<label>Enter your username</label>
 						<input
 							type="text"
