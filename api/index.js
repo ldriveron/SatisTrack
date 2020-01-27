@@ -4,16 +4,26 @@ import express from 'express';
 import bcrypt from 'bcrypt';
 const router = express.Router();
 
-// React imports
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-
 // MongoDB models for api search
 import User from '../models/User';
 import SatisReport from '../models/SatisReport';
 
-// Import react components
-import LoginForm from '../src/components/LoginForm';
+// Notifier service
+import Notifier from './NotifierService';
+
+let initEmailNotifiers = async () => {
+	// Set up all current activated email notifications
+	await User.find({}).then((users) => {
+		users.map((user) => {
+			if (user.allow_email_notifier == true) {
+				Notifier.scheduler(user.work_days, user.work_end_hour, user._id.toString(), user.email);
+			}
+		});
+	});
+};
+
+// Begin setting up email notifiers
+initEmailNotifiers();
 
 // Return the current user's information
 router.get('/userdata/:userID', async (req, res) => {
@@ -26,6 +36,8 @@ router.get('/userdata/:userID', async (req, res) => {
 					work_end_hour: user.work_end_hour,
 					last_schedule_edit: user.last_schedule_edit,
 					last_report_date: user.last_report_date,
+					allow_email_notifier: user.allow_email_notifier,
+					email_confirmed: user.email_confirmed,
 					days_reported: user.days_reported,
 					reporting_streak: user.reporting_streak,
 					total_steaks: user.total_streaks,
@@ -64,6 +76,42 @@ router.get('/auth/init', async (req, res) => {
 		res.send({ id: req.user.id });
 	} else {
 		res.redirect('/users/login');
+	}
+});
+
+router.post('/userdata/editreminder', (req, res) => {
+	let allow_notifications = req.body.allow;
+
+	if (req.isAuthenticated()) {
+		User.findOne({ _id: req.user.id }).then(async (user) => {
+			// Check if the user's notifications are already on
+			if (allow_notifications == 'on' && !Notifier.exists(req.user.id)) {
+				// If the user checks the allow mood report reminder checkbox, then set a notifier for the user
+				Notifier.scheduler(user.work_days, user.work_end_hour, req.user.id, user.email);
+
+				await user.updateOne({ allow_email_notifier: true });
+
+				req.flash('user_alert', 'Email notifications have been enabled.');
+				res.redirect('/users/dashboard');
+			} else if (!allow_notifications && Notifier.exists(req.user.id)) {
+				// Check if the user has notifications on so it could be removed
+				// If the user unchecks the allow mood report reminder checkbox, remove the notifier
+				Notifier.remover(req.user.id);
+
+				await user.updateOne({ allow_email_notifier: false });
+
+				req.flash('user_alert', 'Email notifications have been disabled.');
+				res.redirect('/users/dashboard');
+			} else if (!allow_notifications && !Notifier.exists(req.user.id)) {
+				// If for some reason allow notifications is unchecked and no notifier exists for the user, just
+				// redirect user to dashboard and update their allow_email_notifier setting
+
+				await user.updateOne({ allow_email_notifier: false });
+
+				req.flash('user_alert', 'Email notifications have been disabled.');
+				res.redirect('/users/dashboard');
+			}
+		});
 	}
 });
 
@@ -210,6 +258,11 @@ router.post('/userdata/sethours/:userID/:startHour/:endHour', async (req, res) =
 				last_schedule_edit: new Date().toLocaleDateString()
 			});
 
+			// Update email notifier schedule for the user
+			Notifier.remover(user.id.toString());
+			Notifier.scheduler(user.work_days, user.work_end_hour, user.id.toString(), user.email);
+
+			req.flash('user_alert', 'Your work hours have been updated.');
 			res.send('Done.');
 		});
 	} else {
@@ -236,6 +289,11 @@ router.post(
 			await User.findOne({ _id: req.user.id }).then(async (user) => {
 				await user.updateOne({ work_days: new_days, last_schedule_edit: new Date().toLocaleDateString() });
 
+				// Update email notifier schedule for the user
+				Notifier.remover(user.id.toString());
+				Notifier.scheduler(user.work_days, user.work_end_hour, user.id.toString(), user.email);
+
+				req.flash('user_alert', 'Your work days have been updated.');
 				res.send('Done');
 			});
 		} else {
@@ -254,8 +312,8 @@ router.post('/userdata/editprofile', async (req, res) => {
 			if (user.username != new_username || user.company != new_company) {
 				await user.updateOne({ username: new_username, company: new_company });
 
-				req.flash('success_msg', 'Your profile has been updated.');
-				res.redirect('/users/settings/profile');
+				req.flash('user_alert', 'Your profile has been updated.');
+				res.redirect('/users/dashboard');
 			}
 		});
 	} else {
@@ -288,10 +346,11 @@ router.post('/userdata/editpassword', async (req, res) => {
 							})
 						);
 
-						req.flash('success_msg', 'Your password has been changed.');
-						res.redirect('/users/settings/password');
+						req.flash('user_alert', 'Your password has been changed.');
+						res.redirect('/users/dashboard');
 					} else {
-						req.flash('success_msg', 'Current password incorrect.');
+						req.flash('user_error', 'Current password incorrect.');
+						res.redirect('/users/dashboard');
 					}
 				});
 			})
@@ -319,17 +378,15 @@ router.post('/userdata/deleteaccount', async (req, res) => {
 					await SatisReport.deleteMany({ user_id: req.user.id });
 
 					// End passport session and redirect user to login page
+					req.flash('success_msg', 'Your account and reports have been deleted.');
 					req.logout();
+
+					res.redirect('/users/login');
 				} else {
-					req.flash('success_msg', 'Incorrect password.');
+					req.flash('user_error', 'Incorrect password.');
+					res.redirect('/users/dashboard');
 				}
 			});
-		});
-
-		res.redirect('/users/login');
-		res.render('login.ejs', {
-			loginForm: ReactDOMServer.renderToString(<LoginForm />),
-			page_title: 'Login'
 		});
 	} else {
 		res.redirect('/users/login');

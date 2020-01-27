@@ -56,11 +56,11 @@ $font_varela: 'Varela Round', sans-serif;
 html,
 body {
 	background: $background;
-	width: 100%;
-	min-width: 750px;
+	max-width: 1849px;
+	min-width: 885px;
 	overflow-x: hidden;
 	font-family: $font_nunito;
-	margin: 0;
+	margin: 0 auto;
 	padding-bottom: 30px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -326,6 +326,19 @@ $nav_username_text: #fff;
 		color: $nav_link_hover;
 	}
 
+	a::after {
+		content: '';
+		display: block;
+		width: 0;
+		height: 2px;
+		background: $nav_link;
+		transition: width .3s;
+	}
+
+	a:hover::after {
+		width: 100%;
+	}
+
 	.icon {
 		display: none;
 	}
@@ -396,6 +409,14 @@ $message_alert_bg: rgb(254, 236, 231);
 $message_alert_text: rgb(236, 67, 15);
 $message_alert_border: rgb(236, 67, 15);
 
+$user_alert_bg: getColor(box_base);
+$user_alert_text: getColor(text);
+$user_alert_border: rgb(56, 133, 221);
+
+$user_error_bg: getColor(box_base);
+$user_error_text: getColor(text);
+$user_error_border: rgb(236, 67, 15);
+
 .message_alert {
 	width: fit-content;
 	display: table;
@@ -406,6 +427,43 @@ $message_alert_border: rgb(236, 67, 15);
 	background-color: $message_alert_bg;
 	border-radius: 5px;
 	border-left: 5px solid $message_alert_border;
+}
+
+.user_alert {
+	width: fit-content;
+	display: table;
+	color: $user_alert_text;
+	padding: 10px 25px;
+	margin: 20px auto 0 auto;
+	text-align: center;
+	background-color: $user_alert_bg;
+	border-radius: 5px;
+	border-left: 5px solid $user_alert_border;
+}
+
+.user_error {
+	width: fit-content;
+	display: table;
+	color: $user_error_text;
+	padding: 10px 25px;
+	margin: 20px auto 0 auto;
+	text-align: center;
+	background-color: $user_error_bg;
+	border-radius: 5px;
+	border-left: 5px solid $user_error_border;
+}
+
+.check.icon {
+	color: #fff;
+	margin-right: 10px;
+	margin-top: 2px;
+	width: 14px;
+	height: 8px;
+	float: left;
+	border-bottom: solid 2px currentColor;
+	border-left: solid 2px currentColor;
+	-webkit-transform: rotate(-45deg);
+	transform: rotate(-45deg);
 }
 // End message alert
 
@@ -448,6 +506,7 @@ $form_link_color: getColor(text);
 	flex-wrap: wrap;
 	width: fit-content;
 	width: 45%;
+	margin-top: 5px;
 	padding: 30px;
 	border-radius: 20px;
 	background-color: $form_bg;
@@ -562,10 +621,11 @@ $mood_happy: rgb(2, 196, 198);
 $mood_content: rgb(184, 222, 111);
 $mood_displeased: rgb(247, 205, 67);
 $mood_disappointed: rgb(255, 127, 1);
+$mood_stressed: rgb(225, 6, 0);
 
 // Mood setter
-$mood_setter_bg: rgb(65, 172, 227);
-$mood_setter_bg_gradient: linear-gradient(0deg, rgba(65, 172, 227, 1) 0%, rgba(49, 139, 218, 1) 100%);
+$mood_setter_bg: rgb(249, 124, 60);
+$mood_setter_bg_gradient: linear-gradient(90deg, rgba(249, 124, 60, 1) 0%, rgba(253, 191, 74, 1) 100%);
 $mood_question_text: #fff;
 $mood_setter_radio_border: #009bff;
 $mood_setter_radio_boder_right: #fff;
@@ -578,6 +638,7 @@ $mood_setter_button_bg_happy: $mood_happy;
 $mood_setter_button_bg_content: $mood_content;
 $mood_setter_button_bg_displeased: $mood_displeased;
 $mood_setter_button_bg_disappointed: $mood_disappointed;
+$mood_setter_button_bg_stressed: $mood_stressed;
 $mood_setter_button_bg_hover: rgb(218, 0, 112);
 $mood_setter_button_text: #fff;
 
@@ -599,6 +660,10 @@ $mood_setter_button_text: #fff;
 
 .disappointed_bg {
 	background: $mood_setter_button_bg_disappointed;
+}
+
+.stressed_bg {
+	background: $mood_setter_button_bg_stressed;
 }
 
 // Monthly report colors
@@ -626,16 +691,14 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 
 .page_sub_title {
 	width: 100%;
-	text-align: center;
-	margin-top: 20px;
+	font-size: 35px;
 	margin-bottom: 10px;
-	color: getcolor(text);
-	font-family: $font_playfair;
-	font-size: 40px;
+	padding-bottom: 10px;
+	color: getColor(text);
 }
 
 .dashboard {
-	width: 70%;
+	width: 100%;
 	color: $dashboard_text;
 	display: flex;
 	flex-wrap: wrap;
@@ -730,7 +793,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		background: $mood_setter_bg_gradient;
 		width: 80%;
 		margin-bottom: 50px;
-		padding: 10px;
+		padding: 10px 0px 0px 0px;
 		border-radius: 5px;
 		text-align: center;
 
@@ -748,6 +811,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			padding: 10px 10px 10px 20px;
 			font-size: 13px;
 			font-weight: 600;
+			color: $mood_setter_button_text;
 			background: rgba(255, 255, 255, 0.5);
 			border: none;
 			border-radius: 20px;
@@ -763,14 +827,15 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 
 		button {
 			background-color: $mood_setter_button_bg;
-			border: 2px solid $mood_setter_button_border;
+			border: none;
 			color: $mood_setter_button_text;
 			font-size: 18px;
 			font-weight: 600;
 			letter-spacing: 10px;
 			text-transform: uppercase;
 			padding: 20px 0;
-			border-radius: 5px;
+			border-bottom-left-radius: 5px;
+			border-bottom-right-radius: 5px;
 			width: 100%;
 			margin-top: 30px;
 			transition: 0.5s;
@@ -780,6 +845,19 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			&:focus {
 				outline: none;
 			}
+		}
+
+		::placeholder {
+			color: $mood_setter_button_text;
+			opacity: 1;
+		}
+
+		:-ms-input-placeholder {
+			color: $mood_setter_button_text;
+		}
+
+		::-ms-input-placeholder {
+			color: $mood_setter_button_text;
 		}
 
 		.all_radio_buttons_container {
@@ -938,6 +1016,10 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		background: $mood_setter_button_bg_disappointed;
 	}
 
+	.stressed_bg {
+		background: $mood_setter_button_bg_stressed;
+	}
+
 	.current_day_details {
 		min-width: 70%;
 		color: $dashboard_current_day_text_light;
@@ -1080,22 +1162,41 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			}
 		}
 
+		.week_day_names {
+			width: 100%;
+			display: flex;
+			justify-content: space-around;
+
+			span {
+				background: getColor(box_base);
+				border: 1px solid getColor(box_base);
+				text-align: center;
+				width: calc(100% * (1/7) - 10px - 6px);
+				flex-grow: 1;
+				margin-right: 3px;
+			}
+		}
+
+		.fill_empty_flex_box {
+			width: calc(100% * (1/7) - 10px - 6px);
+			flex-grow: 1;
+			height: 0;
+			font-size: 15px;
+			margin-bottom: 3px;
+			margin-right: 3px;
+			padding: 5px;
+		}
+
 		.days_holder {
 			width: 100%;
 			margin-bottom: 80px;
 			display: flex;
-			justify-content: space-evenly;
+			justify-content: space-around;
 			flex-wrap: wrap;
 		}
 
-		.blank_day {
-			width: 175px;
-			height: 80px;
-			font-size: 15px;
-			margin-bottom: 3px;
-			color: $monthly_report_blank_day_text;
-			padding: 5px;
-			background: $monthty_report_blank_day_bg;
+		.current_day_highlight {
+			border-bottom: 2px solid rgb(26, 92, 255);
 		}
 
 		// Day Tooltip
@@ -1106,7 +1207,8 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 
 		.day_tooltip {
 			position: relative;
-			display: inline-block;
+			left: 0%;
+			top: 70%;
 		}
 
 		.day_tooltip .day_tiptext {
@@ -1119,8 +1221,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			font-size: 13px;
 			font-weight: 800;
 			text-align: center;
-			border-bottom-left-radius: 3px;
-			border-bottom-right-radius: 3px;
+			border-radius: 3px;
 			padding: 6px 6px;
 			position: absolute;
 			z-index: 1;
@@ -1132,7 +1233,8 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		}
 
 		.day_tooltip.bottom .day_tiptext {
-			margin-left: -78px;
+			margin-left: -105px;
+			margin-top: 30px;
 			top: 98%;
 			left: 42%;
 		}
@@ -1145,17 +1247,36 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		}
 
 		.day_tooltip.right .day_tiptext {
+			margin-top: 0px;
+			margin-left: 23px;
+		}
+
+		.day_tooltip.left .day_tiptext {
 			top: -5px;
-			left: 110%;
+			margin-left: -190px;
 		}
 		// End day tooltip
 
+		.blank_day {
+			width: calc(100% * (1/7) - 10px - 6px);
+			flex-grow: 1;
+			height: 80px;
+			font-size: 15px;
+			margin-bottom: 3px;
+			margin-right: 3px;
+			color: $monthly_report_blank_day_text;
+			padding: 5px;
+			background: $monthty_report_blank_day_bg;
+		}
+
 		.reported_day {
-			width: 175px;
+			width: calc(100% * (1/7) - 10px - 6px);
+			flex-grow: 1;
 			height: 80px;
 			font-size: 15px;
 			font-weight: 900;
 			margin-bottom: 3px;
+			margin-right: 3px;
 			color: $monthly_report_day_text;
 			padding: 5px;
 			cursor: pointer;
@@ -1173,21 +1294,21 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			}
 
 			.day_name {
-				margin-left: 40px;
-				margin-top: 5px;
+				font-size: 13px;
+				margin-left: 34px;
+				margin-top: 7px;
 			}
 
 			.mood_word {
-				font-size: 20px;
+				font-size: 15px;
 				width: 100%;
-				margin-top: 20px;
-				margin-left: 40px;
+				margin-top: 15px;
+				margin-left: 0px;
 			}
 
 			.chat-solid.icon {
 				color: rgba(255, 255, 255, 1);
 				position: absolute;
-				margin-left: 80%;
 				margin-top: 8px;
 				width: 15px;
 				height: 10px;
@@ -1228,6 +1349,10 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 
 		.disappointed {
 			background: $mood_setter_button_bg_disappointed;
+		}
+
+		.stressed {
+			background: $mood_setter_button_bg_stressed;
 		}
 
 		// Loader
@@ -1275,13 +1400,10 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 	.set_work_hours {
 		width: 100%;
 		padding-right: 50px;
-		text-align: center;
 
 		.current_hours {
 			width: 100%;
 			display: flex;
-			align-items: center;
-			justify-content: center;
 			margin: 0 0 20px 0;
 
 			.hour {
@@ -1329,7 +1451,7 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 			color: $set_work_button_text_color;
 			width: 200px;
 			height: 40px;
-			margin-top: 20px;
+			margin-top: 40px;
 			border-radius: 5px;
 			font-size: 17px;
 			font-weight: 300;
@@ -1354,7 +1476,6 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 			width: 100%;
 			margin-bottom: 50px;
 			border-radius: 5px;
-			text-align: center;
 
 			.button_holder {
 				width: 100%;
@@ -1365,7 +1486,7 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 				color: $set_work_button_text_color;
 				width: 200px;
 				height: 40px;
-				margin-top: 20px;
+				margin-top: 40px;
 				margin-left: 0px;
 				border-radius: 5px;
 				font-size: 17px;

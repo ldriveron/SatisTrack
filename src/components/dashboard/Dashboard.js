@@ -101,6 +101,9 @@ class Dashboard extends Component {
 			case 'Disappointed':
 				bg_color = 'disappointed_bg';
 				break;
+			case 'Stressed':
+				bg_color = 'stressed_bg';
+				break;
 			default:
 				bg_color = 'ecstatic_bg';
 		}

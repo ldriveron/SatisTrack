@@ -45,6 +45,8 @@ class App extends Component {
 								work_end_hour: resp.user.work_end_hour,
 								last_schedule_edit: resp.user.last_schedule_edit,
 								last_report_date: resp.user.last_report_date,
+								allow_email_notifier: resp.user.allow_email_notifier,
+								email_confirmed: resp.user.email_confirmed,
 								days_reported: resp.user.days_reported,
 								work_days: resp.user.work_days,
 								reporting_streak: resp.user.reporting_streak,

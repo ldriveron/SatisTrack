@@ -14,7 +14,12 @@ const NewSatisReport = (props) => {
 		return (
 			<div className={'mood_setter ' + button_bg_color}>
 				<span className="question">How did you feel after work today?</span>
-				<form className="dashboard_row" id="set_mood" onSubmit={() => props.postNewSatisReport()}>
+				<form
+					className="dashboard_row"
+					id="set_mood"
+					style={{ marginBottom: '0' }}
+					onSubmit={() => props.postNewSatisReport()}
+				>
 					<div className="all_radio_buttons_container">
 						<RadioButton handleCurrentMoodOnChange={props.handleCurrentMoodOnChange} mood={'Ecstatic'} />
 						<RadioButton handleCurrentMoodOnChange={props.handleCurrentMoodOnChange} mood={'Happy'} />
@@ -24,6 +29,7 @@ const NewSatisReport = (props) => {
 							handleCurrentMoodOnChange={props.handleCurrentMoodOnChange}
 							mood={'Disappointed'}
 						/>
+						<RadioButton handleCurrentMoodOnChange={props.handleCurrentMoodOnChange} mood={'Stressed'} />
 					</div>
 
 					<input

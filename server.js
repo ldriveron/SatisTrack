@@ -47,6 +47,8 @@ server.use((req, res, next) => {
 	res.locals.success_msg = req.flash('success_msg');
 	res.locals.error_msg = req.flash('error_msg');
 	res.locals.error = req.flash('error');
+	res.locals.user_alert = req.flash('user_alert');
+	res.locals.user_error = req.flash('user_error');
 	res.locals.userEmail = req.flash('userEmail');
 	res.locals.userID = req.flash('userID');
 

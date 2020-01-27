@@ -16,6 +16,10 @@ initializePassport(passport);
 // For encrypting passwords
 import bcrypt from 'bcrypt';
 
+// For email confirmation
+import mailer from 'nodemailer';
+import random_string from 'crypto-random-string';
+
 import methodOverride from 'method-override';
 
 // Set the server
@@ -84,10 +88,13 @@ server.post('/register', checkAuthenticated, async (req, res) => {
 					registerform: ReactDOMServer.renderToString(<RegisterForm username={username} email={email} />)
 				});
 			} else {
+				let confirmation_code = random_string({ length: 10, type: 'url-safe' });
+
 				const newUser = new User({
 					username,
 					email,
 					password,
+					confirmation_code,
 					private: 0
 				});
 
@@ -102,7 +109,14 @@ server.post('/register', checkAuthenticated, async (req, res) => {
 						await newUser
 							.save()
 							.then((user) => {
-								req.flash('success_msg', 'You account has been created. Login below.');
+								req.flash(
+									'success_msg',
+									'You account has been created. Check your email for a confirmation link.'
+								);
+
+								// Generate and send confirmation email to user
+								emailConfirm(user.email, confirmation_code, user.id.toString());
+
 								req.flash('userEmail', user.email);
 								res.redirect('/users/login');
 							})
@@ -111,6 +125,78 @@ server.post('/register', checkAuthenticated, async (req, res) => {
 				);
 			}
 		});
+	}
+});
+
+// Send an email containing an email confirmation link to the user
+let emailConfirm = async (email, confirmation_code, id) => {
+	let confirm_url = 'http://localhost:4242/users/email_confirm/' + confirmation_code + '/' + id;
+
+	var mailOptions = {
+		from: '"Satis Track" <satistrack@gmail.com>',
+		to: email,
+		subject: 'Confirm your email on Satis Track',
+		html:
+			'<div id="full_container" style="width: 100%; background-color: #EEF0F6; padding: 20px 0;">' +
+			'<a href="http://localhost:4242" target="_blank" style="text-decoration: none;"><div id="logo_text" ' +
+			'style="width: 100%; font-size: 30px; text-align: center; margin-bottom: 20px;">SATIS TRACK</div></a>' +
+			'<div id="content_container" style="width: 60%; background-color: #fff; margin: 20px auto; ' +
+			'padding: 30px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold;">' +
+			'In order to receive emails from Satis Track, including Mood Report reminders, your email must be confirmed.<br><br>' +
+			'<a href="' +
+			confirm_url +
+			'" target="_blank" style="text-decoration: none;"><div id="begin_button" ' +
+			'style="width: fit-content; margin: 0 auto; padding: 10px 30px; border: none; background-color: #fe9079; ' +
+			'color: #fff; font-size: 16px; border-radius: 5px;">Confirm Email</div></a></div>' +
+			'</div>'
+	};
+
+	var transporter = mailer.createTransport({
+		service: 'gmail',
+		auth: {
+			user: 'satistrack@gmail.com',
+			pass: 'Lolidk1!'
+		}
+	});
+
+	await transporter.sendMail(mailOptions, function(error, info) {
+		if (error) {
+			console.log(error);
+		} else {
+			console.log('Email sent for a new account: ' + info.response);
+		}
+	});
+};
+
+// When the user goes to this route, find the user by ID, then check if the user's email is not
+// already confirmed. If it is not, then check that the code matches. If it does, update the
+// user's email confirmation, else the link is invalid.
+server.get('/email_confirm/:code/:id', async (req, res) => {
+	let code = req.params.code;
+	let id = req.params.id;
+
+	await User.findOne({ _id: id })
+		.then(async (user) => {
+			if (!user.email_confirmed) {
+				if (code == user.confirmation_code) {
+					await user.updateOne({ email_confirmed: true, confirmation_code: '' });
+
+					req.flash('user_alert', 'Your email has been confirmed.');
+				} else {
+					req.flash('user_alert', 'Invalid confirmation link.');
+				}
+			} else {
+				req.flash('user_alert', 'Your email is already confirmed.');
+			}
+		})
+		.catch(() => {
+			req.flash('user_alert', 'Invalid confirmation link.');
+		});
+
+	if (req.isAuthenticated()) {
+		res.redirect('/users/dashboard');
+	} else {
+		res.redirect('/users/login');
 	}
 });
 

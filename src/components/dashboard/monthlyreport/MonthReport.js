@@ -70,10 +70,26 @@ const MonthReport = (props) => {
 		// Array for all month days
 		let days_to_show = [];
 
+		// Generate empty days at beginning of month for a better calendar view
+		// Get the first day of the month and check on what day of the week it lands on
+		let fillInDays = new Date(props.match.params.month + '-' + '1' + '-' + props.year).getDay();
+		fillInDays = fillInDays === 7 ? 0 : fillInDays;
+
+		// If the blank day is the current day and during the current month, add a blue bottom border
+		// to indicate the current day on the calendar
+		let today = new Date();
+		let highlight = '';
+		let month_match = today.getMonth() + 1 == props.match.params.month;
 		// Generate month calendar with blank days
 		for (let i = 1; i <= days_in_month; i++) {
+			// Add a blue bottom border to the current day
+			if (today.getDate() == i && month_match) {
+				highlight = ' current_day_highlight';
+			} else {
+				highlight = '';
+			}
 			days_to_show.push(
-				<div className="blank_day" key={i}>
+				<div className={'blank_day' + highlight} key={i}>
 					{i}
 				</div>
 			);
@@ -90,8 +106,20 @@ const MonthReport = (props) => {
 
 			// Replace each blank day with a reported day on the days to show array
 			for (let i = 0; i < days_reported.length; i++) {
-				days_to_show[days_reported[i] - 1] = <SingleDay key={i + resp.result[i].mood} day={resp.result[i]} />;
+				days_to_show[days_reported[i] - 1] = (
+					<SingleDay key={i + resp.result[i].mood} day={resp.result[i]} month_match={month_match} />
+				);
 			}
+		}
+
+		// Insert empty days at beginning of calendar
+		for (let i = 1; i <= fillInDays; i++) {
+			days_to_show.unshift(<div className="blank_day month_aligner" key={i + 60} />);
+		}
+
+		// Seven fill_empty_flex_box divs to fill empty space for correct last row alignment
+		for (let i = 0; i < 7; i++) {
+			days_to_show.push(<div className="fill_empty_flex_box " key={'spacer_' + i} />);
 		}
 
 		// Return the month calendar to be set on the days state
@@ -112,6 +140,16 @@ const MonthReport = (props) => {
 			) : (
 				<div>
 					{moodResults.length > 0 && <MonthStats days={moodResults} />}
+					{/* Day names of week at top of calendar */}
+					<div className="week_day_names">
+						<span>Sunday</span>
+						<span>Monday</span>
+						<span>Tuesday</span>
+						<span>Wednesday</span>
+						<span>Thursday</span>
+						<span>Friday</span>
+						<span>Saturday</span>
+					</div>
 					<div className="days_holder">{days.length > 0 && days}</div>
 				</div>
 			)}

@@ -12,6 +12,18 @@
     </div>
 <% } %>
 
+<% if(user_alert != '') { %>
+<div class="user_alert">
+    <div class="check icon"></div> <%= user_alert %>
+</div>
+<% } %>
+
+<% if(user_error != '') { %>
+<div class="user_error">
+    <%= user_error %>
+</div>
+<% } %>
+
 <% if(error_msg != '') { %>
     <div class="message_alert">
         <%= error_msg %>

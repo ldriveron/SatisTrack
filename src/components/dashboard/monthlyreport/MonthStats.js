@@ -9,6 +9,7 @@ const MonthStats = (props) => {
 	let content = 0;
 	let displeased = 0;
 	let disappointed = 0;
+	let stressed = 0;
 
 	if (props.days.length > 0) {
 		for (let day = 0; day < props.days.length; day++) {
@@ -27,6 +28,9 @@ const MonthStats = (props) => {
 					continue;
 				case 'Disappointed':
 					disappointed++;
+					continue;
+				case 'Stressed':
+					stressed++;
 					continue;
 			}
 		}
@@ -67,6 +71,13 @@ const MonthStats = (props) => {
 				<div className="number">
 					{disappointed}
 					<div className="percentage">{parseInt(disappointed / total_days * 100)}%</div>
+				</div>
+			</div>
+			<div className="mood_total stressed_bg">
+				<div className="text">Stressed</div>{' '}
+				<div className="number">
+					{stressed}
+					<div className="percentage">{parseInt(stressed / total_days * 100)}%</div>
 				</div>
 			</div>
 		</div>
