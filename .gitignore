@@ -1,6 +1,5 @@
 # General
 .DS_Store
-models
 
 # ReactJS / ExpressJS / NodeJS
 node_modules
@@ -10,6 +9,5 @@ config.js
 public/bundle.js
 dist
 package-lock.json
-webpack.config.js
 passport-config.js
-EmailService.js
+build

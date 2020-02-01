@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 // General imports
 import RegisterForm from './RegisterForm';
+import LoginForm from './LoginForm';
 import Header from './Header';
 
 // Dashboard imports
@@ -96,6 +97,7 @@ class App extends Component {
 					</Switch>
 				) : (
 					<Switch>
+						<Route path="/users/login" exact component={LoginForm} />
 						<Route path="/users/register" exact component={RegisterForm} />
 					</Switch>
 				)}

@@ -11,15 +11,19 @@ import sassMiddleware from 'node-sass-middleware';
 import path from 'path';
 import apiRouter from './api';
 
+import cors from 'cors';
+
 // Set the server
 const server = express();
+
+server.use('*', cors());
 
 // Use the sass middleware
 // Puts the processed CSS in public folder
 server.use(
 	sassMiddleware({
-		src: path.join(__dirname, 'sass'),
-		dest: path.join(__dirname, 'public'),
+		src: path.join(__dirname, '../sass'),
+		dest: path.join(__dirname, '../public'),
 		outputStyle: 'compressed'
 	})
 );
@@ -74,5 +78,7 @@ server.get('*', function(req, res) {
 	res.redirect('/');
 });
 
+const port = process.env.PORT || 4242;
+
 // Run the server on port 4242
-server.listen(config.port, config.host, () => console.log('Server is running...'));
+server.listen(port, '0.0.0.0', () => console.log('Server is running...'));

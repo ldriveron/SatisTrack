@@ -2,9 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-// API methods import
-import * as api from '../api';
-
 const Header = (props) => {
 	let userLinks = [];
 
@@ -44,7 +41,7 @@ const Header = (props) => {
 				</span>
 			</div>
 
-			<form key="logout" action="http://localhost:4242/users/logout?_method=POST" method="POST">
+			<form key="logout" action="/users/logout?_method=POST" method="POST">
 				<button type="submit" className="logout_button">
 					Logout
 				</button>

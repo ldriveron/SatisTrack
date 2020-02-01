@@ -34,7 +34,14 @@ const RegisterForm = () => (
 
 			return (
 				<div className="form_box">
-					<form action="/users/register?email={values.username}" method="POST">
+					<form
+						action={
+							'/users/register/' +
+							Intl.DateTimeFormat().resolvedOptions().timeZone +
+							'?email={values.username}'
+						}
+						method="POST"
+					>
 						<h1>Create an account</h1>
 						<div className="username">
 							<label htmlFor="username">Username</label>

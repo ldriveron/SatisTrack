@@ -70,11 +70,6 @@ const MonthReport = (props) => {
 		// Array for all month days
 		let days_to_show = [];
 
-		// Generate empty days at beginning of month for a better calendar view
-		// Get the first day of the month and check on what day of the week it lands on
-		let fillInDays = new Date(props.match.params.month + '-' + '1' + '-' + props.year).getDay();
-		fillInDays = fillInDays === 7 ? 0 : fillInDays;
-
 		// If the blank day is the current day and during the current month, add a blue bottom border
 		// to indicate the current day on the calendar
 		let today = new Date();
@@ -111,6 +106,11 @@ const MonthReport = (props) => {
 				);
 			}
 		}
+
+		// Generate empty days at beginning of month for a better calendar view
+		// Get the first day of the month and check on what day of the week it lands on
+		let fillInDays = new Date(props.match.params.month + '-' + '1' + '-' + props.year).getDay();
+		fillInDays = fillInDays === 7 ? 0 : fillInDays;
 
 		// Insert empty days at beginning of calendar
 		for (let i = 1; i <= fillInDays; i++) {

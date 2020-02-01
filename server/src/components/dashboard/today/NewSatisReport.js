@@ -43,29 +43,16 @@ const NewSatisReport = (props) => {
 					/>
 
 					<div className="button_holder">
-						{props.satis_report.total_results == 0 ? (
-							<button
-								type="button"
-								onClick={() => {
-									document
-										.getElementById('set_mood')
-										.dispatchEvent(new Event('submit', { cancelable: true }));
-								}}
-							>
-								Set Mood
-							</button>
-						) : (
-							<button
-								type="button"
-								onClick={() => {
-									document
-										.getElementById('set_mood')
-										.dispatchEvent(new Event('submit', { cancelable: true }));
-								}}
-							>
-								Set Mood
-							</button>
-						)}
+						<button
+							type="button"
+							onClick={() => {
+								document
+									.getElementById('set_mood')
+									.dispatchEvent(new Event('submit', { cancelable: true }));
+							}}
+						>
+							Set Mood
+						</button>
 					</div>
 				</form>
 			</div>

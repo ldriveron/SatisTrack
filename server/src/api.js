@@ -34,7 +34,7 @@ export const updateWorkTime = (userID, startHour, endHour) => {
 export const updateWorkDays = (userID, sunday, monday, tuesday, wednesday, thursday, friday, saturday) => {
 	return axios
 		.post(
-			`/api/userdata/setschedule/${userID}/${sunday}/${monday}/${tuesday}/${wednesday}/${thursday}/${friday}/${saturday}/`
+			`/api/userdata/setschedule/${userID}/${sunday}/${monday}/${tuesday}/${wednesday}/${thursday}/${friday}/${saturday}`
 		)
 		.then((resp) => resp.data);
 };

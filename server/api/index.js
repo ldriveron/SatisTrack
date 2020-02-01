@@ -8,6 +8,9 @@ const router = express.Router();
 import User from '../models/User';
 import SatisReport from '../models/SatisReport';
 
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 // Notifier service
 import Notifier from './NotifierService';
 
@@ -16,7 +19,13 @@ let initEmailNotifiers = async () => {
 	await User.find({}).then((users) => {
 		users.map((user) => {
 			if (user.allow_email_notifier == true) {
-				Notifier.scheduler(user.work_days, user.work_end_hour, user._id.toString(), user.email);
+				Notifier.scheduler(
+					user.work_days,
+					user.work_end_hour,
+					user._id.toString(),
+					user.email,
+					user.user_timezone
+				);
 			}
 		});
 	});
@@ -59,15 +68,17 @@ router.get('/auth/init', async (req, res) => {
 		// the day's before date. If the user's last report day is the current day, then there is no need to
 		// reset the user's reporting streak
 		let days_of_week = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
-		let today = new Date();
-		let yesterday = new Date();
+		let today = new Date().toLocaleDateString('en-US', { timeZone: req.user.user_timezone });
+		let yesterday = new Date(today);
+
 		// Set the Date object to yeseterday's date
 		yesterday.setDate(yesterday.getDate() - 1);
+
 		await User.findOne({ _id: req.user.id }).then(async (user) => {
 			if (
 				user.work_days[days_of_week[yesterday.getDay()]] &&
 				user.last_report_date != yesterday.toLocaleDateString() &&
-				user.last_report_date != today.toLocaleDateString()
+				user.last_report_date != today
 			) {
 				await user.updateOne({ reporting_streak: 0 });
 			}
@@ -87,7 +98,7 @@ router.post('/userdata/editreminder', (req, res) => {
 			// Check if the user's notifications are already on
 			if (allow_notifications == 'on' && !Notifier.exists(req.user.id)) {
 				// If the user checks the allow mood report reminder checkbox, then set a notifier for the user
-				Notifier.scheduler(user.work_days, user.work_end_hour, req.user.id, user.email);
+				Notifier.scheduler(user.work_days, user.work_end_hour, req.user.id, user.email, user.user_timezone);
 
 				await user.updateOne({ allow_email_notifier: true });
 
@@ -169,7 +180,8 @@ router.post([ '/satis/report/:userID/:mood', '/satis/report/:userID/:mood/:recap
 
 		let user_id = req.params.userID;
 		let mood = req.params.mood;
-		let today = new Date();
+		let today = new Date().toLocaleDateString('en-US', { timeZone: req.user.user_timezone });
+		today = new Date(today);
 		const date = today.toLocaleDateString();
 		const month = today.getMonth() + 1;
 		const day = today.getDate();
@@ -198,7 +210,7 @@ router.post([ '/satis/report/:userID/:mood', '/satis/report/:userID/:mood/:recap
 			// If the day before was a work day and the user's last report date was not on that day,
 			// then reset their reporting streak to 0
 			let days_of_week = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
-			let yesterday = new Date();
+			let yesterday = new Date(today);
 			// Set the Date object to yesterday's date
 			yesterday.setDate(yesterday.getDate() - 1);
 
@@ -255,12 +267,12 @@ router.post('/userdata/sethours/:userID/:startHour/:endHour', async (req, res) =
 			await user.updateOne({
 				work_start_hour: req.params.startHour,
 				work_end_hour: req.params.endHour,
-				last_schedule_edit: new Date().toLocaleDateString()
+				last_schedule_edit: new Date().toLocaleDateString('en-US', { timeZone: req.user.user_timezone })
 			});
 
 			// Update email notifier schedule for the user
 			Notifier.remover(user.id.toString());
-			Notifier.scheduler(user.work_days, user.work_end_hour, user.id.toString(), user.email);
+			Notifier.scheduler(user.work_days, user.work_end_hour, user.id.toString(), user.email, user.user_timezone);
 
 			req.flash('user_alert', 'Your work hours have been updated.');
 			res.send('Done.');
@@ -287,11 +299,20 @@ router.post(
 
 		if (req.isAuthenticated() && req.params.userID === req.user.id) {
 			await User.findOne({ _id: req.user.id }).then(async (user) => {
-				await user.updateOne({ work_days: new_days, last_schedule_edit: new Date().toLocaleDateString() });
+				await user.updateOne({
+					work_days: new_days,
+					last_schedule_edit: new Date().toLocaleDateString('en-US', { timeZone: req.user.user_timezone })
+				});
 
 				// Update email notifier schedule for the user
 				Notifier.remover(user.id.toString());
-				Notifier.scheduler(user.work_days, user.work_end_hour, user.id.toString(), user.email);
+				Notifier.scheduler(
+					user.work_days,
+					user.work_end_hour,
+					user.id.toString(),
+					user.email,
+					user.user_timezone
+				);
 
 				req.flash('user_alert', 'Your work days have been updated.');
 				res.send('Done');

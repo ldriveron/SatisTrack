@@ -1,6 +1,9 @@
 # Satis Track
 ### By Luis Riveron
 
+# Live At (Deployed)
+[http://satis-track.herokuapp.com/](http://satis-track.herokuapp.com/)
+
 Satis Track is a web application for keeping track of daily work satisfaction.
 
 After creating an account and logging in, users set their work schedule which includes:
@@ -9,6 +12,8 @@ After creating an account and logging in, users set their work schedule which in
 - Work days during the week
 
 Users are encouraged to login everyday at their Work End Hour in order to post their current mood. Once the hour expires, the user is no longer allowed to enter a mood for that day. This is meant to hopefully offer more in the moment and realistic statistics for the user's work satisfaction.
+
+Users also have an option to receive Email reminders to record their Mood Report on the exact hour they leave work--based on their selected work days.
 
 Every reported day is saved to the database (MongoDB) and displayed as a monthly calendar for the user.
 
