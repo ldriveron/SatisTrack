@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-// General imports
+// General component imports
+import StartingPage from './StartingPage';
 import RegisterForm from './RegisterForm';
 import LoginForm from './LoginForm';
 import Header from './Header';
@@ -99,6 +100,7 @@ class App extends Component {
 					<Switch>
 						<Route path="/users/login" exact component={LoginForm} />
 						<Route path="/users/register" exact component={RegisterForm} />
+						<Route path="/" exact component={StartingPage} />
 					</Switch>
 				)}
 			</Router>
