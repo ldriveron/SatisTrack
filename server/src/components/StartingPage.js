@@ -9,7 +9,7 @@ const StartingPage = () => {
 				<div className="explainer">
 					<h2>Keep track of your mood at the end of the work day.</h2>
 					<p>
-						Use Satis Track on the hour you leave work to set your Mood Report for the day.
+						Use Satis Tracker on the hour you leave work to set your Mood Report for the day.
 						<br />
 						<br />Gain insight into your work satisfaction with a monthly calendar report.
 						<br />

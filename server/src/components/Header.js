@@ -8,7 +8,7 @@ const Header = (props) => {
 	userLinks.push(
 		<div key="header" className="topnav" id="myTopnav">
 			<div className="statis_logo">
-				<a href="/">SATIS TRACK</a>
+				<a href="/">SATIS TRACKER</a>
 			</div>
 			<Link key="dashboard" to="/users/dashboard" className="links_holder">
 				Dashboard

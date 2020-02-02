@@ -284,7 +284,7 @@ $nav_username_text: #fff;
 		}
 	}
 
-	@media only screen and (max-width: 1049px) {
+	@media only screen and (max-width: 1098px) {
 		// Logo
 		.statis_logo {
 			width: 100%;
@@ -828,11 +828,25 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			color: $mood_setter_button_text;
 			background: rgba(255, 255, 255, 0.5);
 			border: none;
-			border-radius: 20px;
+			border-top-left-radius: 20px;
+			border-top-right-radius: 20px;
 
 			&:focus {
 				outline: none;
 			}
+		}
+
+		.recap_counter {
+			width: 60%;
+			background: rgba(255, 255, 255, 0.3);
+			padding: 9px 0;
+			font-weight: bold;
+			font-size: 12px;
+			color: #000;
+			margin: 0 auto;
+			border-top: 1px solid #fff;
+			border-bottom-left-radius: 20px;
+			border-bottom-right-radius: 20px;
 		}
 
 		.button_holder {

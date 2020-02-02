@@ -1,10 +1,10 @@
-# Satis Track
+# Satis Tracker
 ### By Luis Riveron
 
 # Live At (Deployed)
-[http://satis-track.herokuapp.com/](http://satis-track.herokuapp.com/)
+[https://satistracker.com/](https://satistracker.com/)
 
-Satis Track is a web application for keeping track of daily work satisfaction.
+Satis Tracker is a web application for keeping track of daily work satisfaction.
 
 After creating an account and logging in, users set their work schedule which includes:
 - Work start hour
@@ -18,27 +18,27 @@ Users also have an option to receive Email reminders to record their Mood Report
 Every reported day is saved to the database (MongoDB) and displayed as a monthly calendar for the user.
 
 ## Dashboard
-![Satis Track Dashboard](public/Screenshots/DashboardSatisTrack.png)
+![Satis Tracker Dashboard](public/Screenshots/DashboardSatisTracker.png)
 
 ## Dashboard Light Theme
-![Satis Track Dashboard Light Theme](public/Screenshots/DashboardLightThemeSatisTrack.png)
+![Satis Tracker Dashboard Light Theme](public/Screenshots/DashboardLightThemeSatisTracker.png)
 
 ## Edit Schedule
-![Satis Track Hours Edit Schedule](public/Screenshots/EditScheduleHoursSatisTrack.png)
+![Satis Tracker Hours Edit Schedule](public/Screenshots/EditScheduleHoursSatisTracker.png)
 
-![Satis Track Days Edit Schedule](public/Screenshots/EditScheduleDaysSatisTrack.png)
+![Satis Tracker Days Edit Schedule](public/Screenshots/EditScheduleDaysSatisTracker.png)
 
 ## Post Report
-![Satis Track Post Report](public/Screenshots/PostReportSatisTrack.png)
+![Satis Tracker Post Report](public/Screenshots/PostReportSatisTracker.png)
 
 ## Settings
-![Settings](public/Screenshots/SettingsSatisTrack.png)
+![Settings](public/Screenshots/SettingsSatisTracker.png)
 
 ## Login
-![Satis Track Login](public/Screenshots/LoginSatisTrack.png)
+![Satis Tracker Login](public/Screenshots/LoginSatisTracker.png)
 
 ## Register
-![Satis Track Register](public/Screenshots/RegisterSatisTrack.png)
+![Satis Tracker Register](public/Screenshots/RegisterSatisTracker.png)
 
 ## Built With
 - Javascript (Node.js, Express.js, React JS)

@@ -7,6 +7,13 @@ import RadioButton from './NewSatisReportRadioButton';
 const NewSatisReport = (props) => {
 	let today = new Date();
 
+	let recapCounter = (input) => {
+		var maxInput = 100;
+		var inputLength = input.length;
+
+		document.getElementById('recap_counter').innerHTML = '<span>' + inputLength + '/' + maxInput + '</span>';
+	};
+
 	// className of button will change depending on the chosen mood
 	let button_bg_color = props.button_bg_color;
 	// Show the Satis Setter if the user has 0 satis reports or if their latest satis report is not the current day.
@@ -36,11 +43,15 @@ const NewSatisReport = (props) => {
 						type="text"
 						name="recap"
 						className="recap_input"
-						maxLength="80"
+						maxLength="100"
 						placeholder="Recap your day (optional)"
 						defaultValue=""
+						onKeyUp={(e) => recapCounter(e.target.value)}
 						onChange={(e) => props.handleRecapChange(e.target.value)}
 					/>
+					<div id="recap_counter" className="recap_counter">
+						<span>0/100</span>
+					</div>
 
 					<div className="button_holder">
 						<button

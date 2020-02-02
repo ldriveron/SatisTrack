@@ -1,3 +1,4 @@
+import sslRedirect from 'heroku-ssl-redirect';
 import express from 'express';
 import config from './config';
 import passport from 'passport';
@@ -15,6 +16,9 @@ import cors from 'cors';
 
 // Set the server
 const server = express();
+
+// Use SSL redirect
+server.use(sslRedirect());
 
 server.use('*', cors());
 
@@ -76,6 +80,15 @@ server.use('/api', apiRouter);
 // Redirect to home page if user attempts to go to page that has no set route
 server.get('*', function(req, res) {
 	res.redirect('/');
+});
+
+server.get('*', function(req, res) {
+	const host = req.hostname;
+	if (host === 'satis-track.herokuapp.com') {
+		res.redirect(301, 'https://satistracker.com');
+	} else {
+		res.redirect('/');
+	}
 });
 
 const port = process.env.PORT || 4242;
