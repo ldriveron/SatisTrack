@@ -12,9 +12,8 @@ const EmailReminder = (props) => {
 				<br />
 				{props.email_confirmed == true ? (
 					<div>
-						Allow <input type="checkbox" name="allow" defaultChecked={props.allowed} />
 						<button type="submit" className="formButton">
-							Update Reminder
+							{props.allowed == true ? 'Deactivate Reminder' : 'Activate Reminder'}
 						</button>
 					</div>
 				) : (

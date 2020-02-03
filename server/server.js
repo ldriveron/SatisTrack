@@ -82,15 +82,6 @@ server.get('*', function(req, res) {
 	res.redirect('/');
 });
 
-server.get('*', function(req, res) {
-	const host = req.hostname;
-	if (host === 'satis-track.herokuapp.com') {
-		res.redirect(301, 'https://satistracker.com');
-	} else {
-		res.redirect('/');
-	}
-});
-
 const port = process.env.PORT || 4242;
 
 // Run the server on port 4242

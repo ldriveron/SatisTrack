@@ -503,9 +503,7 @@ $form_link_color: getColor(text);
 
 .form_box {
 	justify-content: center;
-	text-align: left;
 	flex-wrap: wrap;
-	width: fit-content;
 	width: 45%;
 	margin-top: 5px;
 	padding: 30px;
@@ -531,7 +529,7 @@ $form_link_color: getColor(text);
 	}
 
 	input {
-		width: 100%;
+		width: 96%;
 		background-color: $form_input_bg;
 		color: $form_input_color;
 		font-size: 15px;
@@ -584,9 +582,11 @@ $form_link_color: getColor(text);
 	.input_feedback {
 		border-bottom-left-radius: 5px;
 		border-bottom-right-radius: 5px;
-		min-width: 95%;
-		padding-left: 10px;
-		margin-top: -20px;
+		width: fit-content;
+		padding-left: 11px;
+		padding-right: 11px;
+		margin-top: -15px;
+		margin-left: 5px;
 		background-color: $form_feedback_bg;
 		color: $form_feedback_color;
 		font-size: 14px;
@@ -825,11 +825,11 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			padding: 10px 10px 10px 20px;
 			font-size: 13px;
 			font-weight: 600;
-			color: $mood_setter_button_text;
+			color: rgba(0, 0, 0, 0.7);
 			background: rgba(255, 255, 255, 0.5);
 			border: none;
-			border-top-left-radius: 20px;
-			border-top-right-radius: 20px;
+			border-top-left-radius: 10px;
+			border-top-right-radius: 10px;
 
 			&:focus {
 				outline: none;
@@ -839,14 +839,14 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		.recap_counter {
 			width: 60%;
 			background: rgba(255, 255, 255, 0.3);
-			padding: 9px 0;
+			padding: 10px 10px 10px 20px;
 			font-weight: bold;
 			font-size: 12px;
 			color: #000;
 			margin: 0 auto;
 			border-top: 1px solid #fff;
-			border-bottom-left-radius: 20px;
-			border-bottom-right-radius: 20px;
+			border-bottom-left-radius: 10px;
+			border-bottom-right-radius: 10px;
 		}
 
 		.button_holder {
@@ -865,7 +865,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			border-bottom-left-radius: 5px;
 			border-bottom-right-radius: 5px;
 			width: 100%;
-			margin-top: 30px;
+			margin-top: 35px;
 			transition: 0.5s;
 			box-shadow: $box_shadow;
 			cursor: pointer;
@@ -1185,7 +1185,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 				.percentage {
 					width: 100%;
 					color: rgba(0, 0, 0, 0.3);
-					font-size: 11px;
+					font-size: 12px;
 					text-align: center;
 				}
 			}
@@ -1364,27 +1364,27 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			}
 		}
 
-		.ecstatic {
+		.Ecstatic {
 			background: $mood_setter_button_bg_ecstatic;
 		}
 
-		.happy {
+		.Happy {
 			background: $mood_setter_button_bg_happy;
 		}
 
-		.content {
+		.Content {
 			background: $mood_setter_button_bg_content;
 		}
 
-		.displeased {
+		.Displeased {
 			background: $mood_setter_button_bg_displeased;
 		}
 
-		.disappointed {
+		.Disappointed {
 			background: $mood_setter_button_bg_disappointed;
 		}
 
-		.stressed {
+		.Stressed {
 			background: $mood_setter_button_bg_stressed;
 		}
 
@@ -1420,36 +1420,16 @@ $select_bg_color_hover: #1e2168;
 $set_work_button_background: #fe9079;
 $set_work_button_background_hover: #ffa290;
 $set_work_button_text_color: #fff;
-$current_hour_bg_color: getColor(box_base);
-$current_hour_color: getColor(text);
-$current_hour_borer: 1px solid rgb(39, 46, 53);
 
 .edit_schedule {
 	width: 100%;
 	margin-top: 20px;
 	display: flex;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 
 	.set_work_hours {
 		width: 100%;
-		padding-right: 50px;
-
-		.current_hours {
-			width: 100%;
-			display: flex;
-			margin: 0 0 20px 0;
-
-			.hour {
-				background-color: $current_hour_bg_color;
-				width: 150px;
-				padding: 20px 20px;
-				font-size: 20px;
-				font-weight: 300;
-				margin-right: 20px;
-				color: $current_hour_color;
-				border: $current_hour_borer;
-			}
-		}
+		text-align: center;
 
 		label {
 			margin-left: 20px;
@@ -1460,6 +1440,7 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 			background: $select_bg_color;
 			padding-left: 10px;
 			padding-right: 5px;
+			margin-right: 20px;
 			height: 50px;
 			border-radius: 10px;
 			border: none;
@@ -1504,6 +1485,7 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 
 	.set_work_days {
 		width: 100%;
+		text-align: center;
 
 		.day_selector {
 			width: 100%;
@@ -1678,10 +1660,9 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 // Settings component
 
 .settings {
-	width: 60%;
-	margin-top: 20px;
+	width: 100%;
 	display: flex;
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 
 	input {
 		width: 100%;
@@ -1740,11 +1721,12 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 // Global left link navigator and right panel
 
 .left_links {
-	width: 250px;
-	float: left;
+	width: 100%;
+	margin-bottom: 20px;
 
 	.link {
-		width: 100%;
+		width: 300px;
+		margin: 0 auto;
 		padding: 10px 0 10px 10px;
 		background-color: getColor(box_base);
 
@@ -1789,7 +1771,28 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 	padding: 20px;
 	background-color: getColor(box_base);
 	border-radius: 10px;
-	margin-left: 30px;
+	margin-left: 0;
+	margin: 0 auto;
+
+	input {
+		width: 96%;
+		background-color: $form_input_bg;
+		color: $form_input_color;
+		font-size: 15px;
+		font-weight: 500;
+		text-align: left;
+		border-radius: 5px;
+		margin-top: 10px;
+		margin-bottom: 15px;
+		padding: 15px 10px;
+		border: 2px solid $form_input_border;
+		transition: 0.3s;
+
+		&:focus {
+			border: 2px solid $form_input_border_hover;
+			outline: none;
+		}
+	}
 
 	.panel_title {
 		width: 100%;
@@ -1822,37 +1825,17 @@ $current_hour_borer: 1px solid rgb(39, 46, 53);
 			width: 95%;
 		}
 	}
+}
 
-	.left_links {
-		width: 250px;
-		margin-left: 40px;
-		margin-bottom: 30px;
+@media all and (max-width: 1000px) {
+	.form_box {
+		width: 80%;
 	}
 }
 
-@media all and (max-width: 900px) {
-	.edit_schedule {
-		width: 100%;
-		margin-top: 20px;
-		display: flex;
-		flex-wrap: wrap;
-		align-content: center;
-	}
-
-	.settings {
-		width: 100%;
-		margin-top: 20px;
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	.left_links {
-		width: 250px;
-		margin: 0 auto 30px auto;
-	}
-
+@media all and (max-width: 1099px) {
 	.right_panel {
-		width: 70%;
+		width: 80%;
 		float: right;
 		padding: 20px;
 		background-color: getColor(box_base);

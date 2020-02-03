@@ -43,6 +43,7 @@ router.get('/userdata/:userID', async (req, res) => {
 					username: user.username,
 					work_start_hour: user.work_start_hour,
 					work_end_hour: user.work_end_hour,
+					work_paused: user.work_paused,
 					last_schedule_edit: user.last_schedule_edit,
 					last_report_date: user.last_report_date,
 					allow_email_notifier: user.allow_email_notifier,
@@ -66,7 +67,8 @@ router.get('/auth/init', async (req, res) => {
 		// Check if the user lost their reporting streak and if they did, reset it to 0
 		// This works by checking if the day before was a work day and the user's last report date is not
 		// the day's before date. If the user's last report day is the current day, then there is no need to
-		// reset the user's reporting streak
+		// reset the user's reporting streak. If the user's work schedule is paused, then do not reset their
+		// reporting streak.
 		let days_of_week = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
 		let today = new Date().toLocaleDateString('en-US', { timeZone: req.user.user_timezone });
 		let yesterday = new Date(today);
@@ -78,7 +80,8 @@ router.get('/auth/init', async (req, res) => {
 			if (
 				user.work_days[days_of_week[yesterday.getDay()]] &&
 				user.last_report_date != yesterday.toLocaleDateString() &&
-				user.last_report_date != today
+				user.last_report_date != today &&
+				user.work_paused == false
 			) {
 				await user.updateOne({ reporting_streak: 0 });
 			}
@@ -90,32 +93,22 @@ router.get('/auth/init', async (req, res) => {
 	}
 });
 
+// Edit user's email reminder setting
 router.post('/userdata/editreminder', (req, res) => {
-	let allow_notifications = req.body.allow;
-
 	if (req.isAuthenticated()) {
 		User.findOne({ _id: req.user.id }).then(async (user) => {
 			// Check if the user's notifications are already on
-			if (allow_notifications == 'on' && !Notifier.exists(req.user.id)) {
-				// If the user checks the allow mood report reminder checkbox, then set a notifier for the user
+			if (user.allow_email_notifier == false && !Notifier.exists(req.user.id)) {
+				// If the user's email notification is turned off, then turn it on
 				Notifier.scheduler(user.work_days, user.work_end_hour, req.user.id, user.email, user.user_timezone);
 
 				await user.updateOne({ allow_email_notifier: true });
 
 				req.flash('user_alert', 'Email notifications have been enabled.');
 				res.redirect('/users/dashboard');
-			} else if (!allow_notifications && Notifier.exists(req.user.id)) {
-				// Check if the user has notifications on so it could be removed
-				// If the user unchecks the allow mood report reminder checkbox, remove the notifier
+			} else if (user.allow_email_notifier == true && Notifier.exists(req.user.id)) {
+				// If the user's email notification is turned on, then turn it off
 				Notifier.remover(req.user.id);
-
-				await user.updateOne({ allow_email_notifier: false });
-
-				req.flash('user_alert', 'Email notifications have been disabled.');
-				res.redirect('/users/dashboard');
-			} else if (!allow_notifications && !Notifier.exists(req.user.id)) {
-				// If for some reason allow notifications is unchecked and no notifier exists for the user, just
-				// redirect user to dashboard and update their allow_email_notifier setting
 
 				await user.updateOne({ allow_email_notifier: false });
 
@@ -322,6 +315,31 @@ router.post(
 		}
 	}
 );
+
+// Pause or unpause user work schedule
+router.post('/userdata/workpause', (req, res) => {
+	// let work_pause = req.body.pause;
+
+	// Check if a user is logged in
+	if (req.isAuthenticated()) {
+		// Find the currently authenticated user by id
+		User.findOne({ _id: req.user.id }).then(async (user) => {
+			if (user.work_paused == true) {
+				// If the user's work schedule is currently paused, then unpause it by setting work_paused to false
+				await user.updateOne({ work_paused: false });
+
+				req.flash('user_alert', 'Your work schedule has been unpaused.');
+				res.redirect('/users/dashboard');
+			} else {
+				// If the user's work schedule is currently unpaused, then pause it by setting work_paused to true
+				await user.updateOne({ work_paused: true });
+
+				req.flash('user_alert', 'Your work schedule has been paused.');
+				res.redirect('/users/dashboard');
+			}
+		});
+	}
+});
 
 // Change the user's profile
 router.post('/userdata/editprofile', async (req, res) => {

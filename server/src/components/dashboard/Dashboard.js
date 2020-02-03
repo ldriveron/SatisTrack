@@ -162,11 +162,13 @@ class Dashboard extends Component {
 				</div>
 
 				{/* When the satis report is retreived from MongoDB, the current hour is the user's work end hour, and
-				    the current user works on the current day, load the NewSatisReport form component */}
+					the current user works on the current day, and the user's work schedule is not paused, then load the 
+					NewSatisReport form component */}
 				{this.state.satis_report &&
 				this.state.current_hour == this.state.user_data.work_end_hour &&
 				this.state.user_works_today == 'true' &&
-				this.state.display_satis_setter == true && (
+				this.state.display_satis_setter == true &&
+				!this.state.user_data.work_paused && (
 					<NewSatisReport
 						satis_report={this.state.satis_report}
 						last_report_date={this.state.user_data.last_report_date}

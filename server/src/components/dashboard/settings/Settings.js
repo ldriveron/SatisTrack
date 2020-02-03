@@ -18,6 +18,7 @@ const Settings = (props) => {
 
 	return (
 		<div className="settings">
+			<div className="page_title">Settings</div>
 			<Router>
 				<div className="left_links">
 					<Link key="edit_profile" to="/users/settings/profile">

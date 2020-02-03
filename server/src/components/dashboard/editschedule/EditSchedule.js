@@ -9,6 +9,7 @@ import * as api from '../../../api';
 // EditSchedule components import
 import EditWorkHours from './EditWorkHours';
 import EditWorkDays from './EditWorkDays';
+import PauseSchedule from './PauseSchedule';
 
 class SetSchedule extends Component {
 	state = {
@@ -159,7 +160,10 @@ class SetSchedule extends Component {
 								<div className="link top_link">Work Hours</div>
 							</Link>
 							<Link key="work_days" to="/users/editschedule/days">
-								<div className="link bottom_link">Work Days</div>
+								<div className="link middle_link">Work Days</div>
+							</Link>
+							<Link key="work_pause" to="/users/editschedule/pause">
+								<div className="link bottom_link">Pause Schedule</div>
 							</Link>
 						</div>
 						<div className="right_panel">
@@ -191,6 +195,13 @@ class SetSchedule extends Component {
 											handleDayChange={this.handleDayChange.bind(this)}
 											setWorkDays={this.setWorkDays.bind(this)}
 										/>
+									)}
+								/>
+								<Route
+									path="/users/editschedule/pause"
+									exact
+									render={(props) => (
+										<PauseSchedule {...props} work_paused={this.state.user_data.work_paused} />
 									)}
 								/>
 							</Switch>

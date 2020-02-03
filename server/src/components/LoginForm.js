@@ -25,7 +25,7 @@ const LoginForm = (props) => {
 					<input type="password" id="password" name="password" placeholder="Enter your password" required />
 				</div>
 
-				<button type="submit" className="formbutton">
+				<button type="submit" className="formButton">
 					Login
 				</button>
 				<p>

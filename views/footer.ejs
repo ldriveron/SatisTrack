@@ -1,4 +1,12 @@
 <script src="/bundle.js" charset="utf-8"></script>
 
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/service-worker.js')
+        });
+    }
+</script>
+
 </body>
 </html>

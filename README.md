@@ -23,13 +23,13 @@ Every reported day is saved to the database (MongoDB) and displayed as a monthly
 ## Dashboard Light Theme
 ![Satis Tracker Dashboard Light Theme](public/Screenshots/DashboardLightThemeSatisTracker.png)
 
+## Post Report
+![Satis Tracker Post Report](public/Screenshots/PostReportSatisTracker.png)
+
 ## Edit Schedule
 ![Satis Tracker Hours Edit Schedule](public/Screenshots/EditScheduleHoursSatisTracker.png)
 
 ![Satis Tracker Days Edit Schedule](public/Screenshots/EditScheduleDaysSatisTracker.png)
-
-## Post Report
-![Satis Tracker Post Report](public/Screenshots/PostReportSatisTracker.png)
 
 ## Settings
 ![Settings](public/Screenshots/SettingsSatisTracker.png)

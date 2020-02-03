@@ -41,7 +41,7 @@ const Header = (props) => {
 				</span>
 			</div>
 
-			<form key="logout" action="/users/logout?_method=POST" method="POST">
+			<form key="logout" action="/users/logout" method="POST">
 				<button type="submit" className="logout_button">
 					Logout
 				</button>
