@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Header = (props) => {
 	let userLinks = [];
@@ -10,15 +10,20 @@ const Header = (props) => {
 			<div className="statis_logo">
 				<a href="/">SATIS TRACKER</a>
 			</div>
-			<Link key="dashboard" to="/users/dashboard" className="links_holder">
+			<NavLink key="dashboard" to="/users/dashboard" className="links_holder" activeClassName="link_active">
 				Dashboard
-			</Link>
-			<Link key="account_settings" to="/users/editschedule" className="links_holder">
+			</NavLink>
+			<NavLink
+				key="account_settings"
+				to="/users/editschedule"
+				className="links_holder"
+				activeClassName="link_active"
+			>
 				Edit Schedule
-			</Link>
-			<Link key="settings" to="/users/settings/profile" className="links_holder">
+			</NavLink>
+			<NavLink key="settings" to="/users/settings/profile" className="links_holder" activeClassName="link_active">
 				Settings
-			</Link>
+			</NavLink>
 			<div className="username">{props.user_data.username}</div>
 			<div className="tooltip bottom">
 				<div className="user_header_stat left">{props.user_data.days_reported}</div>

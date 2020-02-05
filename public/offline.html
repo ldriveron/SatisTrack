@@ -7,9 +7,71 @@
         <title>Satis Tracker</title>
         <link rel="manifest" href="/manifest.json">
         <meta name="theme-color" content="#2C343A" />
+        <style>
+            body {
+                background: rgb(238, 240, 246);
+	            background-color: rgb(238, 240, 246);
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                text-align: center;
+                padding-top: 50px;
+            }
+
+            .title {
+                width: 100%;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                font-size: 30px;
+                margin-bottom: 30px;
+            }
+
+            .offline_message {
+                background: #fff;
+                font-family: Verdana, Geneva, Tahoma, sans-serif;
+                width: 40%;
+                text-align: center;
+                margin: 0 auto;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            }
+
+            @media (prefers-color-scheme: dark) {
+	            body {
+                    background: rgb(27, 33, 35);
+	                background-color: rgb(27, 33, 35);
+                    width: 100%;
+                    height: 100%;
+                    margin: 0;
+                    text-align: center;
+                    padding-top: 50px;
+                }
+
+                .title {
+                    width: 100%;
+                    font-family: Verdana, Geneva, Tahoma, sans-serif;
+                    font-size: 30px;
+                    margin-bottom: 30px;
+                    color: #fff;
+                }
+
+                .offline_message {
+                    background: rgb(44, 52, 58);
+                    font-family: Verdana, Geneva, Tahoma, sans-serif;
+                    color: #fff;
+                    width: 40%;
+                    text-align: center;
+                    margin: 0 auto;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+                }
+            }
+        </style>
     </head>
 
     <body>
-        <h1>Satis Tracker requires an internet connection.</h1>
+        <div class="title">SATIS TRACKER</div>
+        <div class="offline_message">Satis Tracker requires an internet connection.</div>
     </body>
 </html>

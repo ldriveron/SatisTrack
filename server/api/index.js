@@ -104,7 +104,7 @@ router.post('/userdata/editreminder', (req, res) => {
 
 				await user.updateOne({ allow_email_notifier: true });
 
-				req.flash('user_alert', 'Email notifications have been enabled.');
+				req.flash('user_alert', 'Email notifications have been enabled');
 				res.redirect('/users/dashboard');
 			} else if (user.allow_email_notifier == true && Notifier.exists(req.user.id)) {
 				// If the user's email notification is turned on, then turn it off
@@ -112,7 +112,7 @@ router.post('/userdata/editreminder', (req, res) => {
 
 				await user.updateOne({ allow_email_notifier: false });
 
-				req.flash('user_alert', 'Email notifications have been disabled.');
+				req.flash('user_alert', 'Email notifications have been disabled');
 				res.redirect('/users/dashboard');
 			}
 		});
@@ -160,7 +160,11 @@ router.get('/satis/:year/:month/:userID', (req, res) => {
 
 // Add a satisfaction report for the user to MongoDB
 router.post([ '/satis/report/:userID/:mood', '/satis/report/:userID/:mood/:recap' ], async (req, res) => {
-	if (req.isAuthenticated() && req.params.userID === req.user.id) {
+	if (
+		req.isAuthenticated() &&
+		req.params.userID === req.user.id &&
+		req.user.last_report_date != new Date().toLocaleDateString('en-US', { timeZone: req.user.user_timezone })
+	) {
 		// CHeck for a recap in the url. If there isn't one, then recap is an empty string.
 		let recap;
 		if (!req.params.recap) {
@@ -267,7 +271,7 @@ router.post('/userdata/sethours/:userID/:startHour/:endHour', async (req, res) =
 			Notifier.remover(user.id.toString());
 			Notifier.scheduler(user.work_days, user.work_end_hour, user.id.toString(), user.email, user.user_timezone);
 
-			req.flash('user_alert', 'Your work hours have been updated.');
+			req.flash('user_alert', 'Your work hours have been updated');
 			res.send('Done.');
 		});
 	} else {
@@ -307,7 +311,7 @@ router.post(
 					user.user_timezone
 				);
 
-				req.flash('user_alert', 'Your work days have been updated.');
+				req.flash('user_alert', 'Your work days have been updated');
 				res.send('Done');
 			});
 		} else {
@@ -328,13 +332,30 @@ router.post('/userdata/workpause', (req, res) => {
 				// If the user's work schedule is currently paused, then unpause it by setting work_paused to false
 				await user.updateOne({ work_paused: false });
 
-				req.flash('user_alert', 'Your work schedule has been unpaused.');
+				// Check if the user's email reminder is off
+				if (!Notifier.exists(user.id.toString()) && user.allow_email_notifier == true) {
+					// Turn on the user's email reminders when schedule us unpaused
+					Notifier.scheduler(
+						user.work_days,
+						user.work_end_hour,
+						user.id.toString(),
+						user.email,
+						user.user_timezone
+					);
+				}
+
+				req.flash('user_alert', 'Your work schedule has been unpaused');
 				res.redirect('/users/dashboard');
 			} else {
 				// If the user's work schedule is currently unpaused, then pause it by setting work_paused to true
 				await user.updateOne({ work_paused: true });
 
-				req.flash('user_alert', 'Your work schedule has been paused.');
+				// If the user has email reminders on, then remove it from the scheduler
+				if (Notifier.exists(user.id.toString())) {
+					Notifier.remover(user.id.toString());
+				}
+
+				req.flash('user_alert', 'Your work schedule has been paused');
 				res.redirect('/users/dashboard');
 			}
 		});
@@ -351,7 +372,7 @@ router.post('/userdata/editprofile', async (req, res) => {
 			if (user.username != new_username || user.company != new_company) {
 				await user.updateOne({ username: new_username, company: new_company });
 
-				req.flash('user_alert', 'Your profile has been updated.');
+				req.flash('user_alert', 'Your profile has been updated');
 				res.redirect('/users/dashboard');
 			}
 		});
@@ -385,10 +406,10 @@ router.post('/userdata/editpassword', async (req, res) => {
 							})
 						);
 
-						req.flash('user_alert', 'Your password has been changed.');
+						req.flash('user_alert', 'Your password has been changed');
 						res.redirect('/users/dashboard');
 					} else {
-						req.flash('user_error', 'Current password incorrect.');
+						req.flash('user_error', 'Current password incorrect');
 						res.redirect('/users/dashboard');
 					}
 				});
@@ -417,12 +438,12 @@ router.post('/userdata/deleteaccount', async (req, res) => {
 					await SatisReport.deleteMany({ user_id: req.user.id });
 
 					// End passport session and redirect user to login page
-					req.flash('success_msg', 'Your account and reports have been deleted.');
+					req.flash('success_msg', 'Your account and reports have been deleted');
 					req.logout();
 
 					res.redirect('/users/login');
 				} else {
-					req.flash('user_error', 'Incorrect password.');
+					req.flash('user_error', 'Incorrect password');
 					res.redirect('/users/dashboard');
 				}
 			});

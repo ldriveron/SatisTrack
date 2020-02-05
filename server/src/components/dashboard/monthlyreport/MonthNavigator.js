@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const MonthNavigator = (props) => {
@@ -10,9 +10,13 @@ const MonthNavigator = (props) => {
 	for (let i = 0; i <= 11; i++) {
 		links.push(
 			<span key={i}>
-				<Link key={months[i]} to={'/users/report/' + props.year + '/' + (i + 1)}>
+				<NavLink
+					key={months[i]}
+					to={'/users/report/' + props.year + '/' + (i + 1)}
+					activeClassName="report_nav_link_active"
+				>
 					{months[i]}
-				</Link>
+				</NavLink>
 			</span>
 		);
 	}

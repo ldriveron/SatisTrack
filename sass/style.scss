@@ -243,7 +243,7 @@ $tooltip_shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 $nav_background: getColor(base);
 $nav_text: getColor(text);
 $nav_link: getColor(text);
-$nav_link_hover: rgb(171, 78, 104);
+$nav_link_hover: #0084ff;
 $nav_user_header_stat_bg: rgb(0, 100, 98);
 $nav_user_header_stat_text: #fff;
 $nav_logout_button_text: getColor(text);
@@ -322,23 +322,31 @@ $nav_username_text: #fff;
 		text-decoration: none;
 		font-size: 17px;
 		border-radius: 25px;
+		transition: 0.5s;
 	}
 
 	a:hover {
 		color: $nav_link_hover;
+		border-radius: 5px;
+		background-color: getColor(box_base);
 	}
 
-	a::after {
-		content: '';
-		display: block;
-		width: 0;
-		height: 2px;
-		background: $nav_link;
-		transition: width .3s;
+	.login_link {
+		padding: 5px 20px;
+		border-radius: 5px;
+		border: 1px solid $nav_link_hover;
+		transition: 0.3s;
+		color: #0084ff;
+
+		&:hover {
+			box-shadow: 0 0 0 1pt $nav_link_hover;
+		}
 	}
 
-	a:hover::after {
-		width: 100%;
+	.link_active {
+		color: $nav_link_hover;
+		border-radius: 5px;
+		background-color: getColor(box_base);
 	}
 
 	.icon {
@@ -1141,6 +1149,11 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			justify-content: center;
 		}
 
+		.report_nav_link_active {
+			border-radius: 20px;
+			background-color: getColor(box_base);
+		}
+
 		.month_title {
 			width: 100%;
 			font-size: 40px;
@@ -1423,8 +1436,11 @@ $set_work_button_text_color: #fff;
 
 .edit_schedule {
 	width: 100%;
-	margin-top: 20px;
+	margin-bottom: 50px;
 	display: flex;
+	align-items: center;
+	justify-content: center;
+	align-items: flex-start;
 	flex-wrap: wrap;
 
 	.set_work_hours {
@@ -1489,7 +1505,6 @@ $set_work_button_text_color: #fff;
 
 		.day_selector {
 			width: 100%;
-			margin-bottom: 50px;
 			border-radius: 5px;
 
 			.button_holder {
@@ -1661,7 +1676,11 @@ $set_work_button_text_color: #fff;
 
 .settings {
 	width: 100%;
+	margin-bottom: 50px;
 	display: flex;
+	align-items: center;
+	justify-content: center;
+	align-items: flex-start;
 	flex-wrap: wrap;
 
 	input {
@@ -1721,8 +1740,8 @@ $set_work_button_text_color: #fff;
 // Global left link navigator and right panel
 
 .left_links {
-	width: 100%;
-	margin-bottom: 20px;
+	width: fit-content;
+	margin: 5px 20px 20px 0;
 
 	.link {
 		width: 300px;
@@ -1766,13 +1785,10 @@ $set_work_button_text_color: #fff;
 }
 
 .right_panel {
-	width: 60%;
-	float: right;
+	width: 50%;
 	padding: 20px;
 	background-color: getColor(box_base);
 	border-radius: 10px;
-	margin-left: 0;
-	margin: 0 auto;
 
 	input {
 		width: 96%;
@@ -1829,6 +1845,10 @@ $set_work_button_text_color: #fff;
 
 @media all and (max-width: 1000px) {
 	.form_box {
+		width: 80%;
+	}
+
+	.right_panel {
 		width: 80%;
 	}
 }

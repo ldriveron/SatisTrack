@@ -109,7 +109,10 @@ const CurrentDay = (props) => {
 				</p>
 			</div>
 			<div className="detail_box">
-				{props.work_end_hour == current_hour && props.day_is_set && props.user_works_today == 'true' ? (
+				{props.work_end_hour == current_hour &&
+				props.day_is_set &&
+				props.user_works_today == 'true' &&
+				props.work_paused == false ? (
 					<div className="tooltip bottom">
 						<div className="detail_box time_remaining equal">
 							<div id="time_remaining" onLoad={beginMinutesCounter()} />
@@ -147,7 +150,8 @@ CurrentDay.propTypes = {
 	user_works_today: PropTypes.string,
 	last_report_date: PropTypes.string,
 	work_end_hour: PropTypes.number,
-	day_is_set: PropTypes.bool
+	day_is_set: PropTypes.bool,
+	work_paused: PropTypes.bool
 };
 
 export default CurrentDay;

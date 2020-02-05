@@ -194,6 +194,7 @@ class Dashboard extends Component {
 					last_report_date={this.state.user_data.last_report_date}
 					work_end_hour={this.state.user_data.work_end_hour}
 					day_is_set={this.state.display_satis_setter}
+					work_paused={this.state.user_data.work_paused}
 				/>
 
 				{this.state.satis_report && (

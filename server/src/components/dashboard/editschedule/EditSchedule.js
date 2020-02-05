@@ -151,63 +151,61 @@ class SetSchedule extends Component {
 		);
 
 		return (
-			<div>
+			<div className="edit_schedule">
 				<div className="page_title">Edit Schedule</div>
-				<div className="edit_schedule">
-					<Router>
-						<div className="left_links">
-							<Link key="work_hours" to="/users/editschedule">
-								<div className="link top_link">Work Hours</div>
-							</Link>
-							<Link key="work_days" to="/users/editschedule/days">
-								<div className="link middle_link">Work Days</div>
-							</Link>
-							<Link key="work_pause" to="/users/editschedule/pause">
-								<div className="link bottom_link">Pause Schedule</div>
-							</Link>
-						</div>
-						<div className="right_panel">
-							<Switch>
-								<Route
-									path="/users/editschedule"
-									exact
-									render={(props) => (
-										<EditWorkHours
-											{...props}
-											setWorkHours={this.setWorkHours.bind(this)}
-											handleHourChange={this.handleHourChange.bind(this)}
-											work_start_hour={this.state.user_data.work_start_hour}
-											work_end_hour={this.state.user_data.work_end_hour}
-											new_work_start_hour={this.state.new_work_start_hour}
-											new_work_end_hour={this.state.new_work_end_hour}
-											options={options}
-										/>
-									)}
-								/>
-								<Route
-									path="/users/editschedule/days"
-									exact
-									render={(props) => (
-										<EditWorkDays
-											{...props}
-											new_days={this.state.new_days}
-											days_checkboxes={days_checkboxes}
-											handleDayChange={this.handleDayChange.bind(this)}
-											setWorkDays={this.setWorkDays.bind(this)}
-										/>
-									)}
-								/>
-								<Route
-									path="/users/editschedule/pause"
-									exact
-									render={(props) => (
-										<PauseSchedule {...props} work_paused={this.state.user_data.work_paused} />
-									)}
-								/>
-							</Switch>
-						</div>
-					</Router>
-				</div>
+				<Router>
+					<div className="left_links">
+						<Link key="work_hours" to="/users/editschedule">
+							<div className="link top_link">Work Hours</div>
+						</Link>
+						<Link key="work_days" to="/users/editschedule/days">
+							<div className="link middle_link">Work Days</div>
+						</Link>
+						<Link key="work_pause" to="/users/editschedule/pause">
+							<div className="link bottom_link">Pause Schedule</div>
+						</Link>
+					</div>
+					<div className="right_panel">
+						<Switch>
+							<Route
+								path="/users/editschedule"
+								exact
+								render={(props) => (
+									<EditWorkHours
+										{...props}
+										setWorkHours={this.setWorkHours.bind(this)}
+										handleHourChange={this.handleHourChange.bind(this)}
+										work_start_hour={this.state.user_data.work_start_hour}
+										work_end_hour={this.state.user_data.work_end_hour}
+										new_work_start_hour={this.state.new_work_start_hour}
+										new_work_end_hour={this.state.new_work_end_hour}
+										options={options}
+									/>
+								)}
+							/>
+							<Route
+								path="/users/editschedule/days"
+								exact
+								render={(props) => (
+									<EditWorkDays
+										{...props}
+										new_days={this.state.new_days}
+										days_checkboxes={days_checkboxes}
+										handleDayChange={this.handleDayChange.bind(this)}
+										setWorkDays={this.setWorkDays.bind(this)}
+									/>
+								)}
+							/>
+							<Route
+								path="/users/editschedule/pause"
+								exact
+								render={(props) => (
+									<PauseSchedule {...props} work_paused={this.state.user_data.work_paused} />
+								)}
+							/>
+						</Switch>
+					</div>
+				</Router>
 			</div>
 		);
 	}
