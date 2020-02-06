@@ -24,6 +24,7 @@ let initEmailNotifiers = async () => {
 					user.work_end_hour,
 					user._id.toString(),
 					user.email,
+					user.username,
 					user.user_timezone
 				);
 			}
@@ -100,7 +101,14 @@ router.post('/userdata/editreminder', (req, res) => {
 			// Check if the user's notifications are already on
 			if (user.allow_email_notifier == false && !Notifier.exists(req.user.id)) {
 				// If the user's email notification is turned off, then turn it on
-				Notifier.scheduler(user.work_days, user.work_end_hour, req.user.id, user.email, user.user_timezone);
+				Notifier.scheduler(
+					user.work_days,
+					user.work_end_hour,
+					req.user.id,
+					user.email,
+					user.username,
+					user.user_timezone
+				);
 
 				await user.updateOne({ allow_email_notifier: true });
 
@@ -269,7 +277,14 @@ router.post('/userdata/sethours/:userID/:startHour/:endHour', async (req, res) =
 
 			// Update email notifier schedule for the user
 			Notifier.remover(user.id.toString());
-			Notifier.scheduler(user.work_days, user.work_end_hour, user.id.toString(), user.email, user.user_timezone);
+			Notifier.scheduler(
+				user.work_days,
+				user.work_end_hour,
+				user.id.toString(),
+				user.email,
+				user.username,
+				user.user_timezone
+			);
 
 			req.flash('user_alert', 'Your work hours have been updated');
 			res.send('Done.');
@@ -308,6 +323,7 @@ router.post(
 					user.work_end_hour,
 					user.id.toString(),
 					user.email,
+					user.username,
 					user.user_timezone
 				);
 
@@ -332,16 +348,10 @@ router.post('/userdata/workpause', (req, res) => {
 				// If the user's work schedule is currently paused, then unpause it by setting work_paused to false
 				await user.updateOne({ work_paused: false });
 
-				// Check if the user's email reminder is off
+				// Check if the user's email reminders is paused
 				if (!Notifier.exists(user.id.toString()) && user.allow_email_notifier == true) {
-					// Turn on the user's email reminders when schedule us unpaused
-					Notifier.scheduler(
-						user.work_days,
-						user.work_end_hour,
-						user.id.toString(),
-						user.email,
-						user.user_timezone
-					);
+					// Start the user's email reminders when schedule us unpaused
+					Notifier.starter(user.id.toString());
 				}
 
 				req.flash('user_alert', 'Your work schedule has been unpaused');
@@ -350,9 +360,9 @@ router.post('/userdata/workpause', (req, res) => {
 				// If the user's work schedule is currently unpaused, then pause it by setting work_paused to true
 				await user.updateOne({ work_paused: true });
 
-				// If the user has email reminders on, then remove it from the scheduler
+				// If the user has email reminders on, then put it on pause
 				if (Notifier.exists(user.id.toString())) {
-					Notifier.remover(user.id.toString());
+					Notifier.pauser(user.id.toString());
 				}
 
 				req.flash('user_alert', 'Your work schedule has been paused');

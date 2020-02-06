@@ -66,6 +66,21 @@ body {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+// Fade in transition
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+// End fade in transition
+
 // Homepage colors
 $homepage_bg: #fff;
 $homepage_text: #000;
@@ -196,6 +211,7 @@ $tooltip_shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 	visibility: hidden;
 	opacity: 0;
 	width: fit-content;
+	width: -moz-fit-content;
 	min-width: 150px;
 	background-color: $tooltip_bg;
 	color: $tooltip_text;
@@ -266,11 +282,13 @@ $nav_username_text: #fff;
 	justify-content: center;
 	align-items: start;
 	align-content: start;
+	animation: fadeIn 0.3s;
 
 	@media only screen and (min-width: 1050px) {
 		// Logo
 		.statis_logo {
 			width: fit-content;
+			width: -moz-fit-content;
 			margin-right: 20%;
 			text-align: center;
 			float: left;
@@ -284,7 +302,7 @@ $nav_username_text: #fff;
 		}
 	}
 
-	@media only screen and (max-width: 1098px) {
+	@media only screen and (max-width: 1117px) {
 		// Logo
 		.statis_logo {
 			width: 100%;
@@ -344,7 +362,7 @@ $nav_username_text: #fff;
 	}
 
 	.link_active {
-		color: $nav_link_hover;
+		color: getColor(text);
 		border-radius: 5px;
 		background-color: getColor(box_base);
 	}
@@ -392,18 +410,20 @@ $nav_username_text: #fff;
 // Log out nav bar button
 .logout_button {
 	color: $nav_logout_button_text;
-	border: none;
 	background-color: $nav_logout_button_bg;
-	padding: 6px 10px;
-	margin-top: 10px;
+	margin-top: 11px;
 	margin-left: 10px;
-	font-size: 15px;
-	border-left: 1px solid $nav_logout_button_border;
+	font-size: 13px;
+	padding: 5px 20px;
+	border-radius: 5px;
+	border: 1px solid $nav_link_hover;
+	transition: 0.3s;
+	color: #0084ff;
 	cursor: pointer;
 
 	&:hover {
-		color: $nav_logout_button_hover_text;
-		border-left: 1px solid $nav_logout_button_hover_text;
+		background-color: getColor(box_base);
+		box-shadow: 0 0 0 1pt $nav_link_hover;
 	}
 
 	&:focus {
@@ -428,6 +448,7 @@ $user_error_border: rgb(236, 67, 15);
 
 .message_alert {
 	width: fit-content;
+	width: -moz-fit-content;
 	display: table;
 	color: $message_alert_text;
 	padding: 10px 25px;
@@ -440,10 +461,11 @@ $user_error_border: rgb(236, 67, 15);
 
 .user_alert {
 	width: fit-content;
+	width: -moz-fit-content;
 	display: table;
 	color: $user_alert_text;
 	padding: 10px 25px;
-	margin: 20px auto 0 auto;
+	margin: 20px auto 5px auto;
 	text-align: center;
 	background-color: $user_alert_bg;
 	border-radius: 5px;
@@ -452,6 +474,7 @@ $user_error_border: rgb(236, 67, 15);
 
 .user_error {
 	width: fit-content;
+	width: -moz-fit-content;
 	display: table;
 	color: $user_error_text;
 	padding: 10px 25px;
@@ -460,19 +483,6 @@ $user_error_border: rgb(236, 67, 15);
 	background-color: $user_error_bg;
 	border-radius: 5px;
 	border-left: 5px solid $user_error_border;
-}
-
-.check.icon {
-	color: getColor(text);
-	margin-right: 10px;
-	margin-top: 2px;
-	width: 14px;
-	height: 8px;
-	float: left;
-	border-bottom: solid 2px currentColor;
-	border-left: solid 2px currentColor;
-	-webkit-transform: rotate(-45deg);
-	transform: rotate(-45deg);
 }
 // End message alert
 
@@ -513,7 +523,6 @@ $form_link_color: getColor(text);
 	justify-content: center;
 	flex-wrap: wrap;
 	width: 45%;
-	margin-top: 5px;
 	padding: 30px;
 	border-radius: 20px;
 	background-color: $form_bg;
@@ -591,6 +600,7 @@ $form_link_color: getColor(text);
 		border-bottom-left-radius: 5px;
 		border-bottom-right-radius: 5px;
 		width: fit-content;
+		width: -moz-fit-content;
 		padding-left: 11px;
 		padding-right: 11px;
 		margin-top: -15px;
@@ -721,6 +731,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 	flex-wrap: wrap;
 	align-content: center;
 	justify-content: center;
+	animation: fadeIn 1s;
 
 	.dashboard_row {
 		text-align: center;
@@ -1150,7 +1161,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		}
 
 		.report_nav_link_active {
-			border-radius: 20px;
+			border-radius: 5px;
 			background-color: getColor(box_base);
 		}
 
@@ -1235,6 +1246,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			display: flex;
 			justify-content: space-around;
 			flex-wrap: wrap;
+			animation: fadeIn 0.3s;
 		}
 
 		.current_day_highlight {
@@ -1256,6 +1268,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		.day_tooltip .day_tiptext {
 			visibility: hidden;
 			width: fit-content;
+			width: -moz-fit-content;
 			width: 173px;
 			background-color: $day_tooltip_bg;
 			color: $day_tooltip_text;
@@ -1285,7 +1298,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			margin-left: -85px;
 			z-index: 999;
 			bottom: 110%;
-			left: 50%;
+			left: 0%;
 		}
 
 		.day_tooltip.right .day_tiptext {
@@ -1442,6 +1455,7 @@ $set_work_button_text_color: #fff;
 	justify-content: center;
 	align-items: flex-start;
 	flex-wrap: wrap;
+	animation: fadeIn 0.5s;
 
 	.set_work_hours {
 		width: 100%;
@@ -1682,6 +1696,7 @@ $set_work_button_text_color: #fff;
 	justify-content: center;
 	align-items: flex-start;
 	flex-wrap: wrap;
+	animation: fadeIn 0.5s;
 
 	input {
 		width: 100%;
@@ -1741,7 +1756,8 @@ $set_work_button_text_color: #fff;
 
 .left_links {
 	width: fit-content;
-	margin: 5px 20px 20px 0;
+	width: -moz-fit-content;
+	margin: 0 20px 20px 0;
 
 	.link {
 		width: 300px;
@@ -1789,6 +1805,7 @@ $set_work_button_text_color: #fff;
 	padding: 20px;
 	background-color: getColor(box_base);
 	border-radius: 10px;
+	box-shadow: $box_shadow;
 
 	input {
 		width: 96%;

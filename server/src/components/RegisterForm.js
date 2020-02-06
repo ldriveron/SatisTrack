@@ -54,6 +54,7 @@ const RegisterForm = () => (
 								value={values.username}
 								onChange={handleChange}
 								onBlur={handleBlur}
+								autoComplete="new-password"
 								className={errors.username && touched.username && 'error'}
 								required
 							/>
@@ -88,6 +89,7 @@ const RegisterForm = () => (
 								value={values.password}
 								onChange={handleChange}
 								onBlur={handleBlur}
+								autoComplete="new-password"
 								className={errors.password && touched.password && 'error'}
 								placeholder="Enter a password"
 								required
@@ -106,6 +108,7 @@ const RegisterForm = () => (
 								value={values.password2}
 								onChange={handleChange}
 								onBlur={handleBlur}
+								autoComplete="new-password"
 								className={errors.password2 && touched.password2 && 'error'}
 								placeholder="Confirm password"
 								required

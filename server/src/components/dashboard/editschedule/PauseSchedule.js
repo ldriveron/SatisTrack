@@ -11,7 +11,7 @@ const PauseSchedule = (props) => {
 			<br />
 			<br />
 			<button type="submit" className="button">
-				{props.work_paused == true ? 'Unpause My Schedule' : 'Pause My Schedule'}
+				{props.work_paused == true ? 'Unpause Schedule' : 'Pause Schedule'}
 			</button>
 		</form>
 	);

@@ -23,7 +23,7 @@ const SingleDay = (props) => {
 			tooltip_location = 'right';
 			break;
 		case 'Wednesday':
-			tooltip_location = 'bottom';
+			tooltip_location = 'top';
 			break;
 		case 'Thursday':
 			tooltip_location = 'left';
