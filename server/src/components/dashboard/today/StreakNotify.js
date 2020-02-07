@@ -17,7 +17,7 @@ const StreakNotify = (props) => {
 				<div className="text_holder">
 					<h2>5-DAY STREAK!</h2>
 					<span className="explainer">
-						You have completed a 5-day reporting streak. Keep up the good work!
+						You have completed a 5 day reporting streak. Keep up the good work!
 					</span>
 				</div>
 			</div>

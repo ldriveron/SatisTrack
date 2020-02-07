@@ -61,7 +61,7 @@ body {
 	height: 100%;
 	font-family: $font_nunito;
 	margin: 0;
-	padding-bottom: 30px;
+	padding-bottom: 20px;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -90,7 +90,7 @@ $homepage_screenshot_shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 .home {
 	width: 70%;
 	padding: 0 20px;
-	margin-bottom: 30px;
+	margin-bottom: 50px;
 	background: $homepage_bg;
 	color: $homepage_text;
 	border-radius: 40px;
@@ -826,7 +826,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		background: $mood_setter_bg_gradient;
 		width: 80%;
 		margin-bottom: 50px;
-		padding: 10px 0px 0px 0px;
+		padding: 10px 0 0 0;
 		border-radius: 5px;
 		text-align: center;
 
@@ -849,6 +849,8 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			border: none;
 			border-top-left-radius: 10px;
 			border-top-right-radius: 10px;
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
 
 			&:focus {
 				outline: none;
@@ -885,6 +887,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			border-bottom-right-radius: 5px;
 			width: 100%;
 			margin-top: 35px;
+			margin-bottom: -5px;
 			transition: 0.5s;
 			box-shadow: $box_shadow;
 			cursor: pointer;
@@ -1440,9 +1443,9 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 
 // Change work schedule
 // Change work schedule component colors
-$select_bg_color: #2b2f8e;
-$select_text_color: #fff;
-$select_bg_color_hover: #1e2168;
+$select_bg_color: getColor(blank_day_bg);
+$select_text_color: getColor(text2);
+$select_bg_color_hover: #ff896e;
 $set_work_button_background: #fe9079;
 $set_work_button_background_hover: #ffa290;
 $set_work_button_text_color: #fff;
@@ -1459,20 +1462,20 @@ $set_work_button_text_color: #fff;
 
 	.set_work_hours {
 		width: 100%;
-		text-align: center;
 
 		label {
-			margin-left: 20px;
-			margin-right: 20px;
+			position: absolute;
 		}
 
 		select {
 			background: $select_bg_color;
-			padding-left: 10px;
-			padding-right: 5px;
-			margin-right: 20px;
-			height: 50px;
+			padding: 20px 10px;
+			margin-top: 30px;
+			margin-right: 5px;
+			width: 49%;
+			height: 60px;
 			border-radius: 10px;
+			-webkit-border-radius: 10px;
 			border: none;
 			color: $select_text_color;
 			font-size: 20px;
@@ -1515,7 +1518,6 @@ $set_work_button_text_color: #fff;
 
 	.set_work_days {
 		width: 100%;
-		text-align: center;
 
 		.day_selector {
 			width: 100%;
@@ -1530,8 +1532,7 @@ $set_work_button_text_color: #fff;
 				color: $set_work_button_text_color;
 				width: 200px;
 				height: 40px;
-				margin-top: 40px;
-				margin-left: 0px;
+				margin-top: 60px;
 				border-radius: 5px;
 				font-size: 17px;
 				font-weight: 300;
@@ -1681,6 +1682,37 @@ $set_work_button_text_color: #fff;
 				-ms-transition: all 0.3s ease-out;
 				-o-transition: all 0.3s ease-out;
 			}
+		}
+	}
+
+	.pause_reason_holder {
+		width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		align-items: flex-start;
+		flex-wrap: nowrap;
+
+		span {
+			flex-shrink: 1;
+			font-size: 20px;
+			font-weight: bold;
+		}
+	}
+
+	.pause_img_holder {
+		width: 100%;
+		margin-bottom: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		align-items: flex-start;
+		flex-wrap: nowrap;
+
+		img {
+			width: 15%;
+			flex-shrink: 1;
+			animation: fadeIn 0.3s;
 		}
 	}
 }
