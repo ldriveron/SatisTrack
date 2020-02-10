@@ -144,7 +144,7 @@ class SetSchedule extends Component {
 							/>
 							<span className="checkbox_custom rectangular" />
 						</label>
-						<div className="checkbox_title">{k.charAt(0).toUpperCase() + k.slice(1)}</div>
+						<div className="checkbox_title">{k.charAt(0).toUpperCase() + k.slice(1, 3) + '.'}</div>
 					</div>
 				)
 			)

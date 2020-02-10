@@ -11,6 +11,7 @@ import Header from './Header';
 import Dashboard from './dashboard/Dashboard';
 import EditSchedule from './dashboard/editschedule/EditSchedule';
 import Settings from './dashboard/settings/Settings';
+import Overview from './dashboard/overview/Overview';
 
 // API methods import
 import * as api from '../api';
@@ -95,6 +96,10 @@ class App extends Component {
 						<Route
 							path="/users/settings"
 							render={(props) => <Settings {...props} user_data={this.state.user_data} />}
+						/>
+						<Route
+							path="/users/overview"
+							render={(props) => <Overview {...props} user_data={this.state.user_data} />}
 						/>
 					</Switch>
 				) : (

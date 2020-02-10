@@ -11,15 +11,34 @@ const PauseSchedule = (props) => {
 				<span>Leisure</span>
 			</div>
 			<div className="pause_img_holder">
-				<img src="http://192.168.1.66:4242/images/sun-umbrella.png" alt="Sun Umbrella" />
-				<img src="http://192.168.1.66:4242/images/sick.png" alt="Sick" />
-				<img src="http://192.168.1.66:4242/images/park.png" alt="Park" />
+				<img src="https://satistracker.com/images/sun-umbrella.png" alt="Sun Umbrella" />
+				<img src="https://satistracker.com/images/sick.png" alt="Sick" />
+				<img src="https://satistracker.com/images/park.png" alt="Park" />
 			</div>
 			<button type="submit" className="button">
 				{props.work_paused == true ? 'Unpause Schedule' : 'Pause Schedule'}
 			</button>
 			<br />
 			Pausing your schedule will disable mood reporting and pause your reporting streak
+			<br />
+			<br />
+			<div className="icon_credit">
+				<div>
+					Icons made by{' '}
+					<a
+						href="https://www.flaticon.com/authors/freepik"
+						title="Freepik"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Freepik
+					</a>{' '}
+					from{' '}
+					<a href="https://www.flaticon.com/" title="Flaticon" target="_blank" rel="noopener noreferrer">
+						www.flaticon.com
+					</a>
+				</div>
+			</div>
 		</form>
 	);
 };

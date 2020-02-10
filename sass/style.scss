@@ -302,7 +302,7 @@ $nav_username_text: #fff;
 		}
 	}
 
-	@media only screen and (max-width: 1117px) {
+	@media only screen and (max-width: 1275px) {
 		// Logo
 		.statis_logo {
 			width: 100%;
@@ -377,17 +377,21 @@ $nav_username_text: #fff;
 		border-radius: 5px;
 		padding: 5px 10px;
 		height: 19px;
-		margin-top: 11px;
+		margin-top: 10px;
 		margin-left: 10px;
 		font-size: 13px;
 		font-weight: 800;
+
+		a {
+			background-color: $nav_username_bg;
+		}
 	}
 
 	.user_header_stat {
 		color: $nav_user_header_stat_text;
 		background-color: $nav_user_header_stat_bg;
 		padding: 5px 10px;
-		margin-top: 11px;
+		margin-top: 10px;
 		font-size: 13px;
 		font-weight: 800;
 		cursor: pointer;
@@ -411,7 +415,7 @@ $nav_username_text: #fff;
 .logout_button {
 	color: $nav_logout_button_text;
 	background-color: $nav_logout_button_bg;
-	margin-top: 11px;
+	margin-top: 10px;
 	margin-left: 10px;
 	font-size: 13px;
 	padding: 5px 20px;
@@ -512,9 +516,9 @@ $form_feedback_bg: rgb(253, 240, 240);
 $form_feedback_color: rgb(236, 67, 15);
 
 // Form button
-$button_bg: rgb(255, 115, 99);
+$button_bg: #fe9079;
 $button_text: #fff;
-$button_border: rgb(255, 178, 169);
+$button_bg_hover: #ffa290;
 
 // Form links
 $form_link_color: getColor(text);
@@ -579,16 +583,16 @@ $form_link_color: getColor(text);
 		color: $button_text;
 		width: 200px;
 		height: 40px;
+		margin-top: 40px;
 		border-radius: 5px;
-		margin-top: 50px;
 		font-size: 17px;
 		font-weight: 300;
 		background-color: $button_bg;
-		transition: 0.3s;
+		transition: 0.5s;
 		cursor: pointer;
 
 		&:hover {
-			border: 2px solid $button_border;
+			background: $button_bg_hover;
 		}
 
 		&:focus {
@@ -1156,6 +1160,12 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			}
 		}
 
+		@media all and (max-width: 916px) {
+			.report_year_selector {
+				margin-bottom: 10px;
+			}
+		}
+
 		.report_nav_links {
 			width: 100%;
 			display: flex;
@@ -1173,6 +1183,93 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			font-size: 40px;
 			margin-bottom: 10px;
 			border-bottom: $monthly_report_month_title_bottom_border;
+		}
+
+		.overview_report {
+			width: 100%;
+			margin: -30px auto 30px auto;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-around;
+			align-items: baseline;
+			flex-direction: row;
+
+			.year_selector {
+				width: 100%;
+				margin-bottom: 30px;
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: space-around;
+				align-items: baseline;
+				flex-direction: row;
+
+				.report_year_selector {
+					width: 100px;
+					height: 50px;
+					font-size: 18px;
+					margin: 0;
+					float: left;
+					border-radius: 10px;
+					color: $monthly_report_selector_text;
+					background: $monthly_report_selector_bg;
+					border: $monthly_report_selector_border;
+					cursor: pointer;
+
+					&:focus {
+						outline: none;
+					}
+				}
+			}
+
+			.overview_day_holder {
+				width: 400px;
+				margin-bottom: 20px;
+				margin-right: 15px;
+				display: flex;
+				justify-content: space-around;
+				flex-wrap: wrap;
+				animation: fadeIn 0.3s;
+				cursor: default;
+			}
+
+			.overview_month_name {
+				width: 100%;
+				padding: 0 5px 0 0;
+			}
+
+			.overview_day {
+				margin: 5px 0 0 1%;
+				flex-grow: 1;
+				height: 40px;
+				font-size: 13px;
+				color: getColor(text);
+				padding: 3px 0 0 3px;
+				width: calc(100% * (1/7) - 10px - 1px);
+			}
+
+			.blank_overview_day {
+				background-color: getColor(blank_day_bg);
+				margin: 5px 0 0 1%;
+				flex-grow: 1;
+				height: 40px;
+				font-size: 13px;
+				color: $monthly_report_blank_day_text;
+				padding: 3px 0 0 3px;
+				width: calc(100% * (1/7) - 10px - 1px);
+			}
+
+			.fill_empty_flex_box {
+				margin: 5px 0 0 1%;
+				flex-grow: 1;
+				height: 0;
+				font-size: 13px;
+				padding: 3px 0 0 3px;
+				width: calc(100% * (1/7) - 10px - 1px);
+			}
+
+			.month_aligner {
+				display: block;
+			}
 		}
 
 		.month_stats {
@@ -1310,7 +1407,6 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 		}
 
 		.day_tooltip.left .day_tiptext {
-			top: -5px;
 			margin-left: -190px;
 		}
 		// End day tooltip
@@ -1469,11 +1565,11 @@ $set_work_button_text_color: #fff;
 
 		select {
 			background: $select_bg_color;
-			padding: 20px 10px;
 			margin-top: 30px;
 			margin-right: 5px;
+			padding-left: 10px;
 			width: 49%;
-			height: 60px;
+			height: 50px;
 			border-radius: 10px;
 			-webkit-border-radius: 10px;
 			border: none;
@@ -1486,6 +1582,7 @@ $set_work_button_text_color: #fff;
 
 			&:hover {
 				background: $select_bg_color_hover;
+				color: #fff;
 			}
 
 			&:focus {
@@ -1537,7 +1634,7 @@ $set_work_button_text_color: #fff;
 				font-size: 17px;
 				font-weight: 300;
 				background-color: $set_work_button_background;
-				transition: 0.3s;
+				transition: 0.5s;
 				cursor: pointer;
 
 				&:hover {
@@ -1569,6 +1666,7 @@ $set_work_button_text_color: #fff;
 				font-family: $font_varela;
 				font-size: 18px;
 				font-weight: bold;
+				text-align: center;
 			}
 
 			.checkbox_label {
@@ -1715,6 +1813,16 @@ $set_work_button_text_color: #fff;
 			animation: fadeIn 0.3s;
 		}
 	}
+
+	.icon_credit {
+		color: rgb(51, 51, 51);
+		font-size: 12px;
+
+		a {
+			text-decoration: none;
+			color: rgb(51, 51, 51);
+		}
+	}
 }
 // End change work schedule component
 
@@ -1761,19 +1869,19 @@ $set_work_button_text_color: #fff;
 
 	.formButton {
 		border: none;
-		color: $button_text;
+		color: $set_work_button_text_color;
 		width: 200px;
 		height: 40px;
+		margin-top: 40px;
 		border-radius: 5px;
-		margin-top: 20px;
 		font-size: 17px;
 		font-weight: 300;
-		background-color: $button_bg;
-		transition: 0.3s;
+		background-color: $set_work_button_background;
+		transition: 0.5s;
 		cursor: pointer;
 
 		&:hover {
-			border: 2px solid $button_border;
+			background: $set_work_button_background_hover;
 		}
 
 		&:focus {

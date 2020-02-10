@@ -25,6 +25,7 @@ class MonthRouter extends Component {
 
 	render() {
 		// Array with only the years the user has set satis reports
+		// If user has no mood reports, use the current year
 		let years = [];
 
 		if (this.props.satis_report.total_results != 0) {

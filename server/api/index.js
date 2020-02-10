@@ -131,7 +131,7 @@ router.post('/userdata/editreminder', (req, res) => {
 // If there are none, then respond with total_results: 0
 router.get('/satis/all/:userID', (req, res) => {
 	if (req.isAuthenticated() && req.params.userID === req.user.id) {
-		SatisReport.find({ user_id: req.params.userID }).sort('-date').then((report) => {
+		SatisReport.find({ user_id: req.params.userID }).sort('+date').then((report) => {
 			if (report.length !== 0) {
 				res.send({ total_results: report.length, results: report });
 			} else {

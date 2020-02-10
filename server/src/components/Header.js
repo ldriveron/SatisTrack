@@ -13,6 +13,9 @@ const Header = (props) => {
 			<NavLink key="dashboard" to="/users/dashboard" className="links_holder" activeClassName="link_active">
 				Dashboard
 			</NavLink>
+			<NavLink key="overview" to="/users/overview" className="links_holder" activeClassName="link_active">
+				Overview
+			</NavLink>
 			<NavLink
 				key="account_settings"
 				to="/users/editschedule"
