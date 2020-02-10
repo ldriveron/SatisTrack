@@ -26,6 +26,9 @@ Every reported day is saved to the database (MongoDB) and displayed as a monthly
 ## Post Report
 ![Satis Tracker Post Report](public/Screenshots/PostReportSatisTracker.png)
 
+## Overivew
+![Satis Tracker Overview](public/Screenshots/OverviewSatisTracker.png)
+
 ## Edit Schedule
 ![Satis Tracker Hours Edit Schedule](public/Screenshots/EditScheduleHoursSatisTracker.png)
 
