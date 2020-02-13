@@ -19,12 +19,23 @@ const WorkDays = (props) => {
 		// Set current_day class to the current day
 		let class_name = current_day == day_number ? ' current_day' : '';
 
+		if (day_name == 'sunday') {
+			class_name = class_name + ' sunday';
+		} else if (day_name == 'saturday') {
+			class_name = class_name + ' saturday';
+		}
+
 		// If the day of the week is a work day, set on_day class
 		if (work_value == 'true') {
 			days.push(
 				<div className={'on_day' + class_name} key={day_name}>
 					{day_name.substring(0, 2)}
-					<div className="day_number">{day_number}</div>
+					<div className="tooltip bottom">
+						<div className="day_number">{day_number}</div>
+						<span className="tiptext" style={{ marginTop: '5px', marginLeft: '-83px' }}>
+							Work Day
+						</span>
+					</div>
 				</div>
 			);
 		} else {
@@ -32,7 +43,12 @@ const WorkDays = (props) => {
 			days.push(
 				<div className={'off_day' + class_name} key={day_name}>
 					{day_name.substring(0, 2)}
-					<div className="day_number">{day_number}</div>
+					<div className="tooltip bottom">
+						<div className="day_number">{day_number}</div>
+						<span className="tiptext" style={{ marginTop: '5px', marginLeft: '-83px' }}>
+							Off Day
+						</span>
+					</div>
 				</div>
 			);
 		}

@@ -164,6 +164,8 @@ const Overview = (props) => {
 		setYear(year);
 	}
 
+	document.title = 'Overview';
+
 	return (
 		<div className="dashboard">
 			<div className="page_title">Overview</div>

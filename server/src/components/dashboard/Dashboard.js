@@ -6,7 +6,7 @@ import * as api from '../../api';
 
 // Components import
 import CurrentDay from './today/CurrentDay';
-import WorkDays from './WorkDays';
+import WorkDays from './workdays/WorkDays';
 import StreakNotify from './today/StreakNotify';
 import NewSatisReport from './today/NewSatisReport';
 import MonthRouter from './monthlyreport/MonthRouter';
