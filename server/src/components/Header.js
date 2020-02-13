@@ -45,7 +45,7 @@ const Header = (props) => {
 			<div className="tooltip bottom">
 				<div className="user_header_stat right">{props.user_data.total_streaks}</div>
 				<span className="tiptext" style={{ marginLeft: '-80px' }}>
-					Total 5+ Days Reporting Streaks
+					Total 5-Days Reporting Streaks
 				</span>
 			</div>
 

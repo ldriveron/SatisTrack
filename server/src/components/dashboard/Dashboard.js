@@ -6,6 +6,7 @@ import * as api from '../../api';
 
 // Components import
 import CurrentDay from './today/CurrentDay';
+import WorkDays from './WorkDays';
 import StreakNotify from './today/StreakNotify';
 import NewSatisReport from './today/NewSatisReport';
 import MonthRouter from './monthlyreport/MonthRouter';
@@ -196,6 +197,9 @@ class Dashboard extends Component {
 					day_is_set={this.state.display_satis_setter}
 					work_paused={this.state.user_data.work_paused}
 				/>
+
+				{/* Weekly schedule of the user */}
+				<WorkDays work_days={this.state.user_data.work_days} />
 
 				{this.state.satis_report && (
 					<MonthRouter satis_report={this.state.satis_report} user_id={this.state.user_data.user_id} />

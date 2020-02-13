@@ -10,7 +10,7 @@ const StreakNotify = (props) => {
 					<div className="tooltip bottom">
 						<div className="total_streaks_number">{props.total_streaks}</div>
 						<span className="tiptext" style={{ marginLeft: '-80px' }}>
-							Total 5-Day Streaks
+							Total 5-Days Reporting Streaks
 						</span>
 					</div>
 				</div>
