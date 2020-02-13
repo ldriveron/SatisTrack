@@ -109,7 +109,15 @@ const CurrentDay = (props) => {
 				</p>
 			</div>
 			<div className="detail_box">
-				{props.work_end_hour == current_hour &&
+				{/* If the user's work schedule is paused do not show a timer */}
+				{props.work_paused == true ? (
+					<div className="tooltip bottom">
+						<div className="detail_box time_remaining" style={{ fontSize: '22px' }}>
+							Paused
+						</div>
+						<span className="tiptext">Your work schedule is paused.</span>
+					</div>
+				) : props.work_end_hour == current_hour &&
 				props.day_is_set &&
 				props.user_works_today == 'true' &&
 				props.work_paused == false ? (

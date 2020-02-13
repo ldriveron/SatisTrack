@@ -21,6 +21,9 @@ const EditWorkDays = (props) => {
 						>
 							Set Work Days
 						</button>
+						<br />
+						<br />
+						Editing your work schedule will disable mood reporting for one day.
 					</div>
 				</div>
 			</div>

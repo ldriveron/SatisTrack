@@ -36,8 +36,8 @@ let initEmailNotifiers = async () => {
 initEmailNotifiers();
 
 // Return the current user's information
-router.get('/userdata/:userID', async (req, res) => {
-	if (req.isAuthenticated() && req.params.userID === req.user.id) {
+router.get('/userdata', async (req, res) => {
+	if (req.isAuthenticated()) {
 		await User.findOne({ _id: req.user.id }).then((user) =>
 			res.send({
 				user: {
@@ -129,9 +129,9 @@ router.post('/userdata/editreminder', (req, res) => {
 
 // Get all the user's satisfaction reports from MongoDB sorted by date
 // If there are none, then respond with total_results: 0
-router.get('/satis/all/:userID', (req, res) => {
-	if (req.isAuthenticated() && req.params.userID === req.user.id) {
-		SatisReport.find({ user_id: req.params.userID }).sort('+date').then((report) => {
+router.get('/satis/all', (req, res) => {
+	if (req.isAuthenticated()) {
+		SatisReport.find({ user_id: req.user.id }).sort('+date').then((report) => {
 			if (report.length !== 0) {
 				res.send({ total_results: report.length, results: report });
 			} else {
@@ -145,9 +145,9 @@ router.get('/satis/all/:userID', (req, res) => {
 
 // Get one month's report based on year
 // The result will be retreived based on logged in user, selected year and month, and sorted by day.
-router.get('/satis/:year/:month/:userID', (req, res) => {
-	if (req.isAuthenticated() && req.params.userID === req.user.id) {
-		SatisReport.find({ user_id: req.params.userID, year: req.params.year, month: req.params.month })
+router.get('/satis/:year/:month', (req, res) => {
+	if (req.isAuthenticated()) {
+		SatisReport.find({ user_id: req.user.id, year: req.params.year, month: req.params.month })
 			.sort('day')
 			.then((report) => {
 				if (report.length !== 0) {
@@ -167,10 +167,9 @@ router.get('/satis/:year/:month/:userID', (req, res) => {
 });
 
 // Add a satisfaction report for the user to MongoDB
-router.post([ '/satis/report/:userID/:mood', '/satis/report/:userID/:mood/:recap' ], async (req, res) => {
+router.post([ '/satis/report/:mood', '/satis/report/:mood/:recap' ], async (req, res) => {
 	if (
 		req.isAuthenticated() &&
-		req.params.userID === req.user.id &&
 		req.user.last_report_date != new Date().toLocaleDateString('en-US', { timeZone: req.user.user_timezone })
 	) {
 		// CHeck for a recap in the url. If there isn't one, then recap is an empty string.
@@ -183,7 +182,7 @@ router.post([ '/satis/report/:userID/:mood', '/satis/report/:userID/:mood/:recap
 
 		let days_of_week = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ];
 
-		let user_id = req.params.userID;
+		let user_id = req.user.userID;
 		let mood = req.params.mood;
 		let today = new Date().toLocaleDateString('en-US', { timeZone: req.user.user_timezone });
 		today = new Date(today);
@@ -266,8 +265,8 @@ router.post([ '/satis/report/:userID/:mood', '/satis/report/:userID/:mood/:recap
 
 // Update the user's work start and end hour
 // Also update their last schedule edit to today's date
-router.post('/userdata/sethours/:userID/:startHour/:endHour', async (req, res) => {
-	if (req.isAuthenticated() && req.params.userID === req.user.id) {
+router.post('/userdata/sethours/:startHour/:endHour', async (req, res) => {
+	if (req.isAuthenticated()) {
 		await User.findOne({ _id: req.user.id }).then(async (user) => {
 			await user.updateOne({
 				work_start_hour: req.params.startHour,
@@ -285,10 +284,10 @@ router.post('/userdata/sethours/:userID/:startHour/:endHour', async (req, res) =
 				user.username,
 				user.user_timezone
 			);
-
-			req.flash('user_alert', 'Your work hours have been updated');
-			res.send('Done.');
 		});
+
+		req.flash('user_alert', 'Your work hours have been updated');
+		res.redirect('/users/dashboard');
 	} else {
 		res.redirect('/users/login');
 	}
@@ -297,7 +296,7 @@ router.post('/userdata/sethours/:userID/:startHour/:endHour', async (req, res) =
 // Update the user's work schedule
 // Also update their last schedule edit to today's date
 router.post(
-	'/userdata/setschedule/:userID/:sunday/:monday/:tuesday/:wednesday/:thursday/:friday/:saturday',
+	'/userdata/setschedule/:sunday/:monday/:tuesday/:wednesday/:thursday/:friday/:saturday',
 	async (req, res) => {
 		let new_days = {
 			sunday: req.params.sunday,
@@ -309,7 +308,7 @@ router.post(
 			saturday: req.params.saturday
 		};
 
-		if (req.isAuthenticated() && req.params.userID === req.user.id) {
+		if (req.isAuthenticated()) {
 			await User.findOne({ _id: req.user.id }).then(async (user) => {
 				await user.updateOne({
 					work_days: new_days,
@@ -326,10 +325,10 @@ router.post(
 					user.username,
 					user.user_timezone
 				);
-
-				req.flash('user_alert', 'Your work days have been updated');
-				res.send('Done');
 			});
+
+			req.flash('user_alert', 'Your work days have been updated');
+			res.redirect('/users/dashboard');
 		} else {
 			res.redirect('/users/login');
 		}
@@ -338,8 +337,6 @@ router.post(
 
 // Pause or unpause user work schedule
 router.post('/userdata/workpause', (req, res) => {
-	// let work_pause = req.body.pause;
-
 	// Check if a user is logged in
 	if (req.isAuthenticated()) {
 		// Find the currently authenticated user by id
@@ -448,7 +445,7 @@ router.post('/userdata/deleteaccount', async (req, res) => {
 					await SatisReport.deleteMany({ user_id: req.user.id });
 
 					// End passport session and redirect user to login page
-					req.flash('success_msg', 'Your account and reports have been deleted');
+					req.flash('success_msg', 'Your account and mood reports have been deleted');
 					req.logout();
 
 					res.redirect('/users/login');

@@ -22,7 +22,7 @@ class Dashboard extends Component {
 	};
 
 	componentDidMount() {
-		api.fetchAllSatis(this.state.user_data.user_id).then((resp) => {
+		api.fetchAllSatis().then((resp) => {
 			this.setState({
 				satis_report: resp
 			});
@@ -125,7 +125,7 @@ class Dashboard extends Component {
 	// Use API post request to set the user's new satis report and deactivate the satis setter
 	postNewSatisReport() {
 		api
-			.postNewSatis(this.state.user_data.user_id, this.state.current_mood, this.state.satis_report_recap)
+			.postNewSatis(this.state.current_mood, this.state.satis_report_recap)
 			.then((resp) => {
 				if (resp === 'Done.') {
 					this.setState({

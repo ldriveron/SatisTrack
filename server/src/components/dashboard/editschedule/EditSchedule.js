@@ -44,14 +44,12 @@ class SetSchedule extends Component {
 	setWorkHours() {
 		// Call api update method to change the users work start and work end hours
 		api
-			.updateWorkTime(this.state.user_data.user_id, this.state.new_work_start_hour, this.state.new_work_end_hour)
-			.then((resp) => {
-				if (resp === 'Done.') {
-					this.setState({
-						work_start_hour: this.state.new_work_start_hour,
-						work_end_hour: this.state.new_work_end_hour
-					});
-				}
+			.updateWorkTime(this.state.new_work_start_hour, this.state.new_work_end_hour)
+			.then(() => {
+				this.setState({
+					work_start_hour: this.state.new_work_start_hour,
+					work_end_hour: this.state.new_work_end_hour
+				});
 
 				// Force reload after set work days
 				location.reload();
@@ -90,7 +88,6 @@ class SetSchedule extends Component {
 			// Call api update method to update the users workdays
 			api
 				.updateWorkDays(
-					this.state.user_data.user_id,
 					this.state.new_days.sunday,
 					this.state.new_days.monday,
 					this.state.new_days.tuesday,

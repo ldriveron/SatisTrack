@@ -38,7 +38,7 @@ class App extends Component {
 
 				// Fetch user data after their ID is retreived
 				api
-					.fetchUser(resp.id)
+					.fetchUser()
 					.then((resp) => {
 						this.setState({
 							user_data: {

@@ -94,20 +94,23 @@ const Overview = (props) => {
 				);
 			}
 
-			// Replace each empty day with a day that is reported
-			// Check that the year for the reported day is the currently selected year
-			resp.results.forEach((day) => {
-				if (day.month - 1 == i && day.year == year) {
-					months[i][day.day - 1] = (
-						<div
-							key={random_string({ length: 10, type: 'url-safe' })}
-							className={'overview_day ' + day.mood}
-						>
-							{day.day}
-						</div>
-					);
-				}
-			});
+			// If the user has no mood reports, skip this part
+			if (resp.total_results != 0) {
+				// Replace each empty day with a day that is reported
+				// Check that the year for the reported day is the currently selected year
+				resp.results.forEach((day) => {
+					if (day.month - 1 == i && day.year == year) {
+						months[i][day.day - 1] = (
+							<div
+								key={random_string({ length: 10, type: 'url-safe' })}
+								className={'overview_day ' + day.mood}
+							>
+								{day.day}
+							</div>
+						);
+					}
+				});
+			}
 
 			// Generate empty days at beginning of month for a better calendar view
 			// Get the first day of the month and check on what day of the week it lands on

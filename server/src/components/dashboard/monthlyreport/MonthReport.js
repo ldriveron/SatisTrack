@@ -41,7 +41,7 @@ const MonthReport = (props) => {
 		() => {
 			setIsLoading(true);
 			api
-				.fetchMonthSatis(props.user_id, props.year, props.match.params.month)
+				.fetchMonthSatis(props.year, props.match.params.month)
 				.then((resp) => {
 					setIsLoading(false);
 					// Update the state using useState()

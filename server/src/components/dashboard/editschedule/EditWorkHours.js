@@ -15,7 +15,6 @@ const EditWorkHours = (props) => {
 				>
 					{props.options}
 				</select>
-
 				<label htmlFor="end_hour">End Hour</label>
 				<select
 					name="new_work_end_hour"
@@ -38,6 +37,9 @@ const EditWorkHours = (props) => {
 				>
 					Set Work Hours
 				</button>
+				<br />
+				<br />
+				Editing your work schedule will disable mood reporting for one day.
 			</div>
 		</form>
 	);
