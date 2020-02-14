@@ -13,6 +13,7 @@ const EditWorkDays = (props) => {
 						<button
 							type="button"
 							className="button"
+							disabled={props.disable_update_button}
 							onClick={() => {
 								document
 									.getElementById('set_work_days')
@@ -23,7 +24,7 @@ const EditWorkDays = (props) => {
 						</button>
 						<br />
 						<br />
-						Editing your work schedule will disable mood reporting for one day.
+						Editing your work schedule will disable mood reporting for one day
 					</div>
 				</div>
 			</div>
@@ -35,6 +36,7 @@ EditWorkDays.propTypes = {
 	new_days: PropTypes.object,
 	days_checkboxes: PropTypes.array,
 	handleDayChange: PropTypes.func,
+	disable_update_button: PropTypes.bool,
 	setWorkDays: PropTypes.func
 };
 

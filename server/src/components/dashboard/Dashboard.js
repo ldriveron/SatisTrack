@@ -167,7 +167,7 @@ class Dashboard extends Component {
 					NewSatisReport form component */}
 				{this.state.satis_report &&
 				this.state.current_hour == this.state.user_data.work_end_hour &&
-				this.state.user_works_today == 'true' &&
+				this.state.user_works_today == true &&
 				this.state.display_satis_setter == true &&
 				!this.state.user_data.work_paused && (
 					<NewSatisReport
@@ -212,7 +212,7 @@ class Dashboard extends Component {
 Dashboard.propTypes = {
 	user_id: PropTypes.string,
 	user_data: PropTypes.object,
-	user_works_today: PropTypes.string,
+	user_works_today: PropTypes.bool,
 	today: PropTypes.object
 };
 

@@ -29,6 +29,7 @@ const EditWorkHours = (props) => {
 				<button
 					type="button"
 					className="button"
+					disabled={props.disable_update_button}
 					onClick={() => {
 						document
 							.getElementById('set_work_hours')
@@ -39,7 +40,7 @@ const EditWorkHours = (props) => {
 				</button>
 				<br />
 				<br />
-				Editing your work schedule will disable mood reporting for one day.
+				Editing your work schedule will disable mood reporting for one day
 			</div>
 		</form>
 	);
@@ -48,6 +49,7 @@ const EditWorkHours = (props) => {
 EditWorkHours.propTypes = {
 	setWorkHours: PropTypes.func,
 	handleHourChange: PropTypes.func,
+	disable_update_button: PropTypes.bool,
 	work_start_hour: PropTypes.number,
 	work_end_hour: PropTypes.number,
 	new_work_start_hour: PropTypes.oneOfType([ PropTypes.number, PropTypes.string ]),

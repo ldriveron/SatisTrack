@@ -182,7 +182,7 @@ router.post([ '/satis/report/:mood', '/satis/report/:mood/:recap' ], async (req,
 
 		let days_of_week = [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ];
 
-		let user_id = req.user.userID;
+		let user_id = req.user.id;
 		let mood = req.params.mood;
 		let today = new Date().toLocaleDateString('en-US', { timeZone: req.user.user_timezone });
 		today = new Date(today);
@@ -275,15 +275,17 @@ router.post('/userdata/sethours/:startHour/:endHour', async (req, res) => {
 			});
 
 			// Update email notifier schedule for the user
-			Notifier.remover(user.id.toString());
-			Notifier.scheduler(
-				user.work_days,
-				user.work_end_hour,
-				user.id.toString(),
-				user.email,
-				user.username,
-				user.user_timezone
-			);
+			if (Notifier.exists(user.id.toString) && user.allow_email_notifier == true) {
+				Notifier.remover(user.id.toString());
+				Notifier.scheduler(
+					user.work_days,
+					user.work_end_hour,
+					user.id.toString(),
+					user.email,
+					user.username,
+					user.user_timezone
+				);
+			}
 		});
 
 		req.flash('user_alert', 'Your work hours have been updated');
@@ -299,13 +301,13 @@ router.post(
 	'/userdata/setschedule/:sunday/:monday/:tuesday/:wednesday/:thursday/:friday/:saturday',
 	async (req, res) => {
 		let new_days = {
-			sunday: req.params.sunday,
-			monday: req.params.monday,
-			tuesday: req.params.tuesday,
-			wednesday: req.params.wednesday,
-			thursday: req.params.thursday,
-			friday: req.params.friday,
-			saturday: req.params.saturday
+			sunday: JSON.parse(req.params.sunday.toLowerCase()),
+			monday: JSON.parse(req.params.monday.toLowerCase()),
+			tuesday: JSON.parse(req.params.tuesday.toLowerCase()),
+			wednesday: JSON.parse(req.params.wednesday.toLowerCase()),
+			thursday: JSON.parse(req.params.thursday.toLowerCase()),
+			friday: JSON.parse(req.params.friday.toLowerCase()),
+			saturday: JSON.parse(req.params.saturday.toLowerCase())
 		};
 
 		if (req.isAuthenticated()) {
@@ -316,15 +318,17 @@ router.post(
 				});
 
 				// Update email notifier schedule for the user
-				Notifier.remover(user.id.toString());
-				Notifier.scheduler(
-					user.work_days,
-					user.work_end_hour,
-					user.id.toString(),
-					user.email,
-					user.username,
-					user.user_timezone
-				);
+				if (Notifier.exists(user.id.toString) && user.allow_email_notifier == true) {
+					Notifier.remover(user.id.toString());
+					Notifier.scheduler(
+						user.work_days,
+						user.work_end_hour,
+						user.id.toString(),
+						user.email,
+						user.username,
+						user.user_timezone
+					);
+				}
 			});
 
 			req.flash('user_alert', 'Your work days have been updated');
@@ -347,8 +351,15 @@ router.post('/userdata/workpause', (req, res) => {
 
 				// Check if the user's email reminders is paused
 				if (!Notifier.exists(user.id.toString()) && user.allow_email_notifier == true) {
-					// Start the user's email reminders when schedule us unpaused
-					Notifier.starter(user.id.toString());
+					// Start the user's email reminders when schedule is unpaused
+					Notifier.scheduler(
+						user.work_days,
+						user.work_end_hour,
+						user.id.toString(),
+						user.email,
+						user.username,
+						user.user_timezone
+					);
 				}
 
 				req.flash('user_alert', 'Your work schedule has been unpaused');
@@ -359,7 +370,7 @@ router.post('/userdata/workpause', (req, res) => {
 
 				// If the user has email reminders on, then put it on pause
 				if (Notifier.exists(user.id.toString())) {
-					Notifier.pauser(user.id.toString());
+					Notifier.remover(user.id.toString());
 				}
 
 				req.flash('user_alert', 'Your work schedule has been paused');
@@ -443,6 +454,11 @@ router.post('/userdata/deleteaccount', async (req, res) => {
 
 					// Delete all Satis Reports by the user from MongoDB
 					await SatisReport.deleteMany({ user_id: req.user.id });
+
+					// Update email notifier schedule for the user
+					if (Notifier.exists(user.id.toString)) {
+						Notifier.remover(user.id.toString());
+					}
 
 					// End passport session and redirect user to login page
 					req.flash('success_msg', 'Your account and mood reports have been deleted');

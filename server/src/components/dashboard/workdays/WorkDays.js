@@ -26,7 +26,7 @@ const WorkDays = (props) => {
 		}
 
 		// If the day of the week is a work day, set on_day class
-		if (work_value == 'true') {
+		if (work_value == true) {
 			days.push(
 				<div className={'on_day' + class_name} key={day_name}>
 					{day_name.substring(0, 2)}

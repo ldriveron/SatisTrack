@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import underscore from 'underscore';
 
 // API methods import
 import * as api from '../../../api';
@@ -15,6 +16,7 @@ class SetSchedule extends Component {
 	state = {
 		user_data: this.props.user_data,
 		today: new Date(),
+		disable_update_button: true,
 		new_work_start_hour: 0,
 		new_work_end_hour: 0,
 		new_days: {}
@@ -31,13 +33,28 @@ class SetSchedule extends Component {
 	}
 
 	// When the user changes the option on any of the work hours, set the value on the state
-	// If the hours selected as the same as their current, then disable the 'Set Work Hours button'
-	handleHourChange(e) {
+	// If the hours selected as the same as their current, then disable the 'Set Work Hours' button
+	async handleHourChange(e) {
 		e.preventDefault();
 
-		this.setState({
+		await this.setState({
 			[e.target.name]: e.target.value
 		});
+
+		if (
+			this.state.new_work_start_hour != this.state.user_data.work_start_hour ||
+			this.state.new_work_end_hour != this.state.user_data.work_end_hour ||
+			(this.state.new_work_start_hour != this.state.user_data.work_start_hour &&
+				this.state.new_work_end_hour != this.state.user_data.work_end_hour)
+		) {
+			this.setState({
+				disable_update_button: false
+			});
+		} else {
+			this.setState({
+				disable_update_button: true
+			});
+		}
 	}
 
 	// This method is used to update the users work hours on the database
@@ -46,10 +63,10 @@ class SetSchedule extends Component {
 		api
 			.updateWorkTime(this.state.new_work_start_hour, this.state.new_work_end_hour)
 			.then(() => {
-				this.setState({
-					work_start_hour: this.state.new_work_start_hour,
-					work_end_hour: this.state.new_work_end_hour
-				});
+				// this.setState({
+				// 	work_start_hour: this.state.new_work_start_hour,
+				// 	work_end_hour: this.state.new_work_end_hour
+				// });
 
 				// Force reload after set work days
 				location.reload();
@@ -60,15 +77,25 @@ class SetSchedule extends Component {
 	// When a work day checkbox is clicked, update the new_days object based on
 	// if it's selected or not
 	// Previous days are kept in the new object and changed day will be updated
-	handleDayChange(e) {
+	async handleDayChange(e) {
 		let { value, checked } = e.target;
 
-		this.setState((prevState) => ({
+		await this.setState((prevState) => ({
 			new_days: {
 				...prevState.new_days,
 				[value]: checked
 			}
 		}));
+
+		if (underscore.isEqual(this.state.new_days, this.state.user_data.work_days)) {
+			this.setState({
+				disable_update_button: true
+			});
+		} else {
+			this.setState({
+				disable_update_button: false
+			});
+		}
 	}
 
 	setWorkDays() {
@@ -96,11 +123,7 @@ class SetSchedule extends Component {
 					this.state.new_days.friday,
 					this.state.new_days.saturday
 				)
-				.then((resp) => {
-					if (resp === 'Done.') {
-						console.log('Done');
-					}
-
+				.then(() => {
 					// Force reload after setting work days
 					location.reload();
 				})
@@ -172,6 +195,7 @@ class SetSchedule extends Component {
 										{...props}
 										setWorkHours={this.setWorkHours.bind(this)}
 										handleHourChange={this.handleHourChange.bind(this)}
+										disable_update_button={this.state.disable_update_button}
 										work_start_hour={this.state.user_data.work_start_hour}
 										work_end_hour={this.state.user_data.work_end_hour}
 										new_work_start_hour={this.state.new_work_start_hour}
@@ -189,6 +213,7 @@ class SetSchedule extends Component {
 										new_days={this.state.new_days}
 										days_checkboxes={days_checkboxes}
 										handleDayChange={this.handleDayChange.bind(this)}
+										disable_update_button={this.state.disable_update_button}
 										setWorkDays={this.setWorkDays.bind(this)}
 									/>
 								)}

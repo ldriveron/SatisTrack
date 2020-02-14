@@ -17,7 +17,7 @@ const EmailReminder = (props) => {
 						</button>
 					</div>
 				) : (
-					<div style={{ color: 'red' }}>Please check your email for a confirmation button.</div>
+					<div style={{ color: 'red' }}>Please check your email for a confirmation link</div>
 				)}
 			</form>
 		</div>
