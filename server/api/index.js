@@ -53,7 +53,8 @@ router.get('/userdata', async (req, res) => {
 					reporting_streak: user.reporting_streak,
 					total_steaks: user.total_streaks,
 					work_days: user.work_days,
-					company: user.company
+					company: user.company,
+					private: user.private
 				}
 			})
 		);
@@ -91,39 +92,6 @@ router.get('/auth/init', async (req, res) => {
 		res.send({ id: req.user.id });
 	} else {
 		res.redirect('/users/login');
-	}
-});
-
-// Edit user's email reminder setting
-router.post('/userdata/editreminder', (req, res) => {
-	if (req.isAuthenticated()) {
-		User.findOne({ _id: req.user.id }).then(async (user) => {
-			// Check if the user's notifications are already on
-			if (user.allow_email_notifier == false && !Notifier.exists(req.user.id)) {
-				// If the user's email notification is turned off, then turn it on
-				Notifier.scheduler(
-					user.work_days,
-					user.work_end_hour,
-					req.user.id,
-					user.email,
-					user.username,
-					user.user_timezone
-				);
-
-				await user.updateOne({ allow_email_notifier: true });
-
-				req.flash('user_alert', 'Email notifications have been enabled');
-				res.redirect('/users/dashboard');
-			} else if (user.allow_email_notifier == true && Notifier.exists(req.user.id)) {
-				// If the user's email notification is turned on, then turn it off
-				Notifier.remover(req.user.id);
-
-				await user.updateOne({ allow_email_notifier: false });
-
-				req.flash('user_alert', 'Email notifications have been disabled');
-				res.redirect('/users/dashboard');
-			}
-		});
 	}
 });
 
@@ -275,11 +243,11 @@ router.post('/userdata/sethours/:startHour/:endHour', async (req, res) => {
 			});
 
 			// Update email notifier schedule for the user
-			if (Notifier.exists(user.id.toString) && user.allow_email_notifier == true) {
+			if (Notifier.exists(user.id.toString()) && user.allow_email_notifier == true) {
 				Notifier.remover(user.id.toString());
 				Notifier.scheduler(
 					user.work_days,
-					user.work_end_hour,
+					req.params.endHour,
 					user.id.toString(),
 					user.email,
 					user.username,
@@ -318,10 +286,10 @@ router.post(
 				});
 
 				// Update email notifier schedule for the user
-				if (Notifier.exists(user.id.toString) && user.allow_email_notifier == true) {
+				if (Notifier.exists(user.id.toString()) && user.allow_email_notifier == true) {
 					Notifier.remover(user.id.toString());
 					Notifier.scheduler(
-						user.work_days,
+						new_days,
 						user.work_end_hour,
 						user.id.toString(),
 						user.email,
@@ -399,6 +367,61 @@ router.post('/userdata/editprofile', async (req, res) => {
 	}
 });
 
+// Edit user's email reminder setting
+router.post('/userdata/editreminder', (req, res) => {
+	if (req.isAuthenticated()) {
+		User.findOne({ _id: req.user.id }).then(async (user) => {
+			// Check if the user's notifications are already on
+			if (user.allow_email_notifier == false && !Notifier.exists(req.user.id)) {
+				// If the user's email notification is turned off, then turn it on
+				Notifier.scheduler(
+					user.work_days,
+					user.work_end_hour,
+					req.user.id,
+					user.email,
+					user.username,
+					user.user_timezone
+				);
+
+				await user.updateOne({ allow_email_notifier: true });
+
+				req.flash('user_alert', 'Email notifications have been enabled');
+				res.redirect('/users/dashboard');
+			} else if (user.allow_email_notifier == true && Notifier.exists(req.user.id)) {
+				// If the user's email notification is turned on, then turn it off
+				Notifier.remover(req.user.id);
+
+				await user.updateOne({ allow_email_notifier: false });
+
+				req.flash('user_alert', 'Email notifications have been disabled');
+				res.redirect('/users/dashboard');
+			}
+		});
+	}
+});
+
+// Edit user's privacy setting
+router.post('/userdata/editprivacy', (req, res) => {
+	if (req.isAuthenticated()) {
+		User.findOne({ _id: req.user.id }).then(async (user) => {
+			// Check if the user's account is set to private
+			if (user.private == true) {
+				// If the user's account is set to private, set it to public by changing private to false
+				await user.updateOne({ private: false });
+
+				req.flash('user_alert', 'Your Mood Report Overview is now public');
+				res.redirect('/users/dashboard');
+			} else if (user.private == false) {
+				// If the user's account is set to public, set it to private by changing private to true
+				await user.updateOne({ private: true });
+
+				req.flash('user_alert', 'Your Mood Report Overview is now private');
+				res.redirect('/users/dashboard');
+			}
+		});
+	}
+});
+
 // Change the user's password
 router.post('/userdata/editpassword', async (req, res) => {
 	let current_pw = req.body.current_pw;
@@ -456,7 +479,7 @@ router.post('/userdata/deleteaccount', async (req, res) => {
 					await SatisReport.deleteMany({ user_id: req.user.id });
 
 					// Update email notifier schedule for the user
-					if (Notifier.exists(user.id.toString)) {
+					if (Notifier.exists(user.id.toString())) {
 						Notifier.remover(user.id.toString());
 					}
 

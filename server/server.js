@@ -1,18 +1,33 @@
 import sslRedirect from 'heroku-ssl-redirect';
 import express from 'express';
 import config from './config';
+
+// Passport
 import passport from 'passport';
 
+// Flash
 import flash from 'express-flash';
 
+// Session
 import session from 'express-session';
+const MongoStore = require('connect-mongo')(session);
 
+// Sass
 import sassMiddleware from 'node-sass-middleware';
 
 import path from 'path';
+
+// Api Route
 import apiRouter from './api';
 
 import cors from 'cors';
+
+import mongoose from 'mongoose';
+import mdb from './config';
+mongoose
+	.connect(mdb.mongoAtlasUri, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false })
+	.then(() => console.log('MongoDB connected...'))
+	.catch((err) => console.log(err));
 
 // Set the server
 const server = express();
@@ -32,6 +47,9 @@ server.use(
 	})
 );
 
+// Folder holding public files
+server.use(express.static('public'));
+
 // Set the view engine to ejs
 server.set('view engine', 'ejs');
 // Let the server use the forms in GET requests
@@ -41,9 +59,15 @@ server.use(flash());
 server.use(
 	session({
 		secret: config.SESSION_SECRET,
-		resave: true,
-		saveUninitialized: true,
-		cookie: { maxAge: 1000 * 60 * 60 * 24 * 365 }
+		resave: false,
+		saveUninitialized: false,
+		cookie: { maxAge: 1000 * 60 * 60 * 24 * 30 },
+		store: new MongoStore({
+			mongooseConnection: mongoose.connection,
+			touchAfter: 24 * 3600,
+			autoRemove: 'native',
+			autoRemoveInterval: 60 * 24
+		})
 	})
 );
 
@@ -65,9 +89,6 @@ server.use((req, res, next) => {
 	res.locals.isLoggedIn = req.isAuthenticated();
 	next();
 });
-
-// Folder holding public files
-server.use(express.static('public'));
 
 // Index routes
 server.use('/', require('./routes/index'));

@@ -55,7 +55,8 @@ class App extends Component {
 								work_days: resp.user.work_days,
 								reporting_streak: resp.user.reporting_streak,
 								total_streaks: resp.user.total_steaks,
-								company: resp.user.company
+								company: resp.user.company,
+								private: resp.user.private
 							},
 							user_works_today: resp.user.work_days[days_of_week[this.state.today.getDay()]]
 						});
