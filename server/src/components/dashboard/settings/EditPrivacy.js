@@ -26,7 +26,7 @@ const EditPrivacy = (props) => {
 };
 
 EditPrivacy.propTypes = {
-	account_private: PropTypes.boolean
+	account_private: PropTypes.bool
 };
 
 export default EditPrivacy;

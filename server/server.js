@@ -56,17 +56,19 @@ server.set('view engine', 'ejs');
 server.use(express.urlencoded({ extended: false }));
 // Express flash and session
 server.use(flash());
+
 server.use(
 	session({
+		name: 'stid',
 		secret: config.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
-		cookie: { maxAge: 1000 * 60 * 60 * 24 * 30 },
+		cookie: { maxAge: 1000 * 60 * 60 * 24 * 30 }, // 30 days
 		store: new MongoStore({
 			mongooseConnection: mongoose.connection,
 			touchAfter: 24 * 3600,
-			autoRemove: 'native',
-			autoRemoveInterval: 60 * 24
+			autoRemove: 'interval',
+			autoRemoveInterval: 10
 		})
 	})
 );
@@ -95,6 +97,18 @@ server.use('/', require('./routes/index'));
 
 // User routes (login, register, dashboard, logout...)
 server.use('/users', require('./routes/users'));
+
+// Route for viewing a user's overview
+server.get('/:username', (req, res) => {
+	if (req.isAuthenticated()) {
+		res.render('dashboard.ejs', {
+			page_title: req.params.username
+		});
+	} else {
+		req.flash('error_msg', 'Public Overviews are only visible when logged in');
+		res.redirect('/users/login');
+	}
+});
 
 // Include the api files from api folder (api routes)
 server.use('/api', apiRouter);

@@ -13,6 +13,9 @@ import EditSchedule from './dashboard/editschedule/EditSchedule';
 import Settings from './dashboard/settings/Settings';
 import Overview from './dashboard/overview/Overview';
 
+// User import
+import PublicOverview from './user/Overview';
+
 // API methods import
 import * as api from '../api';
 
@@ -102,12 +105,14 @@ class App extends Component {
 							path="/users/overview"
 							render={(props) => <Overview {...props} user_data={this.state.user_data} />}
 						/>
+						<Route path="/:username" render={(props) => <PublicOverview {...props} />} />
 					</Switch>
 				) : (
 					<Switch>
 						<Route path="/users/login" exact component={LoginForm} />
 						<Route path="/users/register" exact component={RegisterForm} />
 						<Route path="/" exact component={StartingPage} />
+						<Route path="/:username" exact render={(props) => <PublicOverview {...props} />} />
 					</Switch>
 				)}
 			</Router>

@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+// Fetch singular user
+export const fetchSingularUser = (username) => {
+	return axios.get(`/api/${username}`).then((resp) => resp.data);
+};
+
 // Fetch user data
 export const fetchUser = () => {
 	return axios.get(`/api/userdata`).then((resp) => resp.data);
@@ -8,6 +13,11 @@ export const fetchUser = () => {
 // Authenticate the current user
 export const authUser = () => {
 	return axios.get(`/api/auth/init`).then((resp) => resp.data);
+};
+
+// Fetch all satisfaction reports for public overfiew
+export const fetchPublicOverview = (id) => {
+	return axios.get(`api/satis/public/${id}`).then((resp) => resp.data);
 };
 
 // Fetch all satisfaction reports by the user

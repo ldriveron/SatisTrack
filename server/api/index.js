@@ -63,6 +63,49 @@ router.get('/userdata', async (req, res) => {
 	}
 });
 
+// Return a single user's information based on username
+router.get('/:username', async (req, res) => {
+	await User.findOne({ username: req.params.username }).then((user) => {
+		if (user == null) {
+			// If no user is found matching the username, then set error to 1
+			// Indicating that no user was found
+			res.send({ user: { error: 1 } });
+		} else {
+			// If the user's account is not private, return the required data
+			if (user.private == false) {
+				res.send({
+					user: {
+						id: user.id,
+						username: user.username,
+						work_start_hour: user.work_start_hour,
+						work_end_hour: user.work_end_hour,
+						work_paused: user.work_paused,
+						days_reported: user.days_reported,
+						reporting_streak: user.reporting_streak,
+						total_steaks: user.total_streaks,
+						work_days: user.work_days,
+						company: user.company,
+						private: user.private,
+						current: req.user.id == user.id,
+						error: 0
+					}
+				});
+			} else if (user.private == true) {
+				// If the user's account is private, do not return all of the data
+				res.send({
+					user: {
+						id: user.id,
+						username: user.username,
+						private: user.private,
+						current: req.user.id == user.id,
+						error: 0
+					}
+				});
+			}
+		}
+	});
+});
+
 // If the user is authenticated, then return their ID
 router.get('/auth/init', async (req, res) => {
 	if (req.isAuthenticated()) {
@@ -95,7 +138,7 @@ router.get('/auth/init', async (req, res) => {
 	}
 });
 
-// Get all the user's satisfaction reports from MongoDB sorted by date
+// Get all the user's mood reports from MongoDB sorted by date
 // If there are none, then respond with total_results: 0
 router.get('/satis/all', (req, res) => {
 	if (req.isAuthenticated()) {
@@ -109,6 +152,25 @@ router.get('/satis/all', (req, res) => {
 	} else {
 		res.redirect('/users/login');
 	}
+});
+
+// Get all the user's mood reports from MongoDB sorted by date
+// If there are none, then respond with total_results: 0
+// This route is used for public overviews
+router.get('/satis/public/:id', (req, res) => {
+	// First find the user and check if their profile is set to public
+	// If it is public, then find all of their mood reports
+	User.findOne({ _id: req.params.id }).then((user) => {
+		if (user.private == false) {
+			SatisReport.find({ user_id: req.params.id }).sort('+date').then((report) => {
+				if (report.length !== 0) {
+					res.send({ total_results: report.length, results: report });
+				} else {
+					res.send({ total_results: 0 });
+				}
+			});
+		}
+	});
 });
 
 // Get one month's report based on year
@@ -152,6 +214,7 @@ router.post([ '/satis/report/:mood', '/satis/report/:mood/:recap' ], async (req,
 
 		let user_id = req.user.id;
 		let mood = req.params.mood;
+		// Set today Date by using the user's timezone
 		let today = new Date().toLocaleDateString('en-US', { timeZone: req.user.user_timezone });
 		today = new Date(today);
 		const date = today.toLocaleDateString();

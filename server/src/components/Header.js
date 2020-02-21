@@ -27,7 +27,18 @@ const Header = (props) => {
 			<NavLink key="settings" to="/users/settings/profile" className="links_holder" activeClassName="link_active">
 				Settings
 			</NavLink>
-			<div className="username">{props.user_data.username}</div>
+
+			<div className="username">
+				<NavLink
+					key="public"
+					to={'/' + props.user_data.username}
+					className="links_holder"
+					style={{ padding: '0', margin: '0', fontSize: '13px' }}
+				>
+					{props.user_data.username}
+				</NavLink>
+			</div>
+
 			<div className="tooltip bottom">
 				<div className="user_header_stat left">{props.user_data.days_reported}</div>
 				<span className="tiptext" style={{ marginLeft: '-80px' }}>
