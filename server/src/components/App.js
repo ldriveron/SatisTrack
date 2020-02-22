@@ -57,7 +57,7 @@ class App extends Component {
 								days_reported: resp.user.days_reported,
 								work_days: resp.user.work_days,
 								reporting_streak: resp.user.reporting_streak,
-								total_streaks: resp.user.total_steaks,
+								total_streaks: resp.user.total_streaks,
 								company: resp.user.company,
 								private: resp.user.private
 							},

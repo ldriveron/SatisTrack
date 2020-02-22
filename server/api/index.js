@@ -51,7 +51,7 @@ router.get('/userdata', async (req, res) => {
 					email_confirmed: user.email_confirmed,
 					days_reported: user.days_reported,
 					reporting_streak: user.reporting_streak,
-					total_steaks: user.total_streaks,
+					total_streaks: user.total_streaks,
 					work_days: user.work_days,
 					company: user.company,
 					private: user.private
@@ -82,7 +82,7 @@ router.get('/:username', async (req, res) => {
 						work_paused: user.work_paused,
 						days_reported: user.days_reported,
 						reporting_streak: user.reporting_streak,
-						total_steaks: user.total_streaks,
+						total_streaks: user.total_streaks,
 						work_days: user.work_days,
 						company: user.company,
 						private: user.private,

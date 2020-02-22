@@ -384,6 +384,7 @@ $nav_username_text: #fff;
 
 		a {
 			background-color: $nav_username_bg;
+			color: #fff;
 		}
 	}
 
@@ -1324,6 +1325,40 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 
 			.month_aligner {
 				display: block;
+			}
+
+			.public_overview_user_info {
+				background: getColor(box_base);
+				width: fit-content;
+				border-radius: 5px;
+				margin: 0 auto 30px auto;
+				display: flex;
+				flex-wrap: nowrap;
+				justify-content: space-between;
+				align-items: center;
+
+				.info_holder {
+					padding: 30px;
+					text-align: center;
+					align-items: center;
+					color: getColor(text);
+					font-size: 20px;
+
+					.label {
+						width: 100%;
+						margin-bottom: 10px;
+						font-size: 13px;
+						color: rgb(136, 153, 166);
+					}
+				}
+
+				.border_left {
+					border-left: 1px solid getColor(base2);
+				}
+
+				.border_none {
+					border-left: none;
+				}
 			}
 		}
 

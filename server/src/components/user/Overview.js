@@ -185,6 +185,30 @@ const Overview = (props) => {
 						<div className="month_loader" />
 					) : (
 						<div className="overview_report">
+							<div className="public_overview_user_info">
+								<div className="info_holder">
+									<div className="label border_none">Hours</div>
+									{user.work_start_hour % 12 ? user.work_start_hour % 12 : 12}:00{' '}
+									{user.work_start_hour == 23 ? 'am' : user.work_start_hour >= 12 ? 'pm' : 'am'} -
+									{user.work_end_hour % 12 ? user.work_end_hour % 12 : 12}:00{' '}
+									{user.work_end_hour == 23 ? 'am' : user.work_end_hour >= 12 ? 'pm' : 'am'}
+								</div>
+								<div className="info_holder border_left">
+									<div className="label">On Break</div> {user.work_paused ? 'Yes' : 'No'}
+								</div>
+								<div className="info_holder border_left">
+									<div className="label">Days Reported</div> {user.days_reported}
+								</div>
+								<div className="info_holder border_left">
+									<div className="label">Current Streak</div> {user.reporting_streak}
+								</div>
+								<div className="info_holder border_left">
+									<div className="label">Total Streaks</div> {user.total_streaks}
+								</div>
+								<div className="info_holder border_left">
+									<div className="label">Company</div> {user.company}
+								</div>
+							</div>
 							<div className="year_selector">
 								<select
 									className="report_year_selector"
@@ -205,7 +229,7 @@ const Overview = (props) => {
 	} else {
 		return (
 			<div className="dashboard">
-				{user.current == true && <div className="page_title">Your Overview is Set to Private</div>}
+				{user.current == true && <div className="page_title">Your Public Overview is Set to Private</div>}
 				<div className="monthly_report">
 					{isLoading ? (
 						<div className="month_loader" />

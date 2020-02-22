@@ -18,7 +18,7 @@ const EditProfile = (props) => (
 				.max(15, 'Username must be 15 characters or less'),
 			company: Yup.string()
 				.min(2, 'Company name must be 2 characters or longer')
-				.max(50, 'Company name must be 50 characters or less')
+				.max(20, 'Company name must be 50 characters or less')
 		})}
 	>
 		{(props) => {
