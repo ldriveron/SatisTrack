@@ -65,7 +65,7 @@ router.get('/userdata', async (req, res) => {
 
 // Return a single user's information based on username
 router.get('/:username', async (req, res) => {
-	await User.findOne({ username: req.params.username }).then((user) => {
+	await User.findOne({ username: RegExp('\\b' + req.params.username + '\\b', 'i') }).then((user) => {
 		if (user == null) {
 			// If no user is found matching the username, then set error to 1
 			// Indicating that no user was found
@@ -419,6 +419,23 @@ router.post('/userdata/editprofile', async (req, res) => {
 	if (req.isAuthenticated()) {
 		await User.findOne({ _id: req.user.id }).then(async (user) => {
 			if (user.username != new_username || user.company != new_company) {
+				// If the user changes their username and their email notifier is active,
+				// remove their current notifier and replace it with the new username
+				if (user.username != new_username) {
+					if (user.allow_email_notifier && Notifier.exists(user.id.toString())) {
+						Notifier.remover(user.id.toString());
+
+						Notifier.scheduler(
+							user.work_days,
+							user.work_end_hour,
+							req.user.id,
+							user.email,
+							new_username,
+							user.user_timezone
+						);
+					}
+				}
+
 				await user.updateOne({ username: new_username, company: new_company });
 
 				req.flash('user_alert', 'Your profile has been updated');
