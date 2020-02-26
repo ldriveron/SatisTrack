@@ -1335,7 +1335,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 				display: flex;
 				flex-wrap: nowrap;
 				justify-content: space-between;
-				align-items: center;
+				align-items: flex-start;
 
 				.info_holder {
 					padding: 30px;

@@ -189,7 +189,8 @@ const Overview = (props) => {
 								<div className="info_holder">
 									<div className="label border_none">Hours</div>
 									{user.work_start_hour % 12 ? user.work_start_hour % 12 : 12}:00{' '}
-									{user.work_start_hour == 23 ? 'am' : user.work_start_hour >= 12 ? 'pm' : 'am'} -
+									{user.work_start_hour == 23 ? 'am' : user.work_start_hour >= 12 ? 'pm' : 'am'}
+									{' - '}
 									{user.work_end_hour % 12 ? user.work_end_hour % 12 : 12}:00{' '}
 									{user.work_end_hour == 23 ? 'am' : user.work_end_hour >= 12 ? 'pm' : 'am'}
 								</div>
