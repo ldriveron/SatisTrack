@@ -221,6 +221,26 @@ const Overview = (props) => {
 									{options}
 								</select>
 							</div>
+							<div className="day_keys">
+								<div className="key ecstatic_bg">
+									<div className="text">Ecstatic</div>{' '}
+								</div>
+								<div className="key happy_bg">
+									<div className="text">Happy</div>{' '}
+								</div>
+								<div className="key content_bg">
+									<div className="text">Content</div>{' '}
+								</div>
+								<div className="key displeased_bg">
+									<div className="text">Displeased</div>{' '}
+								</div>
+								<div className="key disappointed_bg">
+									<div className="text">Disappointed</div>{' '}
+								</div>
+								<div className="key stressed_bg">
+									<div className="text">Stressed</div>{' '}
+								</div>
+							</div>
 							{months}
 						</div>
 					)}

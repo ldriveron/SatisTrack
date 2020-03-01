@@ -93,6 +93,7 @@ class App extends Component {
 								/>
 							)}
 						/>
+
 						<Route
 							path="/users/editschedule"
 							render={(props) => <EditSchedule {...props} user_data={this.state.user_data} />}
@@ -101,6 +102,7 @@ class App extends Component {
 							path="/users/settings"
 							render={(props) => <Settings {...props} user_data={this.state.user_data} />}
 						/>
+
 						<Route
 							path="/users/overview"
 							render={(props) => <Overview {...props} user_data={this.state.user_data} />}
