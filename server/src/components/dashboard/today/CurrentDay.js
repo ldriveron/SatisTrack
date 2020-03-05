@@ -115,7 +115,7 @@ const CurrentDay = (props) => {
 						<div className="detail_box time_remaining" style={{ fontSize: '22px' }}>
 							Paused
 						</div>
-						<span className="tiptext">Your work schedule is paused.</span>
+						<span className="tiptext">Your work schedule is paused</span>
 					</div>
 				) : props.work_end_hour == current_hour &&
 				props.day_is_set &&
@@ -125,7 +125,7 @@ const CurrentDay = (props) => {
 						<div className="detail_box time_remaining equal">
 							<div id="time_remaining" onLoad={beginMinutesCounter()} />
 						</div>
-						<span className="tiptext">Minutes remaning to set your mood for today.</span>
+						<span className="tiptext">Minutes remaning to set your mood for today</span>
 					</div>
 				) : (
 					<div className="tooltip bottom">
@@ -133,7 +133,7 @@ const CurrentDay = (props) => {
 							{total_hours_remaining}h<br />
 							{60 - current_minutes}m
 						</div>
-						<span className="tiptext">Time remaining until you can set your mood for the day.</span>
+						<span className="tiptext">Time remaining until you can set your mood for the day</span>
 					</div>
 				)}
 			</div>

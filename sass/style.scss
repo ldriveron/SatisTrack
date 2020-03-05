@@ -49,7 +49,7 @@ $background: getColor(base);
 $box_shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 
 // Fonts
-$font_nunito: 'Nunito', Verdana, Geneva, Tahoma, sans-serif;
+$font_montserrat: 'Montserrat', Verdana, Geneva, Tahoma, sans-serif;
 $font_playfair: 'Playfair Display', serif;
 $font_varela: 'Varela Round', sans-serif;
 
@@ -59,7 +59,7 @@ body {
 	background-color: $background;
 	min-width: 885px;
 	height: 100%;
-	font-family: $font_nunito;
+	font-family: $font_montserrat;
 	margin: 0;
 	padding-bottom: 20px;
 	-webkit-font-smoothing: antialiased;
@@ -127,7 +127,7 @@ $homepage_screenshot_shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 
 	@media only screen and (min-width: 1346px) {
 		h1 {
-			font-family: $font_nunito;
+			font-family: $font_montserrat;
 			font-size: 50px;
 			margin-bottom: 80px;
 		}
@@ -157,7 +157,7 @@ $homepage_screenshot_shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 
 	@media only screen and (max-width: 1345px) {
 		h1 {
-			font-family: $font_nunito;
+			font-family: $font_montserrat;
 			font-size: 50px;
 			margin-bottom: 0;
 		}
@@ -215,7 +215,7 @@ $tooltip_shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 	min-width: 150px;
 	background-color: $tooltip_bg;
 	color: $tooltip_text;
-	font-family: $font_varela;
+	font-family: $font_montserrat;
 	font-size: 13px;
 	font-weight: 800;
 	text-align: center;
@@ -1263,8 +1263,9 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 
 				.key {
 					width: fit-content;
+					color: #fff;
 					margin-right: 10px;
-					padding: 0px 10px;
+					padding: 5px 10px;
 					border-radius: 5px;
 					box-shadow: $box_shadow;
 				}
@@ -1437,6 +1438,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 				width: calc(100% * (1/7) - 10px - 6px);
 				flex-grow: 1;
 				margin-right: 3px;
+				padding: 5px 0;
 			}
 		}
 
@@ -1482,7 +1484,7 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			width: 173px;
 			background-color: $day_tooltip_bg;
 			color: $day_tooltip_text;
-			font-family: $font_varela;
+			font-family: $font_montserrat;
 			font-size: 13px;
 			font-weight: 800;
 			text-align: center;

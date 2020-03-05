@@ -23,7 +23,7 @@ const RegisterForm = () => (
 					'Use at least: one number and one special character'
 				),
 			password2: Yup.string()
-				.required('Matching password is required.')
+				.required('Matching password is required')
 				.test('passwords-match', 'Passwords must match', function(value) {
 					return this.parent.password === value;
 				})
