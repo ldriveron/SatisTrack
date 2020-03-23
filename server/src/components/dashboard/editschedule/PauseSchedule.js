@@ -19,6 +19,7 @@ const PauseSchedule = (props) => {
 				{props.work_paused == true ? 'Unpause Schedule' : 'Pause Schedule'}
 			</button>
 			<br />
+			<br />
 			Pausing your schedule will disable mood reporting and pause your reporting streak
 			<br />
 			<br />
