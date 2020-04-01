@@ -13,9 +13,17 @@ const WorkDays = (props) => {
 	// Get the starting day of the week
 	let day_number = today.getDate() - today.getDay();
 
+	// Adjust day_number for beginning of month
+	if (day_number < 4) {
+		day_number = new Date(today.getFullYear(), today.getMonth(), 0).getDate() - 2;
+	}
+
 	// Loop over all the user's work days and generate the list of days
 	const one_day = Object.entries(props.work_days);
 	for (const [ day_name, work_value ] of one_day) {
+		// Adjust day_number back to start of month
+		if (day_number > new Date(today.getFullYear(), today.getMonth(), 0).getDate()) day_number = 1;
+
 		// Set current_day class to the current day
 		let class_name = current_day == day_number ? ' current_day' : '';
 
