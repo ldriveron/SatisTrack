@@ -22,9 +22,9 @@ const WorkDays = (props) => {
 	const one_day = Object.entries(props.work_days);
 	for (const [ day_name, work_value ] of one_day) {
 		// Adjust day_number back to start of month
-		if (day_number > new Date(today.getFullYear(), today.getMonth(), 0).getDate()) day_number = 1;
+		if (day_number > new Date(today.getFullYear(), today.getMonth(), 0).getDate() - 1) day_number = 1;
 
-		// Set current_day class to the current day
+		// Set current_day css class to the current day
 		let class_name = current_day == day_number ? ' current_day' : '';
 
 		if (day_name == 'sunday') {
