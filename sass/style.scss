@@ -1210,9 +1210,14 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 			background: $monthly_report_selector_bg;
 			border: $monthly_report_selector_border;
 			cursor: pointer;
+			transition: 0.5ms;
 
 			&:focus {
 				outline: none;
+			}
+
+			&:hover {
+				background-color: getColor(box_base);
 			}
 		}
 
@@ -1294,6 +1299,10 @@ $monthly_report_loader_color: rgb(252, 113, 55);
 
 					&:focus {
 						outline: none;
+					}
+
+					&:hover {
+						background-color: getColor(box_base);
 					}
 				}
 			}
