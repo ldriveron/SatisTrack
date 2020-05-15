@@ -91,7 +91,6 @@ const RegisterForm = () => (
 								onBlur={handleBlur}
 								placeholder="Enter your company name"
 							/>
-							{errors.email && touched.email && <div className="input_feedback">{errors.email}</div>}
 						</div>
 						<br />
 						<div className="password">
