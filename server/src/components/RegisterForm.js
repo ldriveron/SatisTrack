@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 
 const RegisterForm = () => (
 	<Formik
-		initialValues={{ username: '', email: '', password: '', password2: '' }}
+		initialValues={{ username: '', email: '', company: '', password: '', password2: '' }}
 		onSubmit={(values, { setSubmitting }) => {
 			setSubmitting(false);
 		}}
@@ -75,6 +75,21 @@ const RegisterForm = () => (
 								className={errors.email && touched.email && 'error'}
 								placeholder="Enter an Email"
 								required
+							/>
+							{errors.email && touched.email && <div className="input_feedback">{errors.email}</div>}
+						</div>
+						<br />
+						<div className="Company">
+							<label htmlFor="company">Company Name (Optional)</label>
+							<br />
+							<input
+								type="text"
+								id="company"
+								name="company"
+								value={values.company}
+								onChange={handleChange}
+								onBlur={handleBlur}
+								placeholder="Enter your company name"
 							/>
 							{errors.email && touched.email && <div className="input_feedback">{errors.email}</div>}
 						</div>

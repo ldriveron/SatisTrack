@@ -11,6 +11,11 @@ import SatisReport from '../models/SatisReport';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
+// For email confirmation
+import mailer from 'nodemailer';
+import random_string from 'crypto-random-string';
+import config from '../config';
+
 // Notifier service
 import Notifier from './NotifierService';
 
@@ -124,11 +129,16 @@ router.get('/auth/init', async (req, res) => {
 		await User.findOne({ _id: req.user.id }).then(async (user) => {
 			if (
 				user.work_days[days_of_week[yesterday.getDay()]] &&
-				user.last_report_date != yesterday.toLocaleDateString() &&
+				user.last_report_date != yesterday.toLocaleDateString('en-US', { timeZone: req.user.user_timezone }) &&
 				user.last_report_date != today &&
 				user.work_paused == false
 			) {
 				await user.updateOne({ reporting_streak: 0 });
+			}
+
+			// Update last activity date to current day
+			if (user.last_activity != today) {
+				await user.updateOne({ last_activity: today });
 			}
 		});
 
@@ -217,7 +227,7 @@ router.post([ '/satis/report/:mood', '/satis/report/:mood/:recap' ], async (req,
 		// Set today Date by using the user's timezone
 		let today = new Date().toLocaleDateString('en-US', { timeZone: req.user.user_timezone });
 		today = new Date(today);
-		const date = today.toLocaleDateString();
+		const date = today.toLocaleDateString('en-US', { timeZone: req.user.user_timezone });
 		const month = today.getMonth() + 1;
 		const day = today.getDate();
 		const day_word = days_of_week[today.getDay()];
@@ -255,8 +265,8 @@ router.post([ '/satis/report/:mood', '/satis/report/:mood/:recap' ], async (req,
 			let reporting_streak = 0;
 			if (
 				user.work_days[days_of_week[yesterday.getDay()]] &&
-				user.last_report_date != yesterday.toLocaleDateString() &&
-				user.last_report_date != today.toLocaleDateString()
+				user.last_report_date != yesterday.toLocaleDateString('en-US', { timeZone: req.user.user_timezone }) &&
+				user.last_report_date != today.toLocaleDateString('en-US', { timeZone: req.user.user_timezone })
 			) {
 				reporting_streak = 1;
 			} else {
@@ -269,21 +279,21 @@ router.post([ '/satis/report/:mood', '/satis/report/:mood/:recap' ], async (req,
 			// Else just do a normal mood report without changing first_satis_report or total_streaks.
 			if (user.days_reported == 0) {
 				await user.updateOne({
-					last_report_date: today.toLocaleDateString(),
+					last_report_date: today.toLocaleDateString('en-US', { timeZone: req.user.user_timezone }),
 					days_reported: user.days_reported + 1,
 					reporting_streak: reporting_streak,
-					first_satis_report: today.toLocaleDateString()
+					first_satis_report: today.toLocaleDateString('en-US', { timeZone: req.user.user_timezone })
 				});
 			} else if ((user.reporting_streak + 1) % 5 == 0) {
 				await user.updateOne({
-					last_report_date: today.toLocaleDateString(),
+					last_report_date: today.toLocaleDateString('en-US', { timeZone: req.user.user_timezone }),
 					days_reported: user.days_reported + 1,
 					reporting_streak: reporting_streak,
 					total_streaks: user.total_streaks + 1
 				});
 			} else {
 				await user.updateOne({
-					last_report_date: today.toLocaleDateString(),
+					last_report_date: today.toLocaleDateString('en-US', { timeZone: req.user.user_timezone }),
 					days_reported: user.days_reported + 1,
 					reporting_streak: reporting_streak
 				});
@@ -474,6 +484,67 @@ router.post('/userdata/editreminder', (req, res) => {
 				await user.updateOne({ allow_email_notifier: false });
 
 				req.flash('user_alert', 'Email notifications have been disabled');
+				res.redirect('/users/dashboard');
+			}
+		});
+	}
+});
+
+// Resend email confirmation to user if requested
+router.post('/userdata/confirmemail', (req, res) => {
+	if (req.isAuthenticated()) {
+		User.findOne({ _id: req.user.id }).then(async (user) => {
+			// Only send an email confirmation if the user's email is not already confirmed
+			if (user.email_confirmed != true) {
+				let confirmation_code = random_string({ length: 10, type: 'url-safe' });
+
+				let confirm_url =
+					'https://satistracker.com/users/email_confirm/' + confirmation_code + '/' + req.user.id;
+
+				var mailOptions = {
+					from: '"Satis Tracker" <satistrack@gmail.com>',
+					to: user.email,
+					subject: 'Confirm your email on Satis Tracker',
+					html:
+						'<div id="full_container" style="width: 100%; background-color: #EEF0F6; padding: 20px 0;">' +
+						'<a href="https://satistracker.com" target="_blank" style="text-decoration: none;"><div id="logo_text" ' +
+						'style="width: 100%; font-size: 30px; text-align: center; margin-bottom: 20px;">SATIS TRACKER</div></a>' +
+						'<div id="content_container" style="width: 60%; background-color: #fff; margin: 20px auto; ' +
+						'padding: 30px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold;">' +
+						'In order to receive emails from Satis Tracker, including Mood Report reminders, your email must be confirmed.<br><br>' +
+						'<a href="' +
+						confirm_url +
+						'" target="_blank" style="text-decoration: none;"><div id="begin_button" ' +
+						'style="width: fit-content; margin: 0 auto; padding: 10px 30px; border: none; background-color: #fe9079; ' +
+						'color: #fff; font-size: 16px; border-radius: 5px;">Confirm Email</div></a></div>' +
+						'<div id="statement" style="width: 100%; text-align: center; font-size: 13px; margin-top: 25px;">' +
+						'This is an automated message. Please do not reply to this email.</div>' +
+						'</div>'
+				};
+
+				var transporter = mailer.createTransport({
+					service: 'gmail',
+					auth: {
+						user: 'satistrack@gmail.com',
+						pass: config.emps
+					}
+				});
+
+				await transporter.sendMail(mailOptions, function(error, info) {
+					if (error) {
+						console.log(error);
+					} else {
+						console.log('Confirmation email sent: ' + info.response);
+					}
+				});
+
+				// Update confirmation code for user in database
+				await user.updateOne({ confirmation_code: confirmation_code });
+
+				req.flash('user_alert', 'Check your email for a new confirmation link');
+				res.redirect('/users/dashboard');
+			} else {
+				req.flash('user_alert', 'Your email is already confirmed');
 				res.redirect('/users/dashboard');
 			}
 		});

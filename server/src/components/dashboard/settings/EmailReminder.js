@@ -18,7 +18,18 @@ const EmailReminder = (props) => {
 						</button>
 					</div>
 				) : (
-					<div style={{ color: 'red' }}>Please check your email for a confirmation link</div>
+					<div style={{ color: 'red' }}>
+						Please check your email for a confirmation link
+						<br />
+						<br />
+						<form action="/api/userdata/confirmemail" method="POST">
+							<div>
+								<button type="submit" className="formButton" style={{ width: 'fit-content' }}>
+									Resend confirmation email
+								</button>
+							</div>
+						</form>
+					</div>
 				)}
 			</form>
 		</div>

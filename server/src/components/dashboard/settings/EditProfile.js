@@ -45,7 +45,7 @@ const EditProfile = (props) => (
 
 						<br />
 						<br />
-						<label>Set Company</label>
+						<label>Company Name (Optional)</label>
 						<input
 							type="text"
 							name="company"
@@ -55,7 +55,7 @@ const EditProfile = (props) => (
 							className={errors.company && touched.company && 'error'}
 							onChange={handleChange}
 							defaultValue={company}
-							placeholder="Enter your company name (optional)"
+							placeholder="Enter your company name"
 						/>
 						{errors.company && touched.company && <div className="input_feedback">{errors.company}</div>}
 
