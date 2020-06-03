@@ -18,7 +18,7 @@ import sassMiddleware from 'node-sass-middleware';
 import path from 'path';
 
 // Api Route
-import apiRouter from './api';
+import apiRouter from './api/index.js';
 
 import cors from 'cors';
 

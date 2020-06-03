@@ -116,7 +116,7 @@ let emailConfirm = async (email, confirmation_code, id) => {
 	let confirm_url = 'https://satistracker.com/users/email_confirm/' + confirmation_code + '/' + id;
 
 	var mailOptions = {
-		from: '"Satis Tracker" <satistrack@gmail.com>',
+		from: '"Satis Tracker" <satistracker@gmail.com>',
 		to: email,
 		subject: 'Confirm your email on Satis Tracker',
 		html:
@@ -139,7 +139,7 @@ let emailConfirm = async (email, confirmation_code, id) => {
 	var transporter = mailer.createTransport({
 		service: 'gmail',
 		auth: {
-			user: 'satistrack@gmail.com',
+			user: 'satistracker@gmail.com',
 			pass: config.emps
 		}
 	});

@@ -47,6 +47,7 @@ class App extends Component {
 							user_data: {
 								user_id: this.state.user_id,
 								username: resp.user.username,
+								email: resp.user.email,
 								work_start_hour: resp.user.work_start_hour,
 								work_end_hour: resp.user.work_end_hour,
 								work_paused: resp.user.work_paused,

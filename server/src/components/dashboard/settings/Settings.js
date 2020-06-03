@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 // Import components
 import EditProfile from './EditProfile';
 import EmailReminder from './EmailReminder';
+import EditEmail from './EditEmail';
 import EditPrivacy from './EditPrivacy';
 import EditPassword from './EditPassword';
 import DeleteAccount from './DeleteAccount';
@@ -13,6 +14,7 @@ import DeleteAccount from './DeleteAccount';
 const Settings = (props) => {
 	let username = props.user_data.username;
 	let company = props.user_data.company;
+	let current_email = props.user_data.email;
 	let days_reported = props.user_data.days_reported;
 	let allowed = props.user_data.allow_email_notifier;
 	let email_confirmed = props.user_data.email_confirmed;
@@ -25,6 +27,10 @@ const Settings = (props) => {
 				<div className="left_links">
 					<Link key="edit_profile" to="/users/settings/profile">
 						<div className="link top_link">Edit Profile</div>
+					</Link>
+
+					<Link key="edit_email" to="/users/settings/email">
+						<div className="link middle_link">Edit Email</div>
 					</Link>
 
 					<Link key="email_reminder" to="/users/settings/reminder">
@@ -59,6 +65,13 @@ const Settings = (props) => {
 							render={(props) => (
 								<EmailReminder {...props} allowed={allowed} email_confirmed={email_confirmed} />
 							)}
+						/>
+
+						{/* Edit Email Route */}
+						<Route
+							path="/users/settings/email"
+							exact
+							render={(props) => <EditEmail {...props} current_email={current_email} />}
 						/>
 
 						{/* Edit Privacy Route */}

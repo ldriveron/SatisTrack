@@ -47,6 +47,7 @@ router.get('/userdata', async (req, res) => {
 			res.send({
 				user: {
 					username: user.username,
+					email: user.email,
 					work_start_hour: user.work_start_hour,
 					work_end_hour: user.work_end_hour,
 					work_paused: user.work_paused,
@@ -457,6 +458,62 @@ router.post('/userdata/editprofile', async (req, res) => {
 	}
 });
 
+// Edit uer's email address
+router.post('/userdata/editemail', async (req, res) => {
+	if (req.isAuthenticated()) {
+		// Get the new email entered by user
+		let newEmail = req.body.newEmail;
+
+		// If there is currently no user with the new email, then continue with updating
+		await User.findOne({ email: newEmail }).then(async (user) => {
+			if (user) {
+				req.flash('user_alert', 'Email entered is already registered');
+				res.redirect('users/dashboard');
+			} else {
+				User.findOne({ _id: req.user.id }).then(async (user) => {
+					// Generate a new confirmation code for the user
+					let confirmation_code = random_string({ length: 10, type: 'url-safe' });
+
+					// Send email to user's new email containing confirmation url
+					// Only update the user dats if the email was actually sent
+					if (emailConfirm(newEmail, confirmation_code, req.user.id) != 1) {
+						// Check if the user has email notifications turned on
+						// If they do, then turn it off for the email change
+						// Using an if else statement here so there is only one update needed
+						if (Notifier.exists(req.user.id.toString())) {
+							Notifier.remover(req.user.id.toString());
+
+							// Reflect this change in the database
+							// Set the user's email_confirmed field to false
+							await user.updateOne({
+								email: newEmail,
+								email_confirmed: false,
+								confirmation_code: confirmation_code,
+								allow_email_notifier: false
+							});
+						} else {
+							// Set the user's email_confirmed field to false
+							await user.updateOne({
+								email: newEmail,
+								email_confirmed: false,
+								confirmation_code: confirmation_code
+							});
+						}
+
+						// Alert the user of the change
+						req.flash('user_alert', 'Check your new email for a confirmation link');
+						res.redirect('users/dashboard');
+					} else {
+						// Alert the user that the email change was not successful
+						req.flash('user_alert', 'An error occurred. Try again or enter a different email.');
+						res.redirect('users/dashboard');
+					}
+				});
+			}
+		});
+	}
+});
+
 // Edit user's email reminder setting
 router.post('/userdata/editreminder', (req, res) => {
 	if (req.isAuthenticated()) {
@@ -498,51 +555,17 @@ router.post('/userdata/confirmemail', (req, res) => {
 			if (user.email_confirmed != true) {
 				let confirmation_code = random_string({ length: 10, type: 'url-safe' });
 
-				let confirm_url =
-					'https://satistracker.com/users/email_confirm/' + confirmation_code + '/' + req.user.id;
+				// Send email to user containing confirmation email
+				if (emailConfirm(req.user.email, confirmation_code, req.user.id) != 1) {
+					// Update confirmation code for user in database
+					await user.updateOne({ confirmation_code: confirmation_code });
 
-				var mailOptions = {
-					from: '"Satis Tracker" <satistrack@gmail.com>',
-					to: user.email,
-					subject: 'Confirm your email on Satis Tracker',
-					html:
-						'<div id="full_container" style="width: 100%; background-color: #EEF0F6; padding: 20px 0;">' +
-						'<a href="https://satistracker.com" target="_blank" style="text-decoration: none;"><div id="logo_text" ' +
-						'style="width: 100%; font-size: 30px; text-align: center; margin-bottom: 20px;">SATIS TRACKER</div></a>' +
-						'<div id="content_container" style="width: 60%; background-color: #fff; margin: 20px auto; ' +
-						'padding: 30px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold;">' +
-						'In order to receive emails from Satis Tracker, including Mood Report reminders, your email must be confirmed.<br><br>' +
-						'<a href="' +
-						confirm_url +
-						'" target="_blank" style="text-decoration: none;"><div id="begin_button" ' +
-						'style="width: fit-content; margin: 0 auto; padding: 10px 30px; border: none; background-color: #fe9079; ' +
-						'color: #fff; font-size: 16px; border-radius: 5px;">Confirm Email</div></a></div>' +
-						'<div id="statement" style="width: 100%; text-align: center; font-size: 13px; margin-top: 25px;">' +
-						'This is an automated message. Please do not reply to this email.</div>' +
-						'</div>'
-				};
-
-				var transporter = mailer.createTransport({
-					service: 'gmail',
-					auth: {
-						user: 'satistrack@gmail.com',
-						pass: config.emps
-					}
-				});
-
-				await transporter.sendMail(mailOptions, function(error, info) {
-					if (error) {
-						console.log(error);
-					} else {
-						console.log('Confirmation email sent: ' + info.response);
-					}
-				});
-
-				// Update confirmation code for user in database
-				await user.updateOne({ confirmation_code: confirmation_code });
-
-				req.flash('user_alert', 'Check your email for a new confirmation link');
-				res.redirect('/users/dashboard');
+					req.flash('user_alert', 'Check your email for a new confirmation link');
+					res.redirect('/users/dashboard');
+				} else {
+					req.flash('user_alert', 'An error occurred. Try again.');
+					res.redirect('/users/dashboard');
+				}
 			} else {
 				req.flash('user_alert', 'Your email is already confirmed');
 				res.redirect('/users/dashboard');
@@ -550,6 +573,52 @@ router.post('/userdata/confirmemail', (req, res) => {
 		});
 	}
 });
+
+// Send an email containing an email confirmation link to the user
+let emailConfirm = async (email, confirmation_code, id) => {
+	let confirm_url = 'https://satistracker.com/users/email_confirm/' + confirmation_code + '/' + id;
+
+	var mailOptions = {
+		from: '"Satis Tracker" <satistracker@gmail.com>',
+		to: email,
+		subject: 'Confirm your email on Satis Tracker',
+		html:
+			'<div id="full_container" style="width: 100%; background-color: #EEF0F6; padding: 20px 0;">' +
+			'<a href="https://satistracker.com" target="_blank" style="text-decoration: none;"><div id="logo_text" ' +
+			'style="width: 100%; font-size: 30px; text-align: center; margin-bottom: 20px;">SATIS TRACKER</div></a>' +
+			'<div id="content_container" style="width: 60%; background-color: #fff; margin: 20px auto; ' +
+			'padding: 30px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold;">' +
+			'In order to receive emails from Satis Tracker, including Mood Report reminders, your email must be confirmed.<br><br>' +
+			'<a href="' +
+			confirm_url +
+			'" target="_blank" style="text-decoration: none;"><div id="begin_button" ' +
+			'style="width: fit-content; margin: 0 auto; padding: 10px 30px; border: none; background-color: #fe9079; ' +
+			'color: #fff; font-size: 16px; border-radius: 5px;">Confirm Email</div></a></div>' +
+			'<div id="statement" style="width: 100%; text-align: center; font-size: 13px; margin-top: 25px;">' +
+			'This is an automated message. Please do not reply to this email.</div>' +
+			'</div>'
+	};
+
+	var transporter = mailer.createTransport({
+		service: 'gmail',
+		auth: {
+			user: 'satistracker@gmail.com',
+			pass: config.emps
+		}
+	});
+
+	await transporter.sendMail(mailOptions, function(error, info) {
+		if (error) {
+			console.log(error);
+			// return 1 if an error occurred
+			return 1;
+		} else {
+			console.log('Confirmation email sent: ' + info.response);
+			// return 0 if no error occurred
+			return 0;
+		}
+	});
+};
 
 // Edit user's privacy setting
 router.post('/userdata/editprivacy', (req, res) => {

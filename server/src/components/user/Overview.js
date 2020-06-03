@@ -250,7 +250,7 @@ const Overview = (props) => {
 	} else {
 		return (
 			<div className="dashboard">
-				{user.current == true && <div className="page_title">Your Public Overview is Set to Private</div>}
+				{user.current == true && <div className="page_title">Your Overview is Set to Private</div>}
 				<div className="monthly_report">
 					{isLoading ? (
 						<div className="month_loader" />
