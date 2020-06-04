@@ -459,18 +459,18 @@ router.post('/userdata/editprofile', async (req, res) => {
 });
 
 // Edit uer's email address
-router.post('/userdata/editemail', async (req, res) => {
+router.post('/userdata/editemail', (req, res) => {
 	if (req.isAuthenticated()) {
 		// Get the new email entered by user
 		let newEmail = req.body.newEmail;
 
 		// If there is currently no user with the new email, then continue with updating
-		await User.findOne({ email: newEmail }).then(async (user) => {
+		User.findOne({ email: newEmail }).then(async (user) => {
 			if (user) {
 				req.flash('user_alert', 'Email entered is already registered');
 				res.redirect('users/dashboard');
 			} else {
-				User.findOne({ _id: req.user.id }).then(async (user) => {
+				await User.findOne({ _id: req.user.id }).then(async (user) => {
 					// Generate a new confirmation code for the user
 					let confirmation_code = random_string({ length: 10, type: 'url-safe' });
 
@@ -502,15 +502,17 @@ router.post('/userdata/editemail', async (req, res) => {
 
 						// Alert the user of the change
 						req.flash('user_alert', 'Check your new email for a confirmation link');
-						res.redirect('users/dashboard');
+						res.redirect('/users/dashboard');
 					} else {
 						// Alert the user that the email change was not successful
 						req.flash('user_alert', 'An error occurred. Try again or enter a different email.');
-						res.redirect('users/dashboard');
+						res.redirect('/users/dashboard');
 					}
 				});
 			}
 		});
+	} else {
+		res.redirect('/users/login');
 	}
 });
 
@@ -519,12 +521,17 @@ router.post('/userdata/editreminder', (req, res) => {
 	if (req.isAuthenticated()) {
 		User.findOne({ _id: req.user.id }).then(async (user) => {
 			// Check if the user's notifications are already on
-			if (user.allow_email_notifier == false && !Notifier.exists(req.user.id)) {
+			if (
+				(user.allow_email_notifier == false || user.allow_email_notifier == true) &&
+				!Notifier.exists(req.user.id.toString())
+			) {
 				// If the user's email notification is turned off, then turn it on
+				// If for some reason the user's notifier is set to true in the database, but it is not active in
+				// the server, then turn it on as well
 				Notifier.scheduler(
 					user.work_days,
 					user.work_end_hour,
-					req.user.id,
+					req.user.id.toString(),
 					user.email,
 					user.username,
 					user.user_timezone
@@ -534,16 +541,25 @@ router.post('/userdata/editreminder', (req, res) => {
 
 				req.flash('user_alert', 'Email notifications have been enabled');
 				res.redirect('/users/dashboard');
-			} else if (user.allow_email_notifier == true && Notifier.exists(req.user.id)) {
+			} else if (user.allow_email_notifier == true && Notifier.exists(req.user.id.toString())) {
 				// If the user's email notification is turned on, then turn it off
-				Notifier.remover(req.user.id);
+				Notifier.remover(req.user.id.toString());
 
 				await user.updateOne({ allow_email_notifier: false });
 
 				req.flash('user_alert', 'Email notifications have been disabled');
 				res.redirect('/users/dashboard');
+			} else if (user.allow_email_notifier == false && Notifier.exists(req.user.id.toString())) {
+				// If for some reason the user's notifier is set to false in the database, but it is active in
+				// the server, then turn it off
+				Notifier.remover(req.user.id.toString());
+
+				req.flash('user_alert', 'Email notifications have been disabled');
+				res.redirect('/users/dashboard');
 			}
 		});
+	} else {
+		res.redirect('/users/login');
 	}
 });
 
@@ -571,6 +587,8 @@ router.post('/userdata/confirmemail', (req, res) => {
 				res.redirect('/users/dashboard');
 			}
 		});
+	} else {
+		res.redirect('/users/login');
 	}
 });
 
@@ -639,6 +657,8 @@ router.post('/userdata/editprivacy', (req, res) => {
 				res.redirect('/users/dashboard');
 			}
 		});
+	} else {
+		res.redirect('/users/login');
 	}
 });
 

@@ -7,15 +7,15 @@ import * as Yup from 'yup';
 
 const EditEmail = (props) => (
 	<Formik
-		initialValues={{ newEmail: '' }}
+		initialValues={{ newEmail: '', current_email: props.current_email }}
 		onSubmit={(values, { setSubmitting }) => {
 			setSubmitting(false);
 		}}
 		validationSchema={Yup.object().shape({
 			newEmail: Yup.string()
-				.required('New Email is required')
-				.email('New Email is not valid')
-				.test('email-match', 'This is your current Email. Enter a different one.', function(value) {
+				.required('New email is required')
+				.email('New email is not valid')
+				.test('email-match', 'This is your current email. Enter a different one.', function(value) {
 					return props.current_email != value;
 				})
 		})}
@@ -24,6 +24,8 @@ const EditEmail = (props) => (
 			document.title = 'Edit Email';
 
 			const { values, newEmail, touched, errors, isSubmitting, handleChange, handleBlur } = props;
+
+			let placeHolder = 'Current: ' + values.current_email;
 
 			return (
 				<div>
@@ -34,6 +36,7 @@ const EditEmail = (props) => (
 							type="text"
 							name="newEmail"
 							id="newEmail"
+							placeholder={placeHolder}
 							value={values.newEmail}
 							onBlur={handleBlur}
 							className={errors.newEmail && touched.newEmail && 'error'}
