@@ -24,14 +24,17 @@ const WorkDays = (props) => {
 	};
 
 	// Adjust day_number for beginning of month
-	// If the day_number is less than 6, day does not land on a sunday, and is during the first week of the month,
+	// If the day_number is 6 or less, the day does not land on a sunday, and is during the first week of the month,
 	// then day_number needs to be set to the previous month's days
-	if (day_number < 6 && today.getDay() != 0 && Date.prototype.week_of_month(today) == 0) {
+	if (day_number < 7 && today.getDay() != 0 && Date.prototype.week_of_month(today) == 0) {
+		// Figure out how many days of the previous month need to be displayed
 		let fillInDays = new Date(compare_month + 1 + '/' + '1' + '/' + today.getFullYear()).getDay();
+		// If fillInDays equals 7, then the first sunday of the month is lands on day 1
 		fillInDays = fillInDays == 7 ? 0 : fillInDays - 1;
+		// set day_number at the previous month's total days minus fillInDays
 		day_number = new Date(today.getFullYear(), compare_month, 0).getDate() - fillInDays;
 	} else {
-		// In the case of any week besides the first, begin the day_number count for the first day of the week
+		// In the case of any week besides the first of the month, begin the day_number count for the first day of the week
 		// by substracting the total number of days in the month by the week day number
 		day_number = today.getDate() - today.getDay();
 		compare_month = today.getMonth() + 1;
@@ -43,7 +46,7 @@ const WorkDays = (props) => {
 		// Adjust day_number back to start of month after previous month's total days is reached
 		if (day_number > new Date(today.getFullYear(), compare_month, 0).getDate()) day_number = 1;
 
-		// Set current_day css class to the current day
+		// Set current_day css class to the current day of the week
 		let class_name = today.getDate() == day_number ? ' current_day' : '';
 
 		// Add sunday or saturday class for rounded edges

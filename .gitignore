@@ -11,3 +11,5 @@ dist
 package-lock.json
 passport-config.js
 build
+babel.config.js
+package.json
