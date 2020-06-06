@@ -17,8 +17,8 @@ Procfile
 webpack.config.js
 
 # Models
-User.js
-SatisReport.js
+server/models/User.js
+server/models/SatisReport.js
 
 # PWA
 public/service-worker.js
