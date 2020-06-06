@@ -13,3 +13,19 @@ passport-config.js
 build
 babel.config.js
 package.json
+Procfile
+webpack.config.js
+
+# Models
+User.js
+SatisReport.js
+
+# PWA
+public/service-worker.js
+robots.txt
+manifest.json
+
+# Other
+server/views/index.ejs
+server/api/NotifierService.js
+server/routes/index.js
