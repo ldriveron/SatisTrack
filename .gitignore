@@ -26,6 +26,6 @@ robots.txt
 manifest.json
 
 # Other
-server/views/index.ejs
+views/index.ejs
 server/api/NotifierService.js
 server/routes/index.js
