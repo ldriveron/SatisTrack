@@ -65,7 +65,7 @@ server.post('/register/:region/:location', checkAuthenticated, async (req, res) 
 		await User.findOne({ email: email }, { username: username }).then(async (user) => {
 			if (user) {
 				// User exists, show as an error
-				req.flash('error_msg', 'Email or username entered is already registered');
+				req.flash('user_error', 'Email or username entered is already registered');
 				res.redirect('/users/register');
 			} else {
 				let confirmation_code = random_string({ length: 10, type: 'url-safe' });
@@ -213,7 +213,7 @@ function checkNotAuthenticated(req, res, next) {
 		return next();
 	}
 
-	req.flash('error_msg', 'Log in to view your dashboard');
+	req.flash('user_error', 'Log in to view your dashboard');
 	res.redirect('/users/login');
 }
 

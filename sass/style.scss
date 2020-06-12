@@ -440,9 +440,9 @@ $nav_username_text: #fff;
 
 // Message alert
 // Message alert colors
-$message_alert_bg: rgb(254, 236, 231);
-$message_alert_text: rgb(236, 67, 15);
-$message_alert_border: rgb(236, 67, 15);
+$message_alert_bg: rgb(216, 237, 208);
+$message_alert_text: rgb(114, 134, 105);
+$message_alert_border: rgb(193, 213, 187);
 
 $user_alert_bg: getColor(box_base);
 $user_alert_text: getColor(text);
@@ -452,43 +452,78 @@ $user_error_bg: getColor(box_base);
 $user_error_text: getColor(text);
 $user_error_border: rgb(236, 67, 15);
 
+$close_alert_color: rgb(215, 161, 89);
+$close_alert_bg: rgb(245, 245, 245);
+$close_alert_hover_bg: rgb(29, 29, 41);
+
 .message_alert {
 	width: fit-content;
 	width: -moz-fit-content;
+	position: relative;
+	z-index: 999;
+	box-shadow: $box_shadow;
 	display: table;
 	color: $message_alert_text;
-	padding: 10px 25px;
-	margin: 0 auto 20px auto;
+	padding: 20px 80px 20px 25px;
+	margin: 0px auto 25px auto;
 	text-align: center;
 	background-color: $message_alert_bg;
+	border: 1px solid $message_alert_border;
 	border-radius: 5px;
-	border-left: 5px solid $message_alert_border;
 }
 
 .user_alert {
 	width: fit-content;
 	width: -moz-fit-content;
+	position: fixed;
+	z-index: 999;
+	left: 3%;
+	bottom: 3%;
+	box-shadow: $box_shadow;
 	display: table;
 	color: $user_alert_text;
-	padding: 10px 25px;
-	margin: 20px auto 5px auto;
+	padding: 20px 80px 20px 25px;
+	margin: 0px auto 5px auto;
 	text-align: center;
 	background-color: $user_alert_bg;
+	border: 1px solid $user_alert_border;
 	border-radius: 5px;
-	border-left: 5px solid $user_alert_border;
 }
 
 .user_error {
 	width: fit-content;
 	width: -moz-fit-content;
+	position: relative;
+	z-index: 999;
+	box-shadow: $box_shadow;
 	display: table;
 	color: $user_error_text;
-	padding: 10px 25px;
-	margin: 20px auto 0 auto;
+	padding: 20px 80px 20px 25px;
+	margin: 0px auto 20px auto;
 	text-align: center;
 	background-color: $user_error_bg;
+	border: 1px solid $user_error_border;
 	border-radius: 5px;
-	border-left: 5px solid $user_error_border;
+}
+
+#close_alert {
+	position: absolute;
+	float: right;
+	background-color: $close_alert_bg;
+	color: $close_alert_color;
+	font-size: 13px;
+	font-weight: 900;
+	text-align: center;
+	padding: 11px 15px;
+	margin-top: -9px;
+	margin-left: 30px;
+	border-radius: 50px;
+	cursor: pointer;
+	transition: 0.3s;
+
+	&:hover {
+		background-color: $close_alert_hover_bg;
+	}
 }
 // End message alert
 
@@ -530,6 +565,7 @@ $form_link_color: getColor(text);
 	flex-wrap: wrap;
 	width: 45%;
 	padding: 30px;
+	margin-bottom: 40px;
 	border-radius: 20px;
 	background-color: $form_bg;
 	box-shadow: $box_shadow;

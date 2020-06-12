@@ -1,37 +1,59 @@
+<!--Used for registration errors-->
 <% if(typeof errors != 'undefined') { %>
     <div class="message_alert">
         <% errors.forEach(function(error) { %>
             <%= error.msg %><br>
         <% }); %>
+        <span id="close_alert" onclick="hideAlert()">X</span>
     </div>
 <% } %>
 
+<!--Used for success message-->
 <% if(success_msg != '') { %>
     <div class="message_alert">
         <%= success_msg %>
+        <span id="close_alert" onclick="hideAlert()">X</span>
     </div>
 <% } %>
 
+<!--Used for general alerts-->
 <% if(user_alert != '') { %>
 <div class="user_alert">
     <%= user_alert %>
+    <span id="close_alert" onclick="hideAlert()">X</span>
 </div>
 <% } %>
 
+<!--Used if an error occurs with user updates-->
 <% if(user_error != '') { %>
 <div class="user_error">
     <%= user_error %>
+    <span id="close_alert" onclick="hideAlert()">X</span>
 </div>
 <% } %>
 
+<!--Used if a server error occurs-->
 <% if(error_msg != '') { %>
     <div class="message_alert">
         <%= error_msg %>
+        <span id="close_alert" onclick="hideAlert()">X</span>
     </div>
 <% } %>
 
+<!--Used for incorrect login & registration errors-->
 <% if(error != '') { %>
-    <div class="message_alert">
+    <div class="user_error">
         <%= error %>
+        <span id="close_alert" onclick="hideAlert()">X</span>
     </div>
 <% } %>
+
+<script>
+    // There is never a chance of two alerts showing at the same time
+    // Find the close_alert span
+    // Set the parent element's display to none
+    function hideAlert() {
+        var alert = document.getElementById("close_alert");
+        alert.parentElement.style.display = "none";
+    }
+</script>
