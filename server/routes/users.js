@@ -50,6 +50,7 @@ server.get('/register', checkAuthenticated, (req, res) => {
 server.post('/register/:region/:location', checkAuthenticated, async (req, res) => {
 	// Create a user account using the form information
 	const { username, email, company, password } = req.body;
+	// Get the timezone of the user
 	const user_timezone = req.params.region + '/' + req.params.location;
 	let joindate = new Date().toLocaleDateString('en-US', { timeZone: user_timezone });
 
@@ -68,44 +69,57 @@ server.post('/register/:region/:location', checkAuthenticated, async (req, res) 
 				req.flash('user_error', 'Email or username entered is already registered');
 				res.redirect('/users/register');
 			} else {
-				let confirmation_code = random_string({ length: 10, type: 'url-safe' });
+				// This is the code that will be sent in the url to the user
+				let confirmation_code_base = random_string({ length: 10, type: 'url-safe' });
 
-				const newUser = new User({
-					username,
-					email,
-					company,
-					password,
-					confirmation_code,
-					user_timezone,
-					joindate,
-					private: true
-				});
+				// This is for the encrypted version of the confirmation code
+				let confirmation_code;
 
-				// Secure the user's password
-				await bcrypt.genSalt(10, (err, salt) =>
-					bcrypt.hash(newUser.password, salt, async (err, hash) => {
+				// Generate a hash for the confirmation code
+				await bcrypt.genSalt(10, (err, salt) => {
+					bcrypt.hash(confirmation_code_base, salt, async (err, hash) => {
 						if (err) throw err;
-						//set the password to the generated hash
-						newUser.password = hash;
 
-						// Save new user to mongodb and redirect to login page
-						await newUser
-							.save()
-							.then((user) => {
-								req.flash(
-									'success_msg',
-									'You account has been created. Check your email for a confirmation link.'
-								);
+						confirmation_code = hash;
 
-								// Generate and send confirmation email to user
-								emailConfirm(user.email, confirmation_code, user.id.toString());
+						const newUser = new User({
+							username,
+							email,
+							company,
+							password,
+							confirmation_code,
+							user_timezone,
+							joindate,
+							private: true
+						});
 
-								req.flash('userEmail', user.email);
-								res.redirect('/users/login');
+						// Secure the user's password
+						await bcrypt.genSalt(10, (err, salt) =>
+							bcrypt.hash(newUser.password, salt, async (err, hash) => {
+								if (err) throw err;
+								//set the password to the generated hash
+								newUser.password = hash;
+
+								// Save new user to mongodb and redirect to login page
+								await newUser
+									.save()
+									.then((user) => {
+										req.flash(
+											'success_msg',
+											'You account has been created. Check your email for a confirmation link.'
+										);
+
+										// Generate and send confirmation email to user
+										emailConfirm(user.email, confirmation_code_base, user.id.toString());
+
+										req.flash('userEmail', user.email);
+										res.redirect('/users/login');
+									})
+									.catch((err) => console.log(err));
 							})
-							.catch((err) => console.log(err));
-					})
-				);
+						);
+					});
+				});
 			}
 		});
 	}
@@ -162,33 +176,69 @@ server.get('/email_confirm/:code/:id', async (req, res) => {
 	let id = req.params.id;
 
 	// If the id in the URL does not match the current logged in user's id, then the link is invalid
-	if (req.isAuthenticated() && id != req.user.id.toString()) {
-		req.flash('user_alert', 'Invalid confirmation link');
-		req.redirect('/users/dashboard');
+	// Use a different alert type for logged in users
+	if (req.isAuthenticated()) {
+		if (id != req.user.id.toString()) {
+			req.flash('user_alert', 'Invalid confirmation link');
+			res.redirect('/users/dashboard');
+		} else {
+			await User.findOne({ _id: id }).then(async (user) => {
+				// If the user's email is not confirmed, then use bcrypt to compare the
+				// URL confirmation code to the confirmation code in the database
+				if (!user.email_confirmed) {
+					bcrypt.compare(code, user.confirmation_code, async (err, isMatch) => {
+						if (err) return err;
+
+						if (isMatch) {
+							await user.updateOne({ email_confirmed: true, confirmation_code: null });
+							req.flash('user_alert', 'Your email has been confirmed');
+						} else {
+							req.flash('user_alert', 'Invalid confirmation link');
+						}
+
+						// Redirect user to their dashboard
+						res.redirect('/users/dashboard');
+					});
+				} else {
+					req.flash('user_alert', 'Your email is already confirmed');
+
+					// Redirect user to their dashboard
+					res.redirect('/users/dashboard');
+				}
+			});
+		}
 	} else {
 		await User.findOne({ _id: id })
 			.then(async (user) => {
+				// If the user's email is not confirmed, then use bcrypt to compare the
+				// URL confirmation code to the confirmation code in the database
 				if (!user.email_confirmed) {
-					if (code == user.confirmation_code) {
-						await user.updateOne({ email_confirmed: true, confirmation_code: '' });
+					await bcrypt.compare(code, user.confirmation_code, async (err, isMatch) => {
+						if (err) return err;
+						if (isMatch) {
+							await user.updateOne({ email_confirmed: true, confirmation_code: null });
+							req.flash('success_msg', 'Your email has been confirmed');
+						} else {
+							req.flash('user_error', 'Invalid confirmation link');
+						}
 
-						req.flash('user_alert', 'Your email has been confirmed');
-					} else {
-						req.flash('user_alert', 'Invalid confirmation link');
-					}
+						// Redirect user to login page
+						res.redirect('/users/login');
+					});
 				} else {
-					req.flash('user_alert', 'Your email is already confirmed');
+					req.flash('user_error', 'Your email is already confirmed');
+
+					// Redirect user to login page
+					res.redirect('/users/login');
 				}
 			})
 			.catch(() => {
-				req.flash('user_alert', 'Invalid confirmation link');
-			});
+				// No user found with this id if this happens
+				req.flash('user_error', 'Invalid confirmation link');
 
-		if (req.isAuthenticated()) {
-			res.redirect('/users/dashboard');
-		} else {
-			res.redirect('/users/login');
-		}
+				// Redirect user to login page
+				res.redirect('/users/login');
+			});
 	}
 });
 

@@ -471,43 +471,57 @@ router.post('/userdata/editemail', (req, res) => {
 				res.redirect('users/dashboard');
 			} else {
 				await User.findOne({ _id: req.user.id }).then(async (user) => {
-					// Generate a new confirmation code for the user
+					// This is the code that will be sent in the url to the user
 					let confirmation_code = random_string({ length: 10, type: 'url-safe' });
 
-					// Send email to user's new email containing confirmation url
-					// Only update the user dats if the email was actually sent
-					if (emailConfirm(newEmail, confirmation_code, req.user.id) != 1) {
-						// Check if the user has email notifications turned on
-						// If they do, then turn it off for the email change
-						// Using an if else statement here so there is only one update needed
-						if (Notifier.exists(req.user.id.toString())) {
-							Notifier.remover(req.user.id.toString());
+					// This is for the encrypted version of the confirmation code
+					let confirmation_code_secret;
 
-							// Reflect this change in the database
-							// Set the user's email_confirmed field to false
-							await user.updateOne({
-								email: newEmail,
-								email_confirmed: false,
-								confirmation_code: confirmation_code,
-								allow_email_notifier: false
-							});
-						} else {
-							// Set the user's email_confirmed field to false
-							await user.updateOne({
-								email: newEmail,
-								email_confirmed: false,
-								confirmation_code: confirmation_code
-							});
-						}
+					// Generate a hash for the confirmation code
+					await bcrypt.genSalt(10, (err, salt) => {
+						bcrypt.hash(confirmation_code, salt, async (err, hash) => {
+							if (err) throw err;
 
-						// Alert the user of the change
-						req.flash('user_alert', 'Check your new email for a confirmation link');
-						res.redirect('/users/dashboard');
-					} else {
-						// Alert the user that the email change was not successful
-						req.flash('user_alert', 'An error occurred. Try again or enter a different email.');
-						res.redirect('/users/dashboard');
-					}
+							confirmation_code_secret = hash;
+
+							// Send email to user's new email containing confirmation url
+							// Only update the user data if the email was actually sent
+							if (emailConfirm(newEmail, confirmation_code, req.user.id) != 1) {
+								// Check if the user has email notifications turned on
+								// If they do, then turn it off for the email change
+								// Using an if else statement here so there is only one update needed
+								if (Notifier.exists(req.user.id.toString())) {
+									Notifier.remover(req.user.id.toString());
+
+									// Reflect this change in the database
+									// Set the user's email_confirmed field to false
+									// Update confirmation code for user in database using hash version
+									await user.updateOne({
+										email: newEmail,
+										email_confirmed: false,
+										confirmation_code: confirmation_code_secret,
+										allow_email_notifier: false
+									});
+								} else {
+									// Set the user's email_confirmed field to false
+									// Update confirmation code for user in database using hash version
+									await user.updateOne({
+										email: newEmail,
+										email_confirmed: false,
+										confirmation_code: confirmation_code_secret
+									});
+								}
+
+								// Alert the user of the change
+								req.flash('user_alert', 'Check your new email for a confirmation link');
+								res.redirect('/users/dashboard');
+							} else {
+								// Alert the user that the email change was not successful
+								req.flash('user_alert', 'An error occurred. Try again or enter a different email.');
+								res.redirect('/users/dashboard');
+							}
+						});
+					});
 				});
 			}
 		});
@@ -571,17 +585,29 @@ router.post('/userdata/confirmemail', (req, res) => {
 			if (user.email_confirmed != true) {
 				let confirmation_code = random_string({ length: 10, type: 'url-safe' });
 
-				// Send email to user containing confirmation email
-				if (emailConfirm(req.user.email, confirmation_code, req.user.id) != 1) {
-					// Update confirmation code for user in database
-					await user.updateOne({ confirmation_code: confirmation_code });
+				// This is for the encrypted version of the confirmation code
+				let confirmation_code_secret;
 
-					req.flash('user_alert', 'Check your email for a new confirmation link');
-					res.redirect('/users/dashboard');
-				} else {
-					req.flash('user_alert', 'An error occurred. Try again.');
-					res.redirect('/users/dashboard');
-				}
+				// Generate a hash for the confirmation code
+				await bcrypt.genSalt(10, (err, salt) =>
+					bcrypt.hash(confirmation_code, salt, async (err, hash) => {
+						if (err) throw err;
+
+						confirmation_code_secret = hash;
+
+						// Send email to user containing confirmation email
+						if (emailConfirm(req.user.email, confirmation_code, req.user.id) != 1) {
+							// Update confirmation code for user in database using hash version
+							await user.updateOne({ confirmation_code: confirmation_code_secret });
+
+							req.flash('user_alert', 'Check your email for a new confirmation link');
+							res.redirect('/users/dashboard');
+						} else {
+							req.flash('user_alert', 'An error occurred. Try again.');
+							res.redirect('/users/dashboard');
+						}
+					})
+				);
 			} else {
 				req.flash('user_alert', 'Your email is already confirmed');
 				res.redirect('/users/dashboard');
