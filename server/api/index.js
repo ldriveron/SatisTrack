@@ -12,9 +12,10 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 // For email confirmation
-import mailer from 'nodemailer';
+//import mailer from 'nodemailer';
 import random_string from 'crypto-random-string';
-import config from '../config';
+import ConfirmEmail from './ConfirmEmailHelper';
+//import config from '../config';
 
 // Notifier service
 import Notifier from './NotifierService';
@@ -128,6 +129,7 @@ router.get('/auth/init', async (req, res) => {
 		yesterday.setDate(yesterday.getDate() - 1);
 
 		await User.findOne({ _id: req.user.id }).then(async (user) => {
+			//user.work_days[days_of_week[yesterday.getDay()]] is a boolean
 			if (
 				user.work_days[days_of_week[yesterday.getDay()]] &&
 				user.last_report_date != yesterday.toLocaleDateString('en-US', { timeZone: req.user.user_timezone }) &&
@@ -486,7 +488,7 @@ router.post('/userdata/editemail', (req, res) => {
 
 							// Send email to user's new email containing confirmation url
 							// Only update the user data if the email was actually sent
-							if (emailConfirm(newEmail, confirmation_code, req.user.id) != 1) {
+							if (ConfirmEmail.sendEmail(newEmail, confirmation_code, req.user.id) != 1) {
 								// Check if the user has email notifications turned on
 								// If they do, then turn it off for the email change
 								// Using an if else statement here so there is only one update needed
@@ -596,7 +598,7 @@ router.post('/userdata/confirmemail', (req, res) => {
 						confirmation_code_secret = hash;
 
 						// Send email to user containing confirmation email
-						if (emailConfirm(req.user.email, confirmation_code, req.user.id) != 1) {
+						if (ConfirmEmail.sendEmail(req.user.email, confirmation_code, req.user.id) != 1) {
 							// Update confirmation code for user in database using hash version
 							await user.updateOne({ confirmation_code: confirmation_code_secret });
 
@@ -617,52 +619,6 @@ router.post('/userdata/confirmemail', (req, res) => {
 		res.redirect('/users/login');
 	}
 });
-
-// Send an email containing an email confirmation link to the user
-let emailConfirm = async (email, confirmation_code, id) => {
-	let confirm_url = 'https://satistracker.com/users/email_confirm/' + confirmation_code + '/' + id;
-
-	var mailOptions = {
-		from: '"Satis Tracker" <satistracker@gmail.com>',
-		to: email,
-		subject: 'Confirm your email on Satis Tracker',
-		html:
-			'<div id="full_container" style="width: 100%; background-color: #EEF0F6; padding: 20px 0;">' +
-			'<a href="https://satistracker.com" target="_blank" style="text-decoration: none;"><div id="logo_text" ' +
-			'style="width: 100%; font-size: 30px; text-align: center; margin-bottom: 20px;">SATIS TRACKER</div></a>' +
-			'<div id="content_container" style="width: 60%; background-color: #fff; margin: 20px auto; ' +
-			'padding: 30px; border-radius: 10px; text-align: center; font-size: 18px; font-weight: bold;">' +
-			'In order to receive emails from Satis Tracker, including Mood Report reminders, your email must be confirmed.<br><br>' +
-			'<a href="' +
-			confirm_url +
-			'" target="_blank" style="text-decoration: none;"><div id="begin_button" ' +
-			'style="width: fit-content; margin: 0 auto; padding: 10px 30px; border: none; background-color: #fe9079; ' +
-			'color: #fff; font-size: 16px; border-radius: 5px;">Confirm Email</div></a></div>' +
-			'<div id="statement" style="width: 100%; text-align: center; font-size: 13px; margin-top: 25px;">' +
-			'This is an automated message. Please do not reply to this email.</div>' +
-			'</div>'
-	};
-
-	var transporter = mailer.createTransport({
-		service: 'gmail',
-		auth: {
-			user: 'satistracker@gmail.com',
-			pass: config.emps
-		}
-	});
-
-	await transporter.sendMail(mailOptions, function(error, info) {
-		if (error) {
-			console.log(error);
-			// return 1 if an error occurred
-			return 1;
-		} else {
-			console.log('Confirmation email sent: ' + info.response);
-			// return 0 if no error occurred
-			return 0;
-		}
-	});
-};
 
 // Edit user's privacy setting
 router.post('/userdata/editprivacy', (req, res) => {
