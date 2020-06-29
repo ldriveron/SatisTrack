@@ -430,29 +430,36 @@ router.post('/userdata/editprofile', async (req, res) => {
 	let new_company = req.body.company;
 
 	if (req.isAuthenticated()) {
-		await User.findOne({ _id: req.user.id }).then(async (user) => {
-			if (user.username != new_username || user.company != new_company) {
-				// If the user changes their username and their email notifier is active,
-				// remove their current notifier and replace it with the new username
-				if (user.username != new_username) {
-					if (user.allow_email_notifier && Notifier.exists(user.id.toString())) {
-						Notifier.remover(user.id.toString());
-
-						Notifier.scheduler(
-							user.work_days,
-							user.work_end_hour,
-							req.user.id,
-							user.email,
-							new_username,
-							user.user_timezone
-						);
-					}
-				}
-
-				await user.updateOne({ username: new_username, company: new_company });
-
-				req.flash('user_alert', 'Your profile has been updated');
+		await User.findOne({ username: new_username }).then(async (user) => {
+			if (user) {
+				req.flash('user_alert', "'" + new_username + "' is already taken");
 				res.redirect('/users/dashboard');
+			} else {
+				await User.findOne({ _id: req.user.id }).then(async (user) => {
+					if (user.username != new_username || user.company != new_company) {
+						// If the user changes their username and their email notifier is active,
+						// remove their current notifier and replace it with the new username
+						if (user.username != new_username) {
+							if (user.allow_email_notifier && Notifier.exists(user.id.toString())) {
+								Notifier.remover(user.id.toString());
+
+								Notifier.scheduler(
+									user.work_days,
+									user.work_end_hour,
+									req.user.id,
+									user.email,
+									new_username,
+									user.user_timezone
+								);
+							}
+						}
+
+						await user.updateOne({ username: new_username, company: new_company });
+
+						req.flash('user_alert', 'Your profile has been updated');
+						res.redirect('/users/dashboard');
+					}
+				});
 			}
 		});
 	} else {
