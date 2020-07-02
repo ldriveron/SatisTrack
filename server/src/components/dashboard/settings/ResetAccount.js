@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-const DeleteAccount = (props) => (
+const ResetAccount = (props) => (
 	<Formik
 		initialValues={{ username: '', password: '' }}
 		onSubmit={(values, { setSubmitting }) => {
@@ -27,16 +27,25 @@ const DeleteAccount = (props) => (
 		})}
 	>
 		{(props) => {
-			document.title = 'Delete Account';
+			document.title = 'Reset Account';
 
-			const { values, touched, errors, isSubmitting, handleChange, handleBlur } = props;
+			const { values, touched, errors, isSubmitting, handleChange, handleBlur, isValid } = props;
 
 			return (
 				<div>
-					<form action="/api/userdata/deleteaccount" method="POST">
+					<form action="/api/userdata/resetaccount" method="POST">
 						<div className="panel_title" style={{ color: 'rgb(203,36,49)' }}>
-							Danger Zone: Delete Account
+							Danger Zone: Reset Account
 						</div>
+						Use this option when starting a new job or just because you want to.<br />
+						<br />
+						Resetting your Satis Tracker account will set total reports, total reports in a row, and
+						reporting streaks to zero.<br />
+						<br />
+						All of your Satis Reports will also be deleted.<br />
+						<br />
+						Your work schedule will remain the same.<br />
+						<br />
 						<label>Enter your username</label>
 						<input
 							type="text"
@@ -49,7 +58,6 @@ const DeleteAccount = (props) => (
 							onChange={handleChange}
 						/>
 						{errors.username && touched.username && <div className="input_feedback">{errors.username}</div>}
-
 						<br />
 						<br />
 						<label>Enter your password</label>
@@ -64,13 +72,12 @@ const DeleteAccount = (props) => (
 							onChange={handleChange}
 						/>
 						{errors.password && touched.password && <div className="input_feedback">{errors.password}</div>}
-
 						<button
 							type="submit"
 							className="formButton"
-							disabled={errors.username || errors.password || isSubmitting}
+							disabled={errors.username || errors.password || isSubmitting || isValid}
 						>
-							Delete Account
+							Reset Account
 						</button>
 					</form>
 				</div>
@@ -79,15 +86,16 @@ const DeleteAccount = (props) => (
 	</Formik>
 );
 
-DeleteAccount.propTypes = {
+ResetAccount.propTypes = {
 	username: PropTypes.string,
 	values: PropTypes.object,
 	touched: PropTypes.object,
 	errors: PropTypes.object,
+	isValid: PropTypes.bool,
 	isSubmitting: PropTypes.bool,
 	handleChange: PropTypes.func,
 	handleBlur: PropTypes.func,
 	handleSubmit: PropTypes.func
 };
 
-export default DeleteAccount;
+export default ResetAccount;

@@ -690,6 +690,44 @@ router.post('/userdata/editpassword', async (req, res) => {
 	}
 });
 
+// Reset the user's account
+router.post('/userdata/resetaccount', async (req, res) => {
+	let pw = req.body.password;
+
+	if (req.isAuthenticated()) {
+		await User.findOne({ _id: req.user.id }).then((user) => {
+			//match password
+			bcrypt.compare(pw, user.password, async (err, isMatch) => {
+				if (err) throw err;
+
+				if (isMatch) {
+					// Delete all Satis Reports by the user from MongoDB
+					await SatisReport.deleteMany({ user_id: req.user.id });
+
+					// Reset the user's data
+					await user.updateOne({
+						days_report: 0,
+						reporting_streak: 0,
+						total_streaks: 0,
+						last_report_date: '12/01/1970',
+						company: ''
+					});
+
+					// End passport session and redirect user to login page
+					req.flash('user_alert', 'Your account has been reset');
+
+					res.redirect('/users/dashboard');
+				} else {
+					req.flash('user_error', 'Incorrect password');
+					res.redirect('/users/dashboard');
+				}
+			});
+		});
+	} else {
+		res.redirect('/users/login');
+	}
+});
+
 // Delete the user's account
 router.post('/userdata/deleteaccount', async (req, res) => {
 	let pw = req.body.password;

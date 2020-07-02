@@ -9,6 +9,7 @@ import EmailReminder from './EmailReminder';
 import EditEmail from './EditEmail';
 import EditPrivacy from './EditPrivacy';
 import EditPassword from './EditPassword';
+import ResetAccount from './ResetAccount';
 import DeleteAccount from './DeleteAccount';
 
 const Settings = (props) => {
@@ -43,6 +44,10 @@ const Settings = (props) => {
 
 					<Link key="edit_password" to="/users/settings/password">
 						<div className="link middle_link">Edit Password</div>
+					</Link>
+
+					<Link key="reset_account" to="/users/settings/reset">
+						<div className="link middle_link">Reset Account</div>
 					</Link>
 
 					<Link key="delete_account" to="/users/settings/delete">
@@ -83,6 +88,9 @@ const Settings = (props) => {
 
 						{/* Edit Password Route */}
 						<Route path="/users/settings/password" exact render={(props) => <EditPassword {...props} />} />
+
+						{/* Reset Account Route */}
+						<Route path="/users/settings/reset" exact render={(props) => <ResetAccount {...props} />} />
 
 						{/* Delete Profile Route */}
 						<Route
